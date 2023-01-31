@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  mysql_db:
+    image: mysql
+    container_name: mysql_notification_db
+    environment:
+      MYSQL_DATABASE: 'notification_db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'pluralsight'
+      MYSQL_ROOT_PASSWORD: 'pluralsight'
+    restart: on-failure
+    ports:
+      - '3307:3306'
+    expose:
+      - '3307'
