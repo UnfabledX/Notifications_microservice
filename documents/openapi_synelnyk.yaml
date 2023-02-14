@@ -1,31 +1,31 @@
 openapi: 3.0.3
 info:
   title: Social Media Network - Notification Service
-  description: 
+  description:
     This is a service that works with Notifications in Social Media Network.
     
     1. It can notify a user by email about
     
-        - verification after the registration.
-        
-        - confirmation of password reset.
-        
-        - when someone follows a user with sponsor subscription.
+    - verification after the registration.
     
-        - when someone comments user's post.
-        
-        - when someone replies to user's comment.
+    - confirmation of password reset.
     
-        - when someone follows the user (NO sponsor subscription).
+    - when someone follows a user with sponsor subscription.
+    
+    - when someone comments user's post.
+    
+    - when someone replies to user's comment.
+    
+    - when someone follows the user (NO sponsor subscription).
     
     2. The User can carry out such operations with his notifications
-        
-        - see all notifications
     
-        - delete all notifications
-        
-        - delete one notification
+    - see all notifications
     
+    - delete all notifications
+    
+    - delete one notification
+
   contact:
     name: "Oleksii Synelnyk"
     email: osynelnyk@griddynamics.com
@@ -36,17 +36,17 @@ externalDocs:
 servers:
   - url: https://localhost:8080/
 tags:
-  - name: notifications
-    description: notification endpoints
-  - name: user operations with notifications
+  - name: Create notifications
+    description: creation of notifications of different types
+  - name: User operations with notifications
     description: notification endpoints that user can operate on.
-    
+
 paths:
 
   /notifications:
     post:
       tags:
-        - notifications
+        - Create notifications
       summary: Create a specific notification according to its type.
       requestBody:
         description: notification settings
@@ -58,174 +58,194 @@ paths:
                   description: notification owner (the user who was notified).
                   type: integer
                   example: 3215
-                  
+
                 isEnabled:
                   description: true or false
                   type: boolean
                   example: true
-                  
+
                 notification_type:
                   type: string
                   example: "registration" #or pass reset
-                  
+
                 email_with_link_type:
-                  description: responsible for link type notification 
-                  items: 
+                  description: responsible for link type notification
+                  items:
                     $ref: '#/components/schemas/link_type'
 
                 comm_reply_type:
                   description: responsible for comment or reply type notification
-                  items: 
+                  items:
                     $ref: '#/components/schemas/comm_reply_type'
-                
+
                 follows_or_subcribes_type:
                   description: responsible for follow or subcription type notification
                   items:
                     $ref: '#/components/schemas/follows_or_subcribes_type'
-                  
+
         required: true
       responses:
         '200':
           description: Successful operation
         '400':
           description: Invalid input
-        '404': 
+        '404':
           description: Email adress is not found
 
-  /notifications/{userId}/{notificationId}:
-    delete:
-      tags:
-        - user operations with notifications
-      summary: The user deletes a specific notification by its id  
-      parameters:
-      - name: userId
-        in: path
-        description: ID of a user who wants to delete notification by its id
-        required: true
-        schema:
-          type: integer
-          example: 12345
-      - name: notificationId
-        in: path
-        description: ID of the notification to be deleted
-        required: true
-        schema:
-          type: integer
-          example: 54321        
-      responses:
-        '200':
-          description: Successful operation
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                    example: "You have no permission to delete this notification."
-        '404': 
-          description: Notification/user with such ID not found
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                    example: "Notification/User with such id is not found."
 
-
-  /notifications/{userId}:
-    delete:
-      tags:
-        - user operations with notifications
-      summary: Delete all user notifications 
-      parameters:
-      - name: userId
-        in: path
-        description: ID of a user who wants to delete all his notifications
-        required: true
-        schema:
-          type: integer
-          example: 12345
-      responses:
-        '200':
-          description: Successful operation
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                    example: "You have no permission to delete all notifications"
-        '404': 
-          description: Notifications are not found
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                    example: "Notifications are not found."
-
-
+  /notifications/users/{userId}:
     get:
       tags:
-        - user operations with notifications
-      summary: Retrieve all notifications of the user  
+        - User operations with notifications
+      summary: Retrieve all notifications of the user
       parameters:
-      - name: userId
-        in: path
-        description: ID of a user who wants to obtain all his notifications
-        required: true
-        schema:
-          type: integer
-          example: 12345
+        - name: userId
+          in: path
+          description: ID of a user who wants to obtain all his notifications
+          required: true
+          schema:
+            type: integer
+            example: 12345
+        - name: pageNumber
+          in: query
+          description: number of the page which content must be shown
+          required: false
+          schema:
+            type: integer
+            example: 1
       responses:
         '200':
           description: Successful operation
-        '401':
-          description: Unauthorized
+        '400':
+          description: Bad request
           content:
             application/json:
               schema:
                 properties:
+                  status:
+                    type: string
+                    example: "400 Bad Request."
                   error:
                     type: string
-                    example: "You have no permission to get all notifications"
-        '404': 
-          description: Notifications are not found
+                    example: "Wrong input parameter."
+        '404':
+          description: The user is not found
           content:
             application/json:
               schema:
                 properties:
+                  status:
+                    type: string
+                    example: "404 Not Found."
                   error:
                     type: string
-                    example: "Notifications are not found."
+                    example: "ID of the user or a content on the given page is not found."
+
+
+    delete:
+      tags:
+        - User operations with notifications
+      summary: Delete all user notifications
+      parameters:
+        - name: userId
+          in: path
+          description: ID of a user who wants to delete all his notifications
+          required: true
+          schema:
+            type: integer
+            example: 12
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    example: "400 Bad Request."
+                  error:
+                    type: string
+                    example: "Wrong input parameter."
+        '404':
+          description: The user is not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    example: "404 Not Found."
+                  error:
+                    type: string
+                    example: "ID of the user is not found."
+
+
+
+  /notifications/{notificationId}:
+    delete:
+      tags:
+        - User operations with notifications
+      summary: The user deletes a specific notification by its id
+      parameters:
+        - name: notificationId
+          in: path
+          description: ID of the notification to be deleted
+          required: true
+          schema:
+            type: integer
+            example: 543
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    example: "400 Bad Request."
+                  error:
+                    type: string
+                    example: "Wrong input parameter."
+        '404':
+          description: The user is not found
+          content:
+            application/json:
+              schema:
+                properties:
+                  status:
+                    type: string
+                    example: "404 Not Found."
+                  error:
+                    type: string
+                    example: "ID of the notification is not found."
 
 
 
 components:
   schemas:
-  
+
     link_type:
       type: object
       properties:
-        user_name: 
+        user_name:
           description: name of the user who was notified.
           type: string
-          example: "Yuriy" 
+          example: "Yuriy"
         user_email:
           description: email of the user who was notified.
           type: string
           example: "yuriy_email@gmail.com"
         confirmation_link:
-          description: link to reset a password or to verify user account at registration stage. 
+          description: link to reset a password or to verify user account at registration stage.
           type: string
           example: "https://facedynamics.com/auth/confirm_email/ImFsZXgwZGVzdHJveWVyQGdtYWlsLmNvbSI"
-        time_to_live: 
+        time_to_live:
           description: how many minutes the link is active
           type: integer
           example: 15
@@ -246,11 +266,11 @@ components:
         post_or_comment_textbody:
           type: string
           maxLength: 30
-          example: "Recently just thinking about our..."  
+          example: "Recently just thinking about our..."
 
     follows_or_subcribes_type:
       type: object
-      properties: 
+      properties:
         user_id_who_followed_subcribed:
           type: integer
           example: 31
@@ -260,4 +280,3 @@ components:
         type_of_subscription:
           type: string
           example: "Gold"
-      
