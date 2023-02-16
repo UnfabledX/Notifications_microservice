@@ -10,4 +10,7 @@ public class Constants {
 
     public static final String ID_OR_PAGE_IS_NOT_FOUND = "ID of the user or a content on the given page is not found.";
 
+    public static final String NEW_COMMENT = "Received a NEW Comment!";
+
+    public static final String NEW_REPLY = "Received a NEW Reply!";
 }

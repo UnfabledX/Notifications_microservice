@@ -9,12 +9,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 @Entity
 @Component
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY,
-             content = JsonInclude.Include.NON_NULL)
+        content = JsonInclude.Include.NON_NULL)
 @Table(name = "notifications", schema = "notification_db")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,16 +30,17 @@ public class Notification {
     private Long id;
 
     @Column(name = "owner_id", nullable = false)
+    @Min(value = 1, message = "Id must be greater than 1")
     private int ownerId;
 
     @Column(name = "triggerer_id")
+    @Min(value = 1, message = "Id must be greater than 1")
     private Integer triggererId;
 
     @Column(name = "createdAt")
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "notification_type_id")
-    private NotificationType notificationTypeId;
+    @Column(name = "notification_type_id")
+    private int notificationType;
 }

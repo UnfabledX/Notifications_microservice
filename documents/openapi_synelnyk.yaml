@@ -253,7 +253,7 @@ components:
     comm_reply_type:
       type: object
       properties:
-        user_id_of_post_or_comment:
+        user_id_of_comment_or_reply:
           type: integer
           example: 623
         user_name_of_comment_or_reply:

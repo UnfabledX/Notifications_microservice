@@ -114,4 +114,9 @@ public class IntegrationTests extends BaseTest {
                 HttpMethod.DELETE, null, ErrorMessage.class, notificationId);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
+
+    @Test
+    public void createNotificationCommentTest() {
+        
+    }
 }

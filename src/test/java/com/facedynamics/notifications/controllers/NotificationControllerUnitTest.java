@@ -3,7 +3,11 @@ package com.facedynamics.notifications.controllers;
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationType;
+import com.facedynamics.notifications.model.dto.NotificationDetails;
+import com.facedynamics.notifications.model.dto.NotificationGetDTO;
+import com.facedynamics.notifications.model.dto.NotificationReturnDTO;
 import com.facedynamics.notifications.services.NotificationServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.times;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(NotificationController.class)
@@ -34,6 +38,9 @@ public class NotificationControllerUnitTest extends BaseTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
     private NotificationServiceImpl service;
 
@@ -43,26 +50,26 @@ public class NotificationControllerUnitTest extends BaseTest {
 
     @BeforeEach
     public void init() {
-        NotificationType type = new NotificationType(2L, "Follow", "Some text...");
+        NotificationType type = NotificationType.FOLLOW;
         Notification n1 = Notification.builder()
                 .id(1L)
                 .ownerId(3)
                 .triggererId(5)
-                .notificationTypeId(type)
+                .notificationType(type.getId())
                 .createdAt(LocalDateTime.of(2022, 12, 1, 16, 36, 54))
                 .build();
         Notification n2 = Notification.builder()
                 .id(2L)
                 .ownerId(3)
                 .triggererId(6)
-                .notificationTypeId(type)
+                .notificationType(type.getId())
                 .createdAt(LocalDateTime.of(2021, 10, 12, 12, 12, 33))
                 .build();
         Notification n3 = Notification.builder()
                 .id(5L)
                 .ownerId(3)
                 .triggererId(7)
-                .notificationTypeId(type)
+                .notificationType(type.getId())
                 .createdAt(LocalDateTime.of(2019, 10, 14, 12, 12, 33))
                 .build();
         list = Arrays.asList(n1, n2, n3);
@@ -107,6 +114,7 @@ public class NotificationControllerUnitTest extends BaseTest {
         Mockito.verify(service, times(1))
                 .deleteAllNotificationsByOwnerId(ownerId);
     }
+
     @Test
     public void deleteNotificationsByUserIdTest_IdIsPresent() throws Exception {
         ownerId = 7;
@@ -143,5 +151,27 @@ public class NotificationControllerUnitTest extends BaseTest {
                 .andExpect(content().string(String.valueOf(notificationId)));
         Mockito.verify(service, times(1))
                 .deleteNotificationById(notificationId);
+    }
+
+    @Test
+    public void createNotificationCommentTest() throws Exception {
+        LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
+        NotificationDetails details = NotificationDetails.builder()
+                .userId(123)
+                .postText("some post...")
+                .commentText("some comment")
+                .createdAt(dateTime).build();
+        NotificationGetDTO getDTO = new NotificationGetDTO(321, "comment", details);
+        Mockito.when(service.createNotification(getDTO))
+                .thenReturn(new NotificationReturnDTO("Dragon", NotificationType.COMMENT, dateTime));
+
+        mockMvc.perform(post("/notifications").contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(getDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", Matchers.aMapWithSize(3)))
+                .andExpect(jsonPath("$.type", Matchers.is("COMMENT")));
+
+        verify(service, times(1)).createNotification(getDTO);
     }
 }
