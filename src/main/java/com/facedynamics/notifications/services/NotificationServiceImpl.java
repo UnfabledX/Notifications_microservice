@@ -1,6 +1,8 @@
 package com.facedynamics.notifications.services;
 
 import com.facedynamics.notifications.model.Notification;
+import com.facedynamics.notifications.model.dto.NotificationGetDTO;
+import com.facedynamics.notifications.model.dto.NotificationReturnDTO;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -76,5 +78,21 @@ public class NotificationServiceImpl implements NotificationService {
         }
         notificationRepository.deleteNotificationById(Id);
         return notification.get().getId();
+    }
+
+    @Override
+    public NotificationReturnDTO createNotification(NotificationGetDTO notification){
+        /* 1. send to user service json
+            { "ownerId" : 123,
+              "userId"  : 321  }
+           2. receive from user service following information
+              { "name"      : "Pasha",              (ownerId)
+                "email"     : "pasha@gmil.com",     (ownerId)
+                "username"  : "Dragon" }            (userId)
+            3. save to db a notification (id, ownerId, triggererId, createdAt, notificationTypeId);
+        */
+
+
+        return null;
     }
 }

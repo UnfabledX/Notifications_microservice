@@ -1,0 +1,21 @@
+<html lang="en">
+<head>
+    <title>FaceDynamics comment notification</title>
+</head>
+<body bgcolor="#faf7f1">
+<div style="text-align: -webkit-left;">
+    <h3>Hello ${owner.name}, you have a new comment!</h3>
+    <div>
+        ${triggerer.name} has left the comment ${comment.body} <br/>
+        on your post ${post.body} <br/>
+        at ${comment.createdAt}
+    </div>
+
+    <p><i>Best regards, <br/>
+        your FaceDynamics Team</i> </p>
+</div>
+</body>
+</html>
+
+
+<!-- Your email address is <a href="mailto:${user.emailAddress}">${user.emailAddress}</a>. -->
