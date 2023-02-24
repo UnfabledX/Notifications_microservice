@@ -1,12 +1,18 @@
 package com.facedynamics.notifications.services;
 
 import com.facedynamics.BaseTest;
+import com.facedynamics.notifications.controllers.UserServiceConsumer;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationType;
+import com.facedynamics.notifications.model.dto.NotificationDetails;
+import com.facedynamics.notifications.model.dto.NotificationGetDTO;
+import com.facedynamics.notifications.model.dto.NotificationReturnDTO;
+import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.facedynamics.notifications.model.NotificationType.COMMENT;
 import static com.facedynamics.notifications.util.Constants.PAGE_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -30,6 +37,12 @@ class NotificationServiceUnitTest extends BaseTest {
     @InjectMocks
     private NotificationServiceImpl service;
 
+    @Mock
+    private EmailServiceImpl emailService;
+
+    @Mock
+    private UserServiceConsumer userServiceConsumer;
+
     private List<Notification> notificationList;
 
     private Page<Notification> resultList;
@@ -39,19 +52,18 @@ class NotificationServiceUnitTest extends BaseTest {
     @BeforeEach
     public void init() {
         notificationList = new ArrayList<>();
-        NotificationType type = new NotificationType(2L, "Follow", "Some text...");
         Notification n1 = Notification.builder()
                 .id(1L)
                 .ownerId(3)
                 .triggererId(5)
-                .notificationTypeId(type)
+                .notificationType(COMMENT.getId())
                 .createdAt(LocalDateTime.of(2022, 12, 1, 16, 36, 54))
                 .build();
         Notification n2 = Notification.builder()
                 .id(2L)
                 .ownerId(3)
                 .triggererId(4)
-                .notificationTypeId(type)
+                .notificationType(NotificationType.FOLLOW.getId())
                 .createdAt(LocalDateTime.of(2021, 10, 12, 12, 12, 33))
                 .build();
         notificationList.addAll(Arrays.asList(n1, n2));
@@ -109,5 +121,34 @@ class NotificationServiceUnitTest extends BaseTest {
         when(repository.findNotificationById(notificationId))
                 .thenReturn(Optional.ofNullable(notificationList.get(0)));
         assertEquals(1L, service.deleteNotificationById(notificationId));
+    }
+
+    @Test
+    void createNotificationCommentTest() {
+        LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
+        NotificationDetails details = NotificationDetails.builder()
+                .userId(123)
+                .postText("some post...")
+                .commentText("some comment")
+                .createdAt(dateTime).build();
+        NotificationGetDTO getDTO = new NotificationGetDTO(321, "comment", details);
+
+        NotificationUserServiceDTO userServiceDTO321 = NotificationUserServiceDTO.builder()
+                .name("Oleksii")
+                .username("Unfabled")
+                .email("alex0destroyer@gmail.com")
+                .build();
+        NotificationUserServiceDTO userServiceDTO123 = NotificationUserServiceDTO.builder()
+                .name("Pasha")
+                .username("Dragon")
+                .email("pasha@gmail.com")
+                .build();
+        when(userServiceConsumer.getUserById(321)).thenReturn(userServiceDTO321);
+        when(userServiceConsumer.getUserById(123)).thenReturn(userServiceDTO123);
+        doNothing().when(emailService)
+                .sendCommentEmail(getDTO, userServiceDTO321, userServiceDTO123.getUsername());
+        NotificationReturnDTO actualReturnDTO = service.createNotification(getDTO);
+        NotificationReturnDTO expected = new NotificationReturnDTO(userServiceDTO123.getUsername(), COMMENT, dateTime);
+        assertEquals(expected, actualReturnDTO);
     }
 }

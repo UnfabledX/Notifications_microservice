@@ -3,7 +3,6 @@ package com.facedynamics.notifications.controllers;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.dto.NotificationGetDTO;
 import com.facedynamics.notifications.model.dto.NotificationReturnDTO;
-import com.facedynamics.notifications.model.dto.NotificationUserDTO;
 import com.facedynamics.notifications.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -20,8 +19,6 @@ import java.util.List;
 public class NotificationController {
 
     private final NotificationService notificationService;
-
-    private final UserServiceConsumer userServiceConsumer;
 
     @GetMapping("/users/{userId}")
     public List<Notification> getAllNotificationsByUserId(
@@ -43,11 +40,6 @@ public class NotificationController {
 
     @PostMapping
     public NotificationReturnDTO createNotification(@RequestBody @Valid NotificationGetDTO receivedDTO) {
-
-        NotificationUserDTO ownerDTO = userServiceConsumer.getUserById(receivedDTO.getOwnerId());
-        int triggerUserId = receivedDTO.getDetails().getUserId();
-        NotificationUserDTO triggerUserDTO = userServiceConsumer.getUserById(triggerUserId);
-
         return notificationService.createNotification(receivedDTO);
     }
 }

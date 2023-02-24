@@ -15,4 +15,5 @@ public interface NotificationService {
     Long deleteNotificationById(long notificationId);
 
     NotificationReturnDTO createNotification(NotificationGetDTO notification);
+
 }

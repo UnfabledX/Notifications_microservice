@@ -42,3 +42,20 @@ DELETE http://localhost:8080/notifications/1111
 
 ### 400 Bad Request. Wrong input parameter of id
 DELETE http://localhost:8080/notifications/zzz
+
+### POST comments
+POST http://localhost:8080/notifications
+Content-Type: application/json
+
+{
+    "ownerId": 321,
+    "notificationType": "comment",
+    "details": {
+        "userId": 123,
+        "postText": "Microservices is one of those architectural..",
+        "commentText": "This is absolutely correct approach when..",
+        "createdAt": "2007-12-03T10:15:30"
+    }
+}
+
+

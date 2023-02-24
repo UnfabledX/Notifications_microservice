@@ -1,8 +1,6 @@
 CREATE schema IF NOT EXISTS notification_db;
 USE notification_db;
 
-# -- these commands remove all tables from the database
-# -- An error occurs if tables not exist in DB, so just ignore commands
 -- --------------------------------------------------------------
 -- NOTIFICATIONS TYPES
 -- According to the project requirements there are several types
@@ -16,22 +14,20 @@ USE notification_db;
 --      + registration - when the user receives verification after the registration.
 -- --------------------------------------------------------------
 
-CREATE TABLE notifications_types
+CREATE TABLE notification_types
 (
     id          SMALLINT    NOT NULL  PRIMARY KEY,
-    name        VARCHAR(30) NOT NULL,
-    text_body   TEXT        NOT NULL
-
+    name        VARCHAR(30) NOT NULL
 ) CHARACTER SET=utf8mb4;
 
 -- inserting existing notification types:
-INSERT INTO notifications_types
-VALUES  (1, 'Sponsor Subscription', '%s have just subscribed with %s sponsor subscription %s ago'),
-        (2, 'Follow', '%s started following you %s ago'),
-        (3, 'Comment', '%s left the comment "%s" on your post "%s" %s ago'),
-        (4, 'Reply', '%s replied with "%s" on your comment "%s" %s ago.'),
-        (5, 'Password reset', 'Hi! Please click the link below to reset your account password.\nPlease note, the above link %s is  only valid for %d minutes'),
-        (6, 'Registration', 'You just registered your account with the email: %s \nOne last step, just click here %s to verify your account.\nPlease note, the above link is only valid for %d minutes');
+INSERT INTO notification_types
+VALUES  (1, 'registration'),
+        (2, 'password reset'),
+        (3, 'comment'),
+        (4, 'reply'),
+        (5, 'follow'),
+        (6, 'subscription');
 
 -- --------------------------------------------------------------
 -- NOTIFICATIONS
@@ -56,5 +52,5 @@ CREATE TABLE notifications
 
 -- this declaration contains the foreign key constraint
     CONSTRAINT notification_types_fk
-    FOREIGN KEY (notification_type_id) REFERENCES notifications_types (id)
+    FOREIGN KEY (notification_type_id) REFERENCES notification_types (id)
 ) CHARACTER SET=utf8mb4;

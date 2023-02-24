@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @Component
 @JsonInclude(value = JsonInclude.Include.NON_EMPTY,
-             content = JsonInclude.Include.NON_NULL)
+        content = JsonInclude.Include.NON_NULL)
 @Table(name = "notifications", schema = "notification_db")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,7 +41,6 @@ public class Notification {
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "notification_type_id")
-    private NotificationType notificationTypeId;
+    @Column(name = "notification_type_id")
+    private int notificationType;
 }

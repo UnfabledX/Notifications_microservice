@@ -4,11 +4,11 @@
 </head>
 <body bgcolor="#faf7f1">
 <div style="text-align: -webkit-left;">
-    <h3>Hello ${owner.name}, you have a new comment!</h3>
+    <h3>Hello $ownerName, you have a new comment!</h3>
     <div>
-        ${triggerer.name} has left the comment ${comment.body} <br/>
-        on your post ${post.body} <br/>
-        at ${comment.createdAt}
+        $triggererUsername has left the comment <i>"$commentBody ..." </i><br/>
+        on your post <i>"$postBody ..." </i><br/>
+        at $commentCreatedAt
     </div>
 
     <p><i>Best regards, <br/>
@@ -16,6 +16,3 @@
 </div>
 </body>
 </html>
-
-
-<!-- Your email address is <a href="mailto:${user.emailAddress}">${user.emailAddress}</a>. -->
