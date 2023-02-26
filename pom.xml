@@ -20,7 +20,6 @@
         <spring-cloud.version>2022.0.1</spring-cloud.version>
         <openfeign.version>4.0.1</openfeign.version>
         <velocity.version>3.1</velocity.version>
-        <mapstruck.version>1.5.3.Final</mapstruck.version>
     </properties>
 
     <dependencies>
@@ -98,17 +97,6 @@
             <artifactId>spring-cloud-dependencies</artifactId>
             <version>${spring-cloud.version}</version>
             <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${mapstruck.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.kirviq</groupId>
-            <artifactId>dumbster</artifactId>
-            <version>1.7.1</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.validation</groupId>

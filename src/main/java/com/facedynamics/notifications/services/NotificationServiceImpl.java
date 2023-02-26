@@ -92,6 +92,41 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public NotificationReturnDTO createNotification(NotificationGetDTO receivedDTO) {
         NotificationType type = getType(receivedDTO.getNotificationType());
+        saveNotificationToDatabase(receivedDTO, type);
+
+        switch (type) {
+            case REGISTRATION: //todo
+            case RESET_PASSWORD: //todo
+            case COMMENT:
+            case REPLY: {
+                return sendCommentReplyNotificationReturnDTO(receivedDTO, type);
+            }
+            case FOLLOW:  //todo
+            case SUBSCRIPTION: //todo
+        }
+        return null;
+    }
+
+    private NotificationReturnDTO sendCommentReplyNotificationReturnDTO(NotificationGetDTO receivedDTO,
+                                                                       NotificationType type) {
+        int triggerUserId = receivedDTO.getDetails().getUserId();
+        LocalDateTime createdAt = receivedDTO.getDetails().getCreatedAt();
+        int ownerId = receivedDTO.getOwnerId();
+
+        NotificationUserServiceDTO ownerDTO = userServiceConsumer.getUserById(ownerId);
+        NotificationUserServiceDTO triggerUserDTO = userServiceConsumer.getUserById(triggerUserId);
+
+        if (type == COMMENT) {
+            emailService.sendCommentEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
+        }
+        if (type == REPLY) {
+            emailService.sendReplyEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
+        }
+        return new NotificationReturnDTO(triggerUserDTO.getUsername(),
+                type, createdAt);
+    }
+
+    private void saveNotificationToDatabase(NotificationGetDTO receivedDTO, NotificationType type) {
         int triggerUserId = receivedDTO.getDetails().getUserId();
         LocalDateTime createdAt = receivedDTO.getDetails().getCreatedAt();
         int ownerId = receivedDTO.getOwnerId();
@@ -102,25 +137,5 @@ public class NotificationServiceImpl implements NotificationService {
                 .notificationType(type.getId())
                 .build();
         notificationRepository.save(notification);
-
-        switch (type) {
-            case REGISTRATION: //todo
-            case RESET_PASSWORD: //todo
-            case COMMENT:
-            case REPLY: {
-                NotificationUserServiceDTO ownerDTO = userServiceConsumer.getUserById(ownerId);
-                NotificationUserServiceDTO triggerUserDTO = userServiceConsumer.getUserById(triggerUserId);
-                if (type == COMMENT) {
-                    emailService.sendCommentEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
-                } if (type == REPLY) {
-                    emailService.sendReplyEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
-                }
-                return new NotificationReturnDTO(triggerUserDTO.getUsername(),
-                        type, createdAt);
-            }
-            case FOLLOW:  //todo
-            case SUBSCRIPTION: //todo
-        }
-        return null;
     }
 }
