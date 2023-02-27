@@ -5,7 +5,7 @@ import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationType;
 import com.facedynamics.notifications.model.dto.NotificationDetails;
 import com.facedynamics.notifications.model.dto.NotificationGetDTO;
-import com.facedynamics.notifications.model.dto.NotificationReturnDTO;
+import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
 import com.facedynamics.notifications.services.NotificationServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -163,7 +163,7 @@ public class NotificationControllerUnitTest extends BaseTest {
                 .createdAt(dateTime).build();
         NotificationGetDTO getDTO = new NotificationGetDTO(321, "comment", details);
         Mockito.when(service.createNotification(getDTO))
-                .thenReturn(new NotificationReturnDTO("Dragon", NotificationType.COMMENT, dateTime));
+                .thenReturn(new NotificationResponseDTO("Dragon", NotificationType.COMMENT, dateTime));
 
         mockMvc.perform(post("/notifications").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(getDTO)))

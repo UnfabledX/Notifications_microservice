@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class NotificationReturnDTO {
+public class NotificationResponseDTO {
 
     private String triggererName;
 

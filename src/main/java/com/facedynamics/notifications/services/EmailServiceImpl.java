@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -24,16 +23,9 @@ public class EmailServiceImpl implements EmailService {
     @Value("${source.mail.address}")
     protected String emailFrom;
 
-    protected JavaMailSender mailSender;
+    protected final JavaMailSender mailSender;
 
-    protected VelocityEngine engine;
-
-    @Autowired
-    public EmailServiceImpl(JavaMailSender mailSender,
-                            VelocityEngine engine) {
-        this.mailSender = mailSender;
-        this.engine = engine;
-    }
+    protected final VelocityEngine engine;
 
     @Override
     public void sendCommentEmail(NotificationGetDTO receivedDTO, NotificationUserServiceDTO ownerDTO,

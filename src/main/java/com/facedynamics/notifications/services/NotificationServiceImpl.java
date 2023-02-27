@@ -1,10 +1,10 @@
 package com.facedynamics.notifications.services;
 
-import com.facedynamics.notifications.controllers.UserServiceConsumer;
+import com.facedynamics.notifications.controllers.UserEventService;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationType;
 import com.facedynamics.notifications.model.dto.NotificationGetDTO;
-import com.facedynamics.notifications.model.dto.NotificationReturnDTO;
+import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    private final UserServiceConsumer userServiceConsumer;
+    private final UserEventService userEventService;
 
     private final EmailService emailService;
 
@@ -90,7 +90,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public NotificationReturnDTO createNotification(NotificationGetDTO receivedDTO) {
+    public NotificationResponseDTO createNotification(NotificationGetDTO receivedDTO) {
         NotificationType type = getType(receivedDTO.getNotificationType());
         saveNotificationToDatabase(receivedDTO, type);
 
@@ -107,14 +107,14 @@ public class NotificationServiceImpl implements NotificationService {
         return null;
     }
 
-    private NotificationReturnDTO sendCommentReplyNotificationReturnDTO(NotificationGetDTO receivedDTO,
-                                                                       NotificationType type) {
+    private NotificationResponseDTO sendCommentReplyNotificationReturnDTO(NotificationGetDTO receivedDTO,
+                                                                          NotificationType type) {
         int triggerUserId = receivedDTO.getDetails().getUserId();
         LocalDateTime createdAt = receivedDTO.getDetails().getCreatedAt();
         int ownerId = receivedDTO.getOwnerId();
 
-        NotificationUserServiceDTO ownerDTO = userServiceConsumer.getUserById(ownerId);
-        NotificationUserServiceDTO triggerUserDTO = userServiceConsumer.getUserById(triggerUserId);
+        NotificationUserServiceDTO ownerDTO = userEventService.getUserById(ownerId);
+        NotificationUserServiceDTO triggerUserDTO = userEventService.getUserById(triggerUserId);
 
         if (type == COMMENT) {
             emailService.sendCommentEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
@@ -122,7 +122,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (type == REPLY) {
             emailService.sendReplyEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
         }
-        return new NotificationReturnDTO(triggerUserDTO.getUsername(),
+        return new NotificationResponseDTO(triggerUserDTO.getUsername(),
                 type, createdAt);
     }
 

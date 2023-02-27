@@ -1,5 +1,8 @@
 package com.facedynamics.notifications.model;
 
+import lombok.Getter;
+
+@Getter
 public enum NotificationType {
     REGISTRATION    (1, "registration"),
     RESET_PASSWORD  (2, "password reset"),
@@ -8,20 +11,12 @@ public enum NotificationType {
     FOLLOW          (5, "follow"),
     SUBSCRIPTION    (6, "subscription");
 
-    private int id;
-    private String name;
+    private final int id;
+    private final String name;
 
     NotificationType(int id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public static NotificationType getType(String name) {

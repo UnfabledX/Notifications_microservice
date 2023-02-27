@@ -1,12 +1,12 @@
 package com.facedynamics.notifications.services;
 
 import com.facedynamics.BaseTest;
-import com.facedynamics.notifications.controllers.UserServiceConsumer;
+import com.facedynamics.notifications.controllers.UserEventService;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationType;
 import com.facedynamics.notifications.model.dto.NotificationDetails;
 import com.facedynamics.notifications.model.dto.NotificationGetDTO;
-import com.facedynamics.notifications.model.dto.NotificationReturnDTO;
+import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +41,7 @@ class NotificationServiceUnitTest extends BaseTest {
     private EmailServiceImpl emailService;
 
     @Mock
-    private UserServiceConsumer userServiceConsumer;
+    private UserEventService userEventService;
 
     private List<Notification> notificationList;
 
@@ -143,12 +143,12 @@ class NotificationServiceUnitTest extends BaseTest {
                 .username("Dragon")
                 .email("pasha@gmail.com")
                 .build();
-        when(userServiceConsumer.getUserById(321)).thenReturn(userServiceDTO321);
-        when(userServiceConsumer.getUserById(123)).thenReturn(userServiceDTO123);
+        when(userEventService.getUserById(321)).thenReturn(userServiceDTO321);
+        when(userEventService.getUserById(123)).thenReturn(userServiceDTO123);
         doNothing().when(emailService)
                 .sendCommentEmail(getDTO, userServiceDTO321, userServiceDTO123.getUsername());
-        NotificationReturnDTO actualReturnDTO = service.createNotification(getDTO);
-        NotificationReturnDTO expected = new NotificationReturnDTO(userServiceDTO123.getUsername(), COMMENT, dateTime);
+        NotificationResponseDTO actualReturnDTO = service.createNotification(getDTO);
+        NotificationResponseDTO expected = new NotificationResponseDTO(userServiceDTO123.getUsername(), COMMENT, dateTime);
         assertEquals(expected, actualReturnDTO);
     }
 }
