@@ -2,7 +2,7 @@ package com.facedynamics.notifications;
 
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.util.ErrorMessage;
+import com.facedynamics.notifications.utils.ErrorMessage;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.List;
 import java.util.Optional;
 
-import static com.facedynamics.notifications.util.Constants.PAGE_SIZE;
+import static com.facedynamics.notifications.utils.Constants.PAGE_SIZE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

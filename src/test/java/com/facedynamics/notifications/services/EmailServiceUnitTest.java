@@ -31,7 +31,7 @@ public class EmailServiceUnitTest extends BaseTest {
     public void init() {
         VelocityEngine engine = new VelocityEngine();
         engine.init();
-        service = new EmailServiceImpl(mailSender, engine);
+        service = new EmailServiceImpl(mailSender);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class EmailServiceUnitTest extends BaseTest {
                 .username("Dragon")
                 .build();
 
-        service.sendCommentEmail(getDTO, userServiceDTO321, userServiceDTO123.getUsername());
+        service.sendEmail(getDTO, userServiceDTO321, userServiceDTO123.getUsername());
 
         ArgumentCaptor<MimeMessagePreparator> captor = ArgumentCaptor.forClass(MimeMessagePreparator.class);
         verify(mailSender).send(captor.capture());

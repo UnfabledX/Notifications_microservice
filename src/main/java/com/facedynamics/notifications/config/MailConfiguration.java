@@ -1,6 +1,5 @@
 package com.facedynamics.notifications.config;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +18,8 @@ public class MailConfiguration {
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
-        mailSender.setUsername("osynelnyk@griddynamics.com");
-        mailSender.setPassword("pnwfhppyecypgbcx");
+        mailSender.setUsername("alex0destroyer@gmail.com");
+        mailSender.setPassword("hdrvtiqkponeeouv");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.smtp.auth", "true");
@@ -30,13 +29,6 @@ public class MailConfiguration {
         props.put("mail.smtp.writetimeout", 5000);
 
         return mailSender;
-    }
-
-    @Bean
-    public VelocityEngine getVelocityEngine() {
-        VelocityEngine engine = new VelocityEngine();
-        engine.init();
-        return engine;
     }
 }
 

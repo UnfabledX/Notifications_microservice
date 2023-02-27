@@ -5,9 +5,6 @@ import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
 
 public interface EmailService {
 
-    void sendCommentEmail(NotificationGetDTO receivedDTO, NotificationUserServiceDTO ownerDTO,
+    void sendEmail(NotificationGetDTO receivedDTO, NotificationUserServiceDTO ownerDTO,
                           String triggerUserName);
-
-    void sendReplyEmail(NotificationGetDTO receivedDTO, NotificationUserServiceDTO ownerDTO,
-                               String triggerUserName);
 }
