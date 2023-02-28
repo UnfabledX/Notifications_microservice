@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.utils.emails;
+package com.facedynamics.notifications.emails;
 
 import com.facedynamics.notifications.model.NotificationType;
 import com.facedynamics.notifications.model.dto.NotificationGetDTO;
@@ -9,8 +9,6 @@ import java.io.StringWriter;
 import java.util.Map;
 
 import static com.facedynamics.notifications.model.NotificationType.*;
-import static com.facedynamics.notifications.model.NotificationType.SUBSCRIPTION;
-import static com.facedynamics.notifications.utils.Constants.*;
 
 public class EmailMessageHelper {
 
@@ -30,19 +28,9 @@ public class EmailMessageHelper {
             SUBSCRIPTION,   new SubscriptionEmailMessage()
     );
 
-    private static final Map<NotificationType, String> mapOfTopics = Map.of(
-            REGISTRATION,   NEW_REGISTRATION,
-            RESET_PASSWORD, NEW_RESET_PASSWORD,
-            COMMENT,        NEW_COMMENT,
-            REPLY,          NEW_REPLY,
-            FOLLOW,         NEW_FOLLOW,
-            SUBSCRIPTION,   NEW_SUBSCRIPTION
-    );
-
     public static StringWriter getWriter(NotificationGetDTO receivedDTO, NotificationUserServiceDTO ownerDTO,
                                          String triggerUserName) {
-        NotificationType type = getType(receivedDTO.getNotificationType());
-        EmailMessage specificEmailMessage = mapOfMails.get(type);
+        EmailMessage specificEmailMessage = getEmailMessage(receivedDTO);
         specificEmailMessage.setEngine(engine);
         specificEmailMessage.setReceivedDTO(receivedDTO);
         specificEmailMessage.setOwnerDTO(ownerDTO);
@@ -50,8 +38,13 @@ public class EmailMessageHelper {
         return specificEmailMessage.getLetterBody();
     }
 
-    public static String getTopic(NotificationGetDTO receivedDTO) {
+    public static String getSubject(NotificationGetDTO receivedDTO) {
+        EmailMessage specificEmailMessage = getEmailMessage(receivedDTO);
+        return specificEmailMessage.getLetterSubject();
+    }
+
+    private static EmailMessage getEmailMessage(NotificationGetDTO receivedDTO) {
         NotificationType type = getType(receivedDTO.getNotificationType());
-        return mapOfTopics.get(type);
+        return mapOfMails.get(type);
     }
 }

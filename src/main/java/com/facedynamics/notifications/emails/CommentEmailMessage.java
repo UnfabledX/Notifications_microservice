@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.utils.emails;
+package com.facedynamics.notifications.emails;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -7,6 +7,8 @@ import java.io.StringWriter;
 
 
 public class CommentEmailMessage extends EmailMessage {
+
+    public static final String NEW_COMMENT = "Received a NEW Comment!";
 
     @Override
     public StringWriter getLetterBody() {
@@ -23,5 +25,10 @@ public class CommentEmailMessage extends EmailMessage {
         StringWriter writer = new StringWriter();
         template.merge(context, writer);
         return writer;
+    }
+
+    @Override
+    public String getLetterSubject(){
+        return NEW_COMMENT;
     }
 }

@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.utils.emails;
+package com.facedynamics.notifications.emails;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -6,6 +6,8 @@ import org.apache.velocity.VelocityContext;
 import java.io.StringWriter;
 
 public class ReplyEmailMessage extends EmailMessage {
+
+    public static final String NEW_REPLY = "Received a NEW Reply!";
 
     @Override
     public StringWriter getLetterBody() {
@@ -22,5 +24,10 @@ public class ReplyEmailMessage extends EmailMessage {
         StringWriter writer = new StringWriter();
         template.merge(context, writer);
         return writer;
+    }
+
+    @Override
+    public String getLetterSubject(){
+        return NEW_REPLY;
     }
 }

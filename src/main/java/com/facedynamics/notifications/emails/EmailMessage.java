@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.utils.emails;
+package com.facedynamics.notifications.emails;
 
 import com.facedynamics.notifications.model.dto.NotificationGetDTO;
 import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
