@@ -2,7 +2,7 @@ package com.facedynamics.notifications;
 
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.utils.ErrorMessage;
+import com.facedynamics.notifications.utils.Error;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +55,9 @@ public class IntegrationTests extends BaseTest {
     public void getAllNotificationsByUserIdTest_notValidId() {
         userId = 4321;
         int pageNumber = 0;
-        ResponseEntity<ErrorMessage> response = template.exchange(
+        ResponseEntity<Error> response = template.exchange(
                 createURLWithPort() + "/users/{userId}?page={pageNumber}", HttpMethod.GET,
-                null, ErrorMessage.class, userId, pageNumber);
+                null, Error.class, userId, pageNumber);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
@@ -65,9 +65,9 @@ public class IntegrationTests extends BaseTest {
     @Order(2)
     public void getAllNotificationsByUserIdTest_notValidInput() {
         userId = 4;
-        ResponseEntity<ErrorMessage> response = template.exchange(
+        ResponseEntity<Error> response = template.exchange(
                 createURLWithPort() + "/users/{userId}?page={pageNumber}", HttpMethod.GET,
-                null, ErrorMessage.class, userId, "abc");
+                null, Error.class, userId, "abc");
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
@@ -88,8 +88,8 @@ public class IntegrationTests extends BaseTest {
     @Order(5)
     public void deleteAllNotificationsByUserIdTest_IdIsNotPresent() {
         userId = 432100;
-        ResponseEntity<ErrorMessage> response = template.exchange(createURLWithPort() + "/users/{userId}",
-                HttpMethod.DELETE, null, ErrorMessage.class, userId);
+        ResponseEntity<Error> response = template.exchange(createURLWithPort() + "/users/{userId}",
+                HttpMethod.DELETE, null, Error.class, userId);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
@@ -110,8 +110,8 @@ public class IntegrationTests extends BaseTest {
     @Order(7)
     public void deleteNotificationByIdTest_idIsNotPresent() {
         long notificationId = 5321;
-        ResponseEntity<ErrorMessage> response = template.exchange(createURLWithPort() + "/{notificationId}",
-                HttpMethod.DELETE, null, ErrorMessage.class, notificationId);
+        ResponseEntity<Error> response = template.exchange(createURLWithPort() + "/{notificationId}",
+                HttpMethod.DELETE, null, Error.class, notificationId);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
