@@ -10,7 +10,6 @@ import com.facedynamics.notifications.repository.NotificationRepository;
 import com.facedynamics.notifications.services.commands.CommandFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,8 +46,7 @@ public class NotificationServiceImpl implements NotificationService {
      * if ID of the user is not found in the database.
      */
     @Override
-    public Page<Notification> getAllNotificationsByUserId(int page, int ownerId) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+    public Page<Notification> getAllNotificationsByUserId(int ownerId, Pageable pageable) {
         if (notificationRepository.existsByOwnerId(ownerId)) {
             return notificationRepository.findAllByOwnerId(ownerId, pageable);
         } else {
