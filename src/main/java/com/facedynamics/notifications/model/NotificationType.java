@@ -1,5 +1,6 @@
 package com.facedynamics.notifications.model;
 
+import com.facedynamics.notifications.handler.WrongEnumException;
 import lombok.Getter;
 
 @Getter
@@ -20,7 +21,10 @@ public enum NotificationType {
     }
 
     public static NotificationType getType(String name) {
-
-        return NotificationType.valueOf(name.toUpperCase().trim());
+        try {
+            return NotificationType.valueOf(name.toUpperCase().trim());
+        } catch (IllegalArgumentException e) {
+            throw new WrongEnumException(e.getMessage(), name);
+        }
     }
 }
