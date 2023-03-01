@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface NotificationService {
 
-    List<Notification> getAllNotificationsByUserId(int page, int ownerId);
+    Page<Notification> getAllNotificationsByUserId(int page, int ownerId);
 
     void deleteAllNotificationsByOwnerId(int ownerId);
 

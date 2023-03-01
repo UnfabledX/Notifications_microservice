@@ -18,6 +18,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -48,7 +50,7 @@ public class NotificationControllerUnitTest extends BaseTest {
     @MockBean
     private NotificationServiceImpl service;
 
-    private List<Notification> list;
+    private Page<Notification> pageList;
 
     private int ownerId;
 
@@ -90,7 +92,8 @@ public class NotificationControllerUnitTest extends BaseTest {
                         .build())
                 .createdAt(LocalDateTime.of(2019, 10, 14, 12, 12, 33))
                 .build();
-        list = Arrays.asList(n1, n2, n3);
+        List<Notification> list = Arrays.asList(n1, n2, n3);
+        pageList = new PageImpl<>(list);
     }
 
     @Test
