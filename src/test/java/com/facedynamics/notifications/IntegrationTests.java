@@ -2,7 +2,7 @@ package com.facedynamics.notifications;
 
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.utils.Error;
+import com.facedynamics.notifications.handler.Error;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

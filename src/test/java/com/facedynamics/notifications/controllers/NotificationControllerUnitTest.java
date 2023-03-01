@@ -1,6 +1,7 @@
 package com.facedynamics.notifications.controllers;
 
 import com.facedynamics.BaseTest;
+import com.facedynamics.notifications.handler.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationType;
 import com.facedynamics.notifications.model.dto.NotificationDetails;
@@ -18,7 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -93,11 +93,11 @@ public class NotificationControllerUnitTest extends BaseTest {
     public void getNotificationsByUserIdTest_IdIsNotPresent() throws Exception {
         ownerId = 12212;
         Mockito.when(service.getAllNotificationsByUserId(1, ownerId))
-                .thenThrow(ValidationException.class);
+                .thenThrow(NotFoundException.class);
 
         mockMvc.perform(get(NOTIFICATIONS_BY_USER_ID + "?page={page}", ownerId, 1))
                 .andExpect(status().is4xxClientError())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE));
         Mockito.verify(service, times(1))
                 .getAllNotificationsByUserId(1, ownerId);
     }
@@ -105,12 +105,12 @@ public class NotificationControllerUnitTest extends BaseTest {
     @Test
     public void deleteNotificationsByUserIdTest_IdIsNotPresent() throws Exception {
         ownerId = 54321;
-        Mockito.doThrow(ValidationException.class)
+        Mockito.doThrow(NotFoundException.class)
                 .when(service).deleteAllNotificationsByOwnerId(ownerId);
 
         mockMvc.perform(delete(NOTIFICATIONS_BY_USER_ID, ownerId))
                 .andExpect(status().is4xxClientError())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
         Mockito.verify(service, times(1))
                 .deleteAllNotificationsByOwnerId(ownerId);
     }
@@ -131,11 +131,11 @@ public class NotificationControllerUnitTest extends BaseTest {
     public void deleteNotificationByIDTest_IdIsNotPresent() throws Exception {
         long notificationId = 1000;
         Mockito.when(service.deleteNotificationById(notificationId))
-                .thenThrow(ValidationException.class);
+                .thenThrow(NotFoundException.class);
 
         mockMvc.perform(delete(NOTIFICATIONS_NOTIFICATION_ID, notificationId))
                 .andExpect(status().is4xxClientError())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
         Mockito.verify(service, times(1))
                 .deleteNotificationById(notificationId);
     }

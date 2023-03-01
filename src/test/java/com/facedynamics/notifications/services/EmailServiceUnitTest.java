@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
@@ -61,8 +62,14 @@ public class EmailServiceUnitTest extends BaseTest {
         Assertions.assertNotNull(pr);
 
         Field[] fields = pr.getClass().getDeclaredFields();
-        fields[2].setAccessible(true);
-        String context = fields[2].get(pr).toString();
+        String context = "";
+        for (Field f: fields) {
+            f.setAccessible(true);
+            Object obj = f.get(pr);
+            if (obj instanceof StringWriter){
+                context = obj.toString();
+            }
+        }
         Assertions.assertTrue(context.contains("Hello Oleksii, you have a new comment!"));
         Assertions.assertTrue(context.contains("Dragon has left the comment <i>\"some comment ...\" </i>"));
         Assertions.assertTrue(context.contains("on your post <i>\"some post... ...\" </i><br/>"));
