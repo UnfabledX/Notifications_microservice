@@ -3,6 +3,7 @@ package com.facedynamics.notifications.handler;
 import com.facedynamics.notifications.utils.Error;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -24,7 +25,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ProblemDetail handleValidationException(NotFoundException e) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Data is not found");
-        pd.setProperty(PROBLEMS, new Error(e.getMessage()));
+        pd.setProperty(PROBLEMS, Error.builder().message(e.getMessage()).wrongValue(e.getWrongValue()).build());
         return pd;
     }
 
@@ -34,7 +35,10 @@ public class ControllerExceptionHandler {
         List<Error> errors = new ArrayList<>();
         e.getBindingResult()
                 .getFieldErrors()
-                .forEach(x -> errors.add(new Error(x.getField(), x.getDefaultMessage())));
+                .forEach(x -> errors.add(Error.builder()
+                        .message(x.getDefaultMessage())
+                        .field(x.getField())
+                        .wrongValue(x.getRejectedValue().toString()).build()));
         pd.setProperty(PROBLEMS, errors.get(0));
         return pd;
     }
@@ -42,7 +46,8 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Values can not be read");
-        pd.setProperty(PROBLEMS, new Error(e.getMessage()));
+        String wrongValue = StringUtils.substringBetween(e.getMessage(), "\"", "\"");
+        pd.setProperty(PROBLEMS, Error.builder().message(e.getMessage()).wrongValue(wrongValue).build());
         return pd;
     }
 
@@ -53,26 +58,26 @@ public class ControllerExceptionHandler {
         String wrongValue = e.getValue() != null ? e.getValue().toString() : "";
         String requiredType = e.getRequiredType().getSimpleName();
         String message = String.format("The field '%s' must have a valid type of '%s'", actualField, requiredType);
-        pd.setProperty(PROBLEMS, new Error(actualField, message, wrongValue));
+        pd.setProperty(PROBLEMS, Error.builder().message(message).field(actualField).wrongValue(wrongValue).build());
         return pd;
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ProblemDetail handleIllegalArgumentException(IllegalArgumentException e) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Illegal argument");
-        pd.setProperty(PROBLEMS, new Error(e.getMessage()));
+    @ExceptionHandler(WrongEnumException.class)
+    public ProblemDetail handleIllegalArgumentException(WrongEnumException e) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Wrong ENUM type");
+        pd.setProperty(PROBLEMS, Error.builder().message(e.getMessage()).wrongValue(e.getEnumName()).build());
         return pd;
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ProblemDetail handleConstraintViolationException(ConstraintViolationException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Validation problem");
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, "Constraint violation");
         List<Error> errors = new ArrayList<>();
         for (ConstraintViolation<?> v : e.getConstraintViolations()) {
             String field = v.getPropertyPath().toString().substring(v.getPropertyPath().toString().lastIndexOf('.') + 1);
             String value = v.getInvalidValue().toString();
             String message = String.format(v.getMessage(), field);
-            Error error = new Error(field, message, value);
+            Error error = Error.builder().message(message).field(field).wrongValue(value).build();
             errors.add(error);
         }
         problemDetail.setProperty(PROBLEMS, errors.get(0));

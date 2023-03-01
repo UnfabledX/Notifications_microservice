@@ -5,7 +5,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class NotFoundException extends RuntimeException{
-    public NotFoundException(String s) {
-        super(s);
+
+    private long value;
+
+    public NotFoundException(String message, long value) {
+        super(message);
+        this.value = value;
+    }
+
+    public String getWrongValue(){
+        return String.valueOf(value);
     }
 }
