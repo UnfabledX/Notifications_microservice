@@ -50,7 +50,7 @@ public class NotificationServiceImpl implements NotificationService {
             Page<Notification> notifications = notificationRepository.findAllByOwnerId(ownerId, pageable);
             return notifications.getContent();
         } else {
-            throw new NotFoundException(ID_OR_PAGE_IS_NOT_FOUND);
+            throw new NotFoundException(USER_IS_NOT_FOUND, ownerId);
         }
     }
 
@@ -64,7 +64,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (notificationRepository.existsByOwnerId(ownerId)) {
             notificationRepository.deleteNotificationsByOwnerId(ownerId);
         } else {
-            throw new NotFoundException(USER_IS_NOT_FOUND);
+            throw new NotFoundException(USER_IS_NOT_FOUND, ownerId);
         }
     }
 
@@ -80,7 +80,7 @@ public class NotificationServiceImpl implements NotificationService {
     public Long deleteNotificationById(long Id) {
         Optional<Notification> notification = notificationRepository.findNotificationById(Id);
         if (notification.isEmpty()) {
-            throw new NotFoundException(ID_OF_THE_NOTIFICATION_IS_NOT_FOUND);
+            throw new NotFoundException(ID_OF_THE_NOTIFICATION_IS_NOT_FOUND, Id);
         }
         notificationRepository.deleteNotificationById(Id);
         return notification.get().getId();
