@@ -16,6 +16,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -44,7 +46,7 @@ public class NotificationControllerUnitTest extends BaseTest {
     @MockBean
     private NotificationServiceImpl service;
 
-    private List<Notification> list;
+    private Page<Notification> pageList;
 
     private int ownerId;
 
@@ -72,19 +74,20 @@ public class NotificationControllerUnitTest extends BaseTest {
                 .notificationType(type.getId())
                 .createdAt(LocalDateTime.of(2019, 10, 14, 12, 12, 33))
                 .build();
-        list = Arrays.asList(n1, n2, n3);
+        List<Notification> list = Arrays.asList(n1, n2, n3);
+        pageList = new PageImpl<>(list);
     }
 
     @Test
     public void getNotificationsByUserIdTest_ownerIdIsPresent() throws Exception {
         ownerId = 3;
-        Mockito.when(service.getAllNotificationsByUserId(0, ownerId)).thenReturn(list);
+        Mockito.when(service.getAllNotificationsByUserId(0, ownerId)).thenReturn(pageList);
 
         mockMvc.perform(get(NOTIFICATIONS_BY_USER_ID, ownerId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", Matchers.hasSize(3)))
-                .andExpect(jsonPath("$[1].triggererId", Matchers.is(6)));
+                .andExpect(jsonPath("$.content", Matchers.hasSize(3)))
+                .andExpect(jsonPath("$.content[1].triggererId", Matchers.is(6)));
         Mockito.verify(service, times(1))
                 .getAllNotificationsByUserId(0, ownerId);
     }

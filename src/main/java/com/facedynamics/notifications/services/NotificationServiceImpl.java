@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import static com.facedynamics.notifications.model.NotificationType.getType;
@@ -47,11 +46,10 @@ public class NotificationServiceImpl implements NotificationService {
      * if ID of the user is not found in the database.
      */
     @Override
-    public List<Notification> getAllNotificationsByUserId(int page, int ownerId) {
+    public Page<Notification> getAllNotificationsByUserId(int page, int ownerId) {
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
         if (notificationRepository.existsByOwnerId(ownerId)) {
-            Page<Notification> notifications = notificationRepository.findAllByOwnerId(ownerId, pageable);
-            return notifications.getContent();
+            return notificationRepository.findAllByOwnerId(ownerId, pageable);
         } else {
             throw new NotFoundException(USER_IS_NOT_FOUND, ownerId);
         }

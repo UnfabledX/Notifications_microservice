@@ -1,20 +1,20 @@
 package com.facedynamics.notifications;
 
 import com.facedynamics.BaseTest;
-import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.handler.Error;
+import com.facedynamics.notifications.model.Notification;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.List;
 import java.util.Optional;
 
 import static com.facedynamics.notifications.utils.Constants.PAGE_SIZE;
@@ -40,12 +40,12 @@ public class IntegrationTests extends BaseTest {
     public void getAllNotificationsByUserIdTest_validIdAndPage() {
         userId = 4;
         int pageNumber = 0;
-        ResponseEntity<List> response = template.getForEntity(
+        ResponseEntity<Page> response = template.getForEntity(
                 createURLWithPort() + "/users/{userId}?page={pageNumber}",
-                List.class, userId, pageNumber);
-        List<Notification> notifications = response.getBody();
+                Page.class, userId, pageNumber);
+        Page<Notification> notifications = response.getBody();
         if (Optional.ofNullable(notifications).isPresent()) {
-            assertEquals(PAGE_SIZE, notifications.size());
+            assertEquals(PAGE_SIZE, notifications.getContent().size());
         }
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }

@@ -75,9 +75,9 @@ class NotificationServiceUnitTest extends BaseTest {
         ownerId = 3;
         when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE))).thenReturn(resultList);
         when(repository.existsByOwnerId(ownerId)).thenReturn(true);
-        List<Notification> actualList = service.getAllNotificationsByUserId(0, ownerId);
+        Page<Notification> actualList = service.getAllNotificationsByUserId(0, ownerId);
         assertNotNull(actualList);
-        assertEquals(notificationList, actualList);
+        assertEquals(resultList, actualList);
     }
 
     @Test
