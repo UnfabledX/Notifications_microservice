@@ -8,6 +8,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +26,9 @@ public class NotificationController {
 
     @GetMapping("/users/{userId}")
     public Page<Notification> getAllNotificationsByUserId(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @PathVariable("userId") @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) int ownerUserId) {
-        return notificationService.getAllNotificationsByUserId(page, ownerUserId);
+            @PathVariable("userId") @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) int ownerUserId,
+            @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
+        return notificationService.getAllNotificationsByUserId(ownerUserId, pageable);
     }
 
     @DeleteMapping("/users/{userId}")

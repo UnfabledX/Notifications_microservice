@@ -18,6 +18,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -50,6 +52,9 @@ public class NotificationControllerUnitTest extends BaseTest {
 
     private int ownerId;
 
+    private  Pageable pageable;
+
+
     @BeforeEach
     public void init() {
         NotificationType type = NotificationType.FOLLOW;
@@ -76,12 +81,13 @@ public class NotificationControllerUnitTest extends BaseTest {
                 .build();
         List<Notification> list = Arrays.asList(n1, n2, n3);
         pageList = new PageImpl<>(list);
+        pageable = PageRequest.of(0, 5);
     }
 
     @Test
     public void getNotificationsByUserIdTest_ownerIdIsPresent() throws Exception {
         ownerId = 3;
-        Mockito.when(service.getAllNotificationsByUserId(0, ownerId)).thenReturn(pageList);
+        Mockito.when(service.getAllNotificationsByUserId(ownerId, pageable)).thenReturn(pageList);
 
         mockMvc.perform(get(NOTIFICATIONS_BY_USER_ID, ownerId))
                 .andExpect(status().isOk())
@@ -89,20 +95,21 @@ public class NotificationControllerUnitTest extends BaseTest {
                 .andExpect(jsonPath("$.content", Matchers.hasSize(3)))
                 .andExpect(jsonPath("$.content[1].triggererId", Matchers.is(6)));
         Mockito.verify(service, times(1))
-                .getAllNotificationsByUserId(0, ownerId);
+                .getAllNotificationsByUserId(ownerId, pageable);
     }
 
     @Test
     public void getNotificationsByUserIdTest_IdIsNotPresent() throws Exception {
         ownerId = 12212;
-        Mockito.when(service.getAllNotificationsByUserId(1, ownerId))
+        pageable = PageRequest.of(1, 5);
+        Mockito.when(service.getAllNotificationsByUserId(ownerId, pageable))
                 .thenThrow(NotFoundException.class);
 
         mockMvc.perform(get(NOTIFICATIONS_BY_USER_ID + "?page={page}", ownerId, 1))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE));
         Mockito.verify(service, times(1))
-                .getAllNotificationsByUserId(1, ownerId);
+                .getAllNotificationsByUserId(ownerId, pageable);
     }
 
     @Test

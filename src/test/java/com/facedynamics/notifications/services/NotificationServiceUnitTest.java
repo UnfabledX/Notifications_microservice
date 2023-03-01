@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -49,6 +50,8 @@ class NotificationServiceUnitTest extends BaseTest {
 
     private int ownerId;
 
+    private Pageable pageable;
+
     @BeforeEach
     public void init() {
         notificationList = new ArrayList<>();
@@ -68,6 +71,7 @@ class NotificationServiceUnitTest extends BaseTest {
                 .build();
         notificationList.addAll(Arrays.asList(n1, n2));
         resultList = new PageImpl<>(notificationList);
+        pageable = PageRequest.of(0, 5);
     }
 
     @Test
@@ -75,7 +79,7 @@ class NotificationServiceUnitTest extends BaseTest {
         ownerId = 3;
         when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE))).thenReturn(resultList);
         when(repository.existsByOwnerId(ownerId)).thenReturn(true);
-        Page<Notification> actualList = service.getAllNotificationsByUserId(0, ownerId);
+        Page<Notification> actualList = service.getAllNotificationsByUserId(ownerId, pageable);
         assertNotNull(actualList);
         assertEquals(resultList, actualList);
     }
@@ -86,7 +90,7 @@ class NotificationServiceUnitTest extends BaseTest {
         when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE)))
                 .thenThrow(NotFoundException.class);
         assertThrows(NotFoundException.class,
-                () -> service.getAllNotificationsByUserId(0, ownerId));
+                () -> service.getAllNotificationsByUserId(ownerId, pageable));
     }
 
     @Test
