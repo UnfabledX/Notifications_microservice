@@ -18,10 +18,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -119,7 +119,7 @@ public class NotificationControllerUnitTest extends BaseTest {
     @Test
     public void getNotificationsByUserIdTest_IdIsNotPresent() throws Exception {
         ownerId = 12212;
-        pageable = PageRequest.of(1, 5);
+        pageable = PageRequest.of(1, 5, Sort.by("createdAt").descending());
         Mockito.when(service.getAllNotificationsByUserId(ownerId, pageable))
                 .thenThrow(NotFoundException.class);
 
