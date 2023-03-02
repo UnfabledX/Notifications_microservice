@@ -26,12 +26,13 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.facedynamics.notifications.model.NotificationType.COMMENT;
-import static com.facedynamics.notifications.utils.Constants.PAGE_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 class NotificationServiceUnitTest extends BaseTest {
+
+    public final static int PAGE_SIZE_DEFAULT = 5;
 
     private final NotificationRepository repository = mock(NotificationRepository.class);
 
@@ -77,7 +78,7 @@ class NotificationServiceUnitTest extends BaseTest {
     @Test
     void getAllNotificationsByUserIdTest_validId() {
         ownerId = 3;
-        when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE))).thenReturn(resultList);
+        when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE_DEFAULT))).thenReturn(resultList);
         when(repository.existsByOwnerId(ownerId)).thenReturn(true);
         Page<Notification> actualList = service.getAllNotificationsByUserId(ownerId, pageable);
         assertNotNull(actualList);
@@ -87,7 +88,7 @@ class NotificationServiceUnitTest extends BaseTest {
     @Test
     public void getAllNotificationsByUserIdTest_notValidId() {
         ownerId = 12345;
-        when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE)))
+        when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE_DEFAULT)))
                 .thenThrow(NotFoundException.class);
         assertThrows(NotFoundException.class,
                 () -> service.getAllNotificationsByUserId(ownerId, pageable));

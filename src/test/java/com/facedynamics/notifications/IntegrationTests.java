@@ -2,26 +2,33 @@ package com.facedynamics.notifications;
 
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.handler.Error;
-import com.facedynamics.notifications.model.Notification;
+import com.facedynamics.notifications.model.NotificationType;
+import com.facedynamics.notifications.model.dto.NotificationDetails;
+import com.facedynamics.notifications.model.dto.NotificationGetDTO;
+import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import static com.facedynamics.notifications.utils.Constants.PAGE_SIZE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IntegrationTests extends BaseTest {
+
+    public final static int PAGE_SIZE_DEFAULT = 5;
 
     @Autowired
     private TestRestTemplate template;
@@ -37,16 +44,15 @@ public class IntegrationTests extends BaseTest {
 
     @Test
     @Order(1)
-    public void getAllNotificationsByUserIdTest_validIdAndPage() {
+    public void getAllNotificationsByUserIdTest_validId() {
         userId = 4;
         int pageNumber = 0;
-        ResponseEntity<Page> response = template.getForEntity(
+        ResponseEntity<Map> response = template.getForEntity(
                 createURLWithPort() + "/users/{userId}?page={pageNumber}",
-                Page.class, userId, pageNumber);
-        Page<Notification> notifications = response.getBody();
-        if (Optional.ofNullable(notifications).isPresent()) {
-            assertEquals(PAGE_SIZE, notifications.getContent().size());
-        }
+                Map.class, userId, pageNumber);
+        Map<String, Object> notifications = response.getBody();
+        assertNotNull(notifications);
+        assertEquals(PAGE_SIZE_DEFAULT, notifications.size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -65,10 +71,13 @@ public class IntegrationTests extends BaseTest {
     @Order(2)
     public void getAllNotificationsByUserIdTest_notValidInput() {
         userId = 4;
-        ResponseEntity<Error> response = template.exchange(
+        ResponseEntity<Map> response = template.exchange(
                 createURLWithPort() + "/users/{userId}?page={pageNumber}", HttpMethod.GET,
-                null, Error.class, userId, "abc");
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+                null, Map.class, userId, "abc");
+        Map<String, Object> notifications = response.getBody();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(notifications);
+        assertEquals(PAGE_SIZE_DEFAULT, notifications.size());
     }
 
     @Test
@@ -116,7 +125,60 @@ public class IntegrationTests extends BaseTest {
     }
 
     @Test
-    public void createNotificationCommentTest() {
-        
+    public void createNotificationCommentTest_OK() {
+        NotificationGetDTO getDTO = new NotificationGetDTO(321, "comment", NotificationDetails.builder()
+                .userId(123)
+                .postText("Some post")
+                .commentText("Some comment")
+                .createdAt(LocalDateTime.parse("2021-12-03T10:15:30"))
+                .build());
+        ResponseEntity<NotificationResponseDTO> response = template.postForEntity(createURLWithPort(),
+                getDTO, NotificationResponseDTO.class);
+        NotificationResponseDTO responseDTO = response.getBody();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(responseDTO);
+        assertEquals(NotificationType.COMMENT, responseDTO.getType());
+    }
+
+    @Test
+    public void createNotificationCommentTest_InvalidNotificationType() {
+        NotificationGetDTO getDTO = new NotificationGetDTO(321, "wrong type", NotificationDetails.builder()
+                .userId(123)
+                .postText("Some post")
+                .commentText("Some comment")
+                .createdAt(LocalDateTime.parse("2021-12-03T10:15:30"))
+                .build());
+        ResponseEntity<ProblemDetail> response = template.postForEntity(createURLWithPort(),
+                getDTO, ProblemDetail.class);
+        ProblemDetail detail = response.getBody();
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(detail);
+        assertNotNull(detail.getProperties());
+
+        Map<String, Object> map = detail.getProperties();
+        LinkedHashMap<?,?> innerData = (LinkedHashMap<?,?>) map.get("problem details");
+        String actual = innerData.get("wrongValue").toString();
+        assertEquals("wrong type", actual);
+    }
+
+    @Test
+    public void createNotificationCommentTest_InvalidUserId() {
+        NotificationGetDTO getDTO = new NotificationGetDTO(321, "wrong type", NotificationDetails.builder()
+                .userId(-123)
+                .postText("Some post")
+                .commentText("Some comment")
+                .createdAt(LocalDateTime.parse("2021-12-03T10:15:30"))
+                .build());
+        ResponseEntity<ProblemDetail> response = template.postForEntity(createURLWithPort(),
+                getDTO, ProblemDetail.class);
+        ProblemDetail detail = response.getBody();
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(detail);
+        assertNotNull(detail.getProperties());
+
+        Map<String, Object> map = detail.getProperties();
+        LinkedHashMap<?,?> innerData = (LinkedHashMap<?,?>) map.get("problem details");
+        String actual = innerData.get("wrongValue").toString();
+        assertEquals("-123", actual);
     }
 }
