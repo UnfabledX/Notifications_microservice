@@ -11,10 +11,10 @@ public class Converter {
     public static Map<String, Object> getResponse(Page<Notification> list) {
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("notifications", list.getContent());
-        response.put("current-page", list.getNumber());
-        response.put("notifications-per-page", list.getSize());
-        response.put("total-notifications", list.getTotalElements());
-        response.put("total-pages", list.getTotalPages());
+        response.put("currentPage", list.getNumber());
+        response.put("notificationsPerPage", list.getSize());
+        response.put("totalNotifications", list.getTotalElements());
+        response.put("totalPages", list.getTotalPages());
         return response;
     }
 }

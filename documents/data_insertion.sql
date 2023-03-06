@@ -2,8 +2,8 @@ DELETE
 FROM notification_db.notifications;
 INSERT INTO notifications
 VALUES (DEFAULT, 4, 11, 3, now()),
-       (DEFAULT, 3, 8, 4, '2023-01-12 13:47:36'),
-       (DEFAULT, 4, 10, 3, '2022-04-12 12:36:36'),
+       (DEFAULT, 3, 8, 6, '2023-01-12 13:47:36'),
+       (DEFAULT, 4, 10, 6, '2022-04-12 12:36:36'),
        (DEFAULT, 4, 10, 4, '2022-04-12 12:36:36'),
        (DEFAULT, 3, 10, 5, '2021-06-23 13:47:36'),
        (DEFAULT, 4, null, 1, '2016-08-23 16:49:30'),

@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 
-    private final static String PROBLEMS = "problem details";
+    private final static String PROBLEMS = "problemDetails";
 
     @ExceptionHandler(NotFoundException.class)
     public ProblemDetail handleNotFoundException(NotFoundException e) {
