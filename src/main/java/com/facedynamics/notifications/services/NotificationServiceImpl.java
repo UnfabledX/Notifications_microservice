@@ -3,7 +3,7 @@ package com.facedynamics.notifications.services;
 import com.facedynamics.notifications.controllers.UserEventService;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationType;
-import com.facedynamics.notifications.model.dto.NotificationGetDTO;
+import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
 import com.facedynamics.notifications.repository.NotificationRepository;
@@ -90,7 +90,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public NotificationResponseDTO createNotification(NotificationGetDTO receivedDTO) {
+    public NotificationResponseDTO createNotification(NotificationDto receivedDTO) {
         NotificationType type = getType(receivedDTO.getNotificationType());
         saveNotificationToDatabase(receivedDTO, type);
 
@@ -105,7 +105,7 @@ public class NotificationServiceImpl implements NotificationService {
         return null;
     }
 
-    private NotificationResponseDTO sendCommentReplyNotificationReturnDTO(NotificationGetDTO receivedDTO,
+    private NotificationResponseDTO sendCommentReplyNotificationReturnDTO(NotificationDto receivedDTO,
                                                                           NotificationType type) {
         int triggerUserId = receivedDTO.getDetails().getUserId();
         LocalDateTime createdAt = receivedDTO.getDetails().getCreatedAt();
@@ -120,7 +120,7 @@ public class NotificationServiceImpl implements NotificationService {
                 type, createdAt);
     }
 
-    private void saveNotificationToDatabase(NotificationGetDTO receivedDTO, NotificationType type) {
+    private void saveNotificationToDatabase(NotificationDto receivedDTO, NotificationType type) {
         int triggerUserId = receivedDTO.getDetails().getUserId();
         LocalDateTime createdAt = receivedDTO.getDetails().getCreatedAt();
         int ownerId = receivedDTO.getOwnerId();

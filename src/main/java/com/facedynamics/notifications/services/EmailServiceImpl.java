@@ -1,6 +1,6 @@
 package com.facedynamics.notifications.services;
 
-import com.facedynamics.notifications.model.dto.NotificationGetDTO;
+import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
 import com.facedynamics.notifications.emails.EmailMessageHelper;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +23,8 @@ public class EmailServiceImpl implements EmailService {
     protected final JavaMailSender mailSender;
 
     @Override
-    public void sendEmail(NotificationGetDTO receivedDTO, NotificationUserServiceDTO ownerDTO,
-                                 String triggerUserName) {
+    public void sendEmail(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,
+                          String triggerUserName) {
         StringWriter writer = EmailMessageHelper.getWriter(receivedDTO, ownerDTO, triggerUserName);
 
         MimeMessagePreparator prep = mimeMessage -> {

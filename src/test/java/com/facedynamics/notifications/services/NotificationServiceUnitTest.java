@@ -5,7 +5,7 @@ import com.facedynamics.notifications.controllers.UserEventService;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationType;
 import com.facedynamics.notifications.model.dto.NotificationDetails;
-import com.facedynamics.notifications.model.dto.NotificationGetDTO;
+import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
 import com.facedynamics.notifications.repository.NotificationRepository;
@@ -131,7 +131,7 @@ class NotificationServiceUnitTest extends BaseTest {
                 .postText("some post...")
                 .commentText("some comment")
                 .createdAt(dateTime).build();
-        NotificationGetDTO getDTO = new NotificationGetDTO(321, "comment", details);
+        NotificationDto getDTO = new NotificationDto(321, "comment", details);
 
         NotificationUserServiceDTO userServiceDTO321 = NotificationUserServiceDTO.builder()
                 .name("Oleksii")

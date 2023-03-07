@@ -2,7 +2,7 @@ package com.facedynamics.notifications.services;
 
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.model.dto.NotificationDetails;
-import com.facedynamics.notifications.model.dto.NotificationGetDTO;
+import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
 import lombok.RequiredArgsConstructor;
 import org.apache.velocity.app.VelocityEngine;
@@ -42,7 +42,7 @@ public class EmailServiceUnitTest extends BaseTest {
                 .postText("some post...")
                 .commentText("some comment")
                 .createdAt(dateTime).build();
-        NotificationGetDTO getDTO = new NotificationGetDTO(321, "comment", details);
+        NotificationDto getDTO = new NotificationDto(321, "comment", details);
 
         NotificationUserServiceDTO userServiceDTO321 = NotificationUserServiceDTO.builder()
                 .name("Oleksii")

@@ -1,7 +1,7 @@
 package com.facedynamics.notifications.controllers;
 
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.model.dto.NotificationGetDTO;
+import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
 import com.facedynamics.notifications.services.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class NotificationController {
     }
 
     @PostMapping
-    public NotificationResponseDTO createNotification(@RequestBody @Valid NotificationGetDTO receivedDTO) {
+    public NotificationResponseDTO createNotification(@RequestBody @Valid NotificationDto receivedDTO) {
         return notificationService.createNotification(receivedDTO);
     }
 }

@@ -1,7 +1,7 @@
 package com.facedynamics.notifications.emails;
 
 import com.facedynamics.notifications.model.NotificationType;
-import com.facedynamics.notifications.model.dto.NotificationGetDTO;
+import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
 import org.apache.velocity.app.VelocityEngine;
 
@@ -28,7 +28,7 @@ public class EmailMessageHelper {
             SUBSCRIPTION,   new SubscriptionEmailMessage()
     );
 
-    public static StringWriter getWriter(NotificationGetDTO receivedDTO, NotificationUserServiceDTO ownerDTO,
+    public static StringWriter getWriter(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,
                                          String triggerUserName) {
         EmailMessage specificEmailMessage = getEmailMessage(receivedDTO);
         specificEmailMessage.setEngine(engine);
@@ -38,12 +38,12 @@ public class EmailMessageHelper {
         return specificEmailMessage.getLetterBody();
     }
 
-    public static String getSubject(NotificationGetDTO receivedDTO) {
+    public static String getSubject(NotificationDto receivedDTO) {
         EmailMessage specificEmailMessage = getEmailMessage(receivedDTO);
         return specificEmailMessage.getLetterSubject();
     }
 
-    private static EmailMessage getEmailMessage(NotificationGetDTO receivedDTO) {
+    private static EmailMessage getEmailMessage(NotificationDto receivedDTO) {
         NotificationType type = getType(receivedDTO.getNotificationType());
         return mapOfMails.get(type);
     }
