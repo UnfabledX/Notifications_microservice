@@ -1,14 +1,15 @@
 package com.facedynamics.notifications.emails;
 
-import com.facedynamics.notifications.model.NotificationType;
+import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import org.apache.velocity.app.VelocityEngine;
 
 import java.io.StringWriter;
 import java.util.Map;
 
-import static com.facedynamics.notifications.model.NotificationType.*;
+import static com.facedynamics.notifications.model.dto.NotificationContent.Type.*;
+
 
 public class EmailMessageHelper {
 
@@ -19,13 +20,13 @@ public class EmailMessageHelper {
         engine.init();
     }
 
-    private static final Map<NotificationType, EmailMessage> mapOfMails = Map.of(
-            REGISTRATION,   new RegistrationEmailMessage(),
-            RESET_PASSWORD, new ResetPasswordEmailMessage(),
-            COMMENT,        new CommentEmailMessage(),
-            REPLY,          new ReplyEmailMessage(),
-            FOLLOW,         new FollowEmailMessage(),
-            SUBSCRIPTION,   new SubscriptionEmailMessage()
+    private static final Map<NotificationContent.Type, EmailMessage> mapOfMails = Map.of(
+            USER_REGISTERED,    new UserRegisteredEmailMessage(),
+            PASSWORD_RESET,     new PasswordResetEmailMessage(),
+            COMMENT_CREATED,    new CommentCreatedEmailMessage(),
+            COMMENT_REPLIED,    new CommentRepliedEmailMessage(),
+            FOLLOWED_BY,        new FollowedByEmailMessage(),
+            SUBSCRIBED_BY,      new SubscribedByEmailMessage()
     );
 
     public static StringWriter getWriter(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,
@@ -44,7 +45,7 @@ public class EmailMessageHelper {
     }
 
     private static EmailMessage getEmailMessage(NotificationDto receivedDTO) {
-        NotificationType type = getType(receivedDTO.getNotificationType());
+        NotificationContent.Type type = receivedDTO.content().getType();
         return mapOfMails.get(type);
     }
 }

@@ -1,6 +1,6 @@
 package com.facedynamics.notifications.controllers;
 
-import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,5 +16,5 @@ public interface UserEventService {
      */
     @GetMapping("users/{id}")
     @Cacheable
-    NotificationUserServiceDTO getUserById(@PathVariable int id);
+    NotificationUserServiceDTO getUserById(@PathVariable long id);
 }

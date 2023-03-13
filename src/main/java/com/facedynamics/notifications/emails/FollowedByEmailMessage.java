@@ -2,9 +2,9 @@ package com.facedynamics.notifications.emails;
 
 import java.io.StringWriter;
 
-public class ResetPasswordEmailMessage extends EmailMessage {
+public class FollowedByEmailMessage extends EmailMessage {
 
-    public static final String NEW_RESET_PASSWORD = "Request to Reset Password!";
+    public static final String NEW_FOLLOW = "You have a NEW Follow!";
 
     @Override
     public StringWriter getLetterBody() {
@@ -14,6 +14,6 @@ public class ResetPasswordEmailMessage extends EmailMessage {
 
     @Override
     public String getLetterSubject(){
-        return NEW_RESET_PASSWORD;
+        return NEW_FOLLOW;
     }
 }

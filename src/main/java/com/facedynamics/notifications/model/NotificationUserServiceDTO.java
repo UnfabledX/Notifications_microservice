@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.model.dto;
+package com.facedynamics.notifications.model;
 
 import lombok.Builder;
 import lombok.Data;

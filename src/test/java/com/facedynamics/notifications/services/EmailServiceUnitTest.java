@@ -3,7 +3,7 @@ package com.facedynamics.notifications.services;
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.model.dto.NotificationDetails;
 import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import lombok.RequiredArgsConstructor;
 import org.apache.velocity.app.VelocityEngine;
 import org.junit.jupiter.api.Assertions;

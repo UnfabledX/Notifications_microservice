@@ -1,14 +1,15 @@
 package com.facedynamics.notifications.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.time.LocalDateTime;
-import java.util.Map;
 
-
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY,
+        content = JsonInclude.Include.NON_NULL)
 public record NotificationDto(
-        Long createdById,
         Long recipientId,
+        Long createdById,
         NotificationContent content,
-        Map<String, Object> metadata,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {

@@ -1,7 +1,7 @@
 package com.facedynamics.notifications.emails;
 
+import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
 import lombok.Setter;
 import org.apache.velocity.app.VelocityEngine;
 

@@ -2,9 +2,9 @@ package com.facedynamics.notifications.emails;
 
 import java.io.StringWriter;
 
-public class SubscriptionEmailMessage extends EmailMessage {
+public class UserRegisteredEmailMessage extends EmailMessage {
 
-    public static final String NEW_SUBSCRIPTION = "You have a NEW Subscription!";
+    public static final String NEW_REGISTRATION = "Your registration for FaceDynamics social network!";
 
     @Override
     public StringWriter getLetterBody() {
@@ -14,6 +14,6 @@ public class SubscriptionEmailMessage extends EmailMessage {
 
     @Override
     public String getLetterSubject(){
-        return NEW_SUBSCRIPTION;
+        return NEW_REGISTRATION;
     }
 }

@@ -2,10 +2,9 @@ package com.facedynamics.notifications.services;
 
 import com.facedynamics.notifications.controllers.UserEventService;
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.model.NotificationType;
+import com.facedynamics.notifications.model.NotificationUserServiceDTO;
+import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
-import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,11 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.facedynamics.notifications.model.NotificationType.*;
 import static com.facedynamics.notifications.utils.Constants.*;
 
 /**
@@ -90,46 +87,30 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public NotificationResponseDTO createNotification(NotificationDto receivedDTO) {
-        NotificationType type = getType(receivedDTO.getNotificationType());
-        saveNotificationToDatabase(receivedDTO, type);
+    public Notification createNotification(NotificationDto receivedDTO) {
+        NotificationContent.Type type = receivedDTO.content().getType();
 
         switch (type) {
-            case REGISTRATION: //todo
-            case RESET_PASSWORD: //todo
-            case COMMENT, REPLY:
-                return sendCommentReplyNotificationReturnDTO(receivedDTO, type);
-            case FOLLOW:  //todo
-            case SUBSCRIPTION: //todo
+            case USER_REGISTERED: //todo
+            case PASSWORD_RESET: //todo
+            case COMMENT_CREATED:
+            case COMMENT_REPLIED: {
+                NotificationUserServiceDTO ownerDTO = userEventService.getUserById(receivedDTO.recipientId());
+                NotificationUserServiceDTO triggerUserDTO = userEventService.getUserById(receivedDTO.createdById());
+                emailService.sendEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
+                Notification notification = Notification.builder()
+                        .ownerId(receivedDTO.recipientId())
+                        .triggererId(receivedDTO.createdById())
+                        .createdAt(receivedDTO.createdAt())
+                        .updatedAt(receivedDTO.updatedAt())
+                        .notificationType(receivedDTO.content().getType().ordinal())
+                        .build();
+                return notificationRepository.save(notification);
+            }
+            case FOLLOWED_BY:  //todo
+            case SUBSCRIBED_BY: //todo
         }
         return null;
     }
 
-    private NotificationResponseDTO sendCommentReplyNotificationReturnDTO(NotificationDto receivedDTO,
-                                                                          NotificationType type) {
-        int triggerUserId = receivedDTO.getDetails().getUserId();
-        LocalDateTime createdAt = receivedDTO.getDetails().getCreatedAt();
-        int ownerId = receivedDTO.getOwnerId();
-
-        NotificationUserServiceDTO ownerDTO = userEventService.getUserById(ownerId);
-        NotificationUserServiceDTO triggerUserDTO = userEventService.getUserById(triggerUserId);
-
-        emailService.sendEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
-
-        return new NotificationResponseDTO(triggerUserDTO.getUsername(),
-                type, createdAt);
-    }
-
-    private void saveNotificationToDatabase(NotificationDto receivedDTO, NotificationType type) {
-        int triggerUserId = receivedDTO.getDetails().getUserId();
-        LocalDateTime createdAt = receivedDTO.getDetails().getCreatedAt();
-        int ownerId = receivedDTO.getOwnerId();
-        Notification notification = Notification.builder()
-                .ownerId(ownerId)
-                .triggererId(triggerUserId)
-                .createdAt(createdAt)
-                .notificationType(type.getId())
-                .build();
-        notificationRepository.save(notification);
-    }
 }

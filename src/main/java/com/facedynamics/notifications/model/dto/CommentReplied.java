@@ -6,16 +6,16 @@ import lombok.Getter;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class CommentCreated extends NotificationContent {
+public class CommentReplied extends NotificationContent {
 
-    @NotEmpty
-    private final String postText;
     @NotEmpty
     private final String commentText;
+    @NotEmpty
+    private final String replyText;
 
-    public CommentCreated(String postText, String commentText) {
-        super(Type.COMMENT_CREATED);
-        this.postText = postText;
+    public CommentReplied(String commentText, String replyText) {
+        super(Type.COMMENT_REPLIED);
         this.commentText = commentText;
+        this.replyText = replyText;
     }
 }

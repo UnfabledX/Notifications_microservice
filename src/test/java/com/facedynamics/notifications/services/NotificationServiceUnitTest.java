@@ -7,7 +7,7 @@ import com.facedynamics.notifications.model.NotificationType;
 import com.facedynamics.notifications.model.dto.NotificationDetails;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
-import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

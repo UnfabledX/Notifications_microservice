@@ -31,15 +31,19 @@ public class Notification {
 
     @Column(name = "owner_id", nullable = false)
     @Min(value = 1, message = "Id must be greater than 1")
-    private int ownerId;
+    private Long ownerId;
 
     @Column(name = "triggerer_id")
     @Min(value = 1, message = "Id must be greater than 1")
-    private Integer triggererId;
+    private Long triggererId;
 
     @Column(name = "createdAt")
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
+
+    @Column(name = "updatedAt")
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private LocalDateTime updatedAt;
 
     @Column(name = "notification_type_id")
     private int notificationType;

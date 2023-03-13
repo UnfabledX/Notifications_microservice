@@ -2,7 +2,6 @@ package com.facedynamics.notifications.services;
 
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
 
 import java.util.List;
 
@@ -14,6 +13,6 @@ public interface NotificationService {
 
     Long deleteNotificationById(long notificationId);
 
-    NotificationResponseDTO createNotification(NotificationDto notification);
+    Notification createNotification(NotificationDto notification);
 
 }
