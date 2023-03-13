@@ -1,6 +1,6 @@
 package com.facedynamics.notifications.handler;
 
-import com.facedynamics.notifications.util.ErrorMessage;
+import com.facedynamics.notifications.utils.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

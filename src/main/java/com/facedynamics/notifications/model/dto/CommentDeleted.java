@@ -5,13 +5,13 @@ import lombok.Getter;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class CommentCreated extends NotificationContent {
+public class CommentDeleted extends NotificationContent{
 
     private final Long commentId;
     private final Long postId;
 
-    public CommentCreated(Long commentId, Long postId) {
-        super(Type.COMMENT_CREATED);
+    public CommentDeleted(Long commentId, Long postId) {
+        super(NotificationContent.Type.COMMENT_CREATED);
         this.commentId = commentId;
         this.postId = postId;
     }
