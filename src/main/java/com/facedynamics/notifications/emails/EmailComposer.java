@@ -21,12 +21,12 @@ public class EmailComposer {
     }
 
     private static final Map<NotificationContent.Type, EmailMessage> mapOfMails = Map.of(
-            USER_REGISTERED,    new UserRegisteredEmailMessage(),
-            USER_PASSWORD_RESET_REQUEST,     new PasswordResetRequestEmailMessage(),
-            POST_COMMENTED,    new PostCommentedEmailMessage(),
-            COMMENT_REPLIED,    new CommentRepliedEmailMessage(),
-            FOLLOWED_BY,        new FollowedByEmailMessage(),
-            SUBSCRIBED_BY,      new SubscribedByEmailMessage()
+            USER_REGISTERED,                new UserRegisteredEmailMessage(),
+            USER_PASSWORD_RESET_REQUEST,    new PasswordResetRequestEmailMessage(),
+            POST_COMMENTED,                 new PostCommentedEmailMessage(),
+            COMMENT_REPLIED,                new CommentRepliedEmailMessage(),
+            FOLLOWED_BY,                    new FollowedByEmailMessage(),
+            SUBSCRIBED_BY,                  new SubscribedByEmailMessage()
     );
 
     public static StringWriter getWriter(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,

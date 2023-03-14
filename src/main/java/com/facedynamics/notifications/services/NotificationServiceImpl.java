@@ -3,10 +3,10 @@ package com.facedynamics.notifications.services;
 import com.facedynamics.notifications.controllers.UserEventService;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationResponseDTO;
-import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.repository.NotificationRepository;
+import com.facedynamics.notifications.services.commands.CommandFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +36,8 @@ public class NotificationServiceImpl implements NotificationService {
     private final UserEventService userEventService;
 
     private final EmailService emailService;
+
+    private CommandFactory factory;
 
     /**
      * Finds all notifications of specified user ID.
@@ -87,39 +89,18 @@ public class NotificationServiceImpl implements NotificationService {
         return notification.get().getId();
     }
 
-
+    /**
+     * Creates notification of specified type, saves it to database,
+     * sends an email letter to recipient user (who received a notification)
+     * @param receivedDTO dto with incoming necessary data
+     * @return returns a response body of a saved notification
+     */
     @Override
     public NotificationResponseDTO createNotification(NotificationDto receivedDTO) {
         NotificationContent.Type type = receivedDTO.content().getType();
-
-        switch (type) {
-            case USER_REGISTERED: //todo
-            case USER_PASSWORD_RESET_REQUEST: //todo
-            case POST_COMMENTED:
-            case COMMENT_REPLIED: {
-                NotificationUserServiceDTO ownerDTO = userEventService.getUserById(receivedDTO.recipientId());
-                NotificationUserServiceDTO triggerUserDTO = userEventService.getUserById(receivedDTO.createdById());
-                emailService.sendEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
-                notificationRepository.save(getNotification(receivedDTO));
-                return NotificationResponseDTO.builder()
-                        .triggererName(triggerUserDTO.getUsername())
-                        .type(type)
-                        .createdAt(receivedDTO.createdAt())
-                        .build();
-            }
-            case FOLLOWED_BY:  //todo
-            case SUBSCRIBED_BY: //todo
+        if (factory == null) {
+            factory = new CommandFactory(userEventService, emailService, notificationRepository);
         }
-        return null;
-    }
-
-    private static Notification getNotification(NotificationDto receivedDTO) {
-        return Notification.builder()
-                .ownerId(receivedDTO.recipientId())
-                .triggererId(receivedDTO.createdById())
-                .createdAt(receivedDTO.createdAt())
-                .updatedAt(receivedDTO.updatedAt())
-                .notificationType(receivedDTO.content().getType().ordinal())
-                .build();
+        return factory.createCommand(type).execute(receivedDTO);
     }
 }

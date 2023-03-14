@@ -30,9 +30,9 @@ public class Notification {
     @Min(value = 1, message = "Id must be greater than 1")
     private Long ownerId;
 
-    @Column(name = "triggerer_id")
+    @Column(name = "createdBy_id")
     @Min(value = 1, message = "Id must be greater than 1")
-    private Long triggererId;
+    private Long createdById;
 
     @Column(name = "createdAt")
     @Temporal(value = TemporalType.TIMESTAMP)
@@ -42,6 +42,7 @@ public class Notification {
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
 
-    @Column(name = "notification_type_id")
-    private int notificationType;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "details_id", referencedColumnName = "id")
+    private NotificationDetails details;
 }

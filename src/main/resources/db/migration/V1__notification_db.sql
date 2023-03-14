@@ -2,55 +2,47 @@ CREATE schema IF NOT EXISTS notification_db;
 USE notification_db;
 
 -- --------------------------------------------------------------
--- NOTIFICATIONS TYPES
--- According to the project requirements there are several types
--- of notifications:
---      + paid subscription when user subscribes to another in order
---        to see exclusive content.
---      + follow - when the user follows another to track his news
---      + comment - when the user commented someones post.
---      + reply - when the user replied to someones comment.
---      + pass_reset - when the user receives confirmation of password reset.
---      + registration - when the user receives verification after the registration.
+-- NOTIFICATIONS DETAILS
+-- Notification details represent detailed information about specific type
+-- of notification:
+--      + PostCommented - details about post_id, comment_id
+--      + CommentReplied - details about comment_id, reply_id
+--      + UserRegistered -
+--      + PasswordResetRequest -
+--      + to be continued...
 -- --------------------------------------------------------------
 
-CREATE TABLE notification_types
+CREATE TABLE notification_details
 (
-    id          SMALLINT    NOT NULL  PRIMARY KEY,
-    name        VARCHAR(30) NOT NULL
+    id           BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    post_id      BIGINT,
+    comment_id   BIGINT,
+    reply_id     BIGINT
 ) CHARACTER SET=utf8mb4;
-
--- inserting existing notification types:
-INSERT INTO notification_types
-VALUES  (1, 'registration'),
-        (2, 'password reset'),
-        (3, 'comment'),
-        (4, 'reply'),
-        (5, 'follow'),
-        (6, 'subscription');
 
 -- --------------------------------------------------------------
 -- NOTIFICATIONS
 -- notifications that are present in the project have fields:
 --      + id - unique auto-incremented identifier for notifications
---      + owner_user_id - user id who is notified by notification
---      + trigger_user_id - user id who triggered notification
---      + notify_type_id - notifications type id
+--      + owner_id - user id who is notified by notification
+--      + createdBy_id - user id who triggered notification
+--      + details_id - id of details if any present
 --      + createdAt - time when notification was created
+--      + updatedAt - time when the notified entity was updated
 -- --------------------------------------------------------------
 CREATE TABLE notifications
 (
 -- 'generated always AS identity' means id is autoincrement field
--- (from 1 up to Integer.MAX_VALUE with the step 1)
     id                      BIGINT    NOT NULL   AUTO_INCREMENT  PRIMARY KEY,
-    owner_id                INT       NOT NULL,
-    triggerer_id            INT,
--- notify_type_id in notifications table is associated with id in notifications_types table
--- notify_type_id of notifications = id of notifications_types
-    notification_type_id    SMALLINT  NOT NULL,
+    owner_id                BIGINT    NOT NULL,
+    createdBy_id            BIGINT,
+-- details_id in notifications table is associated with id in notification_details table
+-- details_id of notifications = id of notification_details
+    details_id              BIGINT,
     createdAt               TIMESTAMP NOT NULL,
+    updatedAt               TIMESTAMP,
 
 -- this declaration contains the foreign key constraint
-    CONSTRAINT notification_types_fk
-    FOREIGN KEY (notification_type_id) REFERENCES notification_types (id)
+    CONSTRAINT details_fk
+    FOREIGN KEY (details_id) REFERENCES notification_details (id)
 ) CHARACTER SET=utf8mb4;
