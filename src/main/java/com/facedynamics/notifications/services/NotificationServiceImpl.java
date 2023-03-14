@@ -86,6 +86,7 @@ public class NotificationServiceImpl implements NotificationService {
         return notification.get().getId();
     }
 
+
     @Override
     public Notification createNotification(NotificationDto receivedDTO) {
         NotificationContent.Type type = receivedDTO.content().getType();
@@ -98,13 +99,7 @@ public class NotificationServiceImpl implements NotificationService {
                 NotificationUserServiceDTO ownerDTO = userEventService.getUserById(receivedDTO.recipientId());
                 NotificationUserServiceDTO triggerUserDTO = userEventService.getUserById(receivedDTO.createdById());
                 emailService.sendEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
-                Notification notification = Notification.builder()
-                        .ownerId(receivedDTO.recipientId())
-                        .triggererId(receivedDTO.createdById())
-                        .createdAt(receivedDTO.createdAt())
-                        .updatedAt(receivedDTO.updatedAt())
-                        .notificationType(receivedDTO.content().getType().ordinal())
-                        .build();
+                Notification notification = getNotification(receivedDTO);
                 return notificationRepository.save(notification);
             }
             case FOLLOWED_BY:  //todo
@@ -113,4 +108,13 @@ public class NotificationServiceImpl implements NotificationService {
         return null;
     }
 
+    private static Notification getNotification(NotificationDto receivedDTO) {
+        return Notification.builder()
+                .ownerId(receivedDTO.recipientId())
+                .triggererId(receivedDTO.createdById())
+                .createdAt(receivedDTO.createdAt())
+                .updatedAt(receivedDTO.updatedAt())
+                .notificationType(receivedDTO.content().getType().ordinal())
+                .build();
+    }
 }
