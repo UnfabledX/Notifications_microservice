@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class PasswordReset extends NotificationContent {
+public class PasswordResetRequest extends NotificationContent {
 
     @Size(min = 3, max = 24, message = "Username mustn't be bigger then 24 letters and less then 3 letters")
     private final String username;
@@ -18,8 +18,8 @@ public class PasswordReset extends NotificationContent {
     private final String confirmationLink;
     private final int timeToLive;
 
-    public PasswordReset(String username, String email, String confirmationLink, int timeToLive) {
-        super(Type.PASSWORD_RESET);
+    public PasswordResetRequest(String username, String email, String confirmationLink, int timeToLive) {
+        super(Type.USER_PASSWORD_RESET_REQUEST);
         this.username = username;
         this.email = email;
         this.confirmationLink = confirmationLink;

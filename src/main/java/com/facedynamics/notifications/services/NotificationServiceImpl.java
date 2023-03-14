@@ -2,6 +2,7 @@ package com.facedynamics.notifications.services;
 
 import com.facedynamics.notifications.controllers.UserEventService;
 import com.facedynamics.notifications.model.Notification;
+import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
@@ -88,19 +89,23 @@ public class NotificationServiceImpl implements NotificationService {
 
 
     @Override
-    public Notification createNotification(NotificationDto receivedDTO) {
+    public NotificationResponseDTO createNotification(NotificationDto receivedDTO) {
         NotificationContent.Type type = receivedDTO.content().getType();
 
         switch (type) {
             case USER_REGISTERED: //todo
-            case PASSWORD_RESET: //todo
-            case COMMENT_CREATED:
+            case USER_PASSWORD_RESET_REQUEST: //todo
+            case POST_COMMENTED:
             case COMMENT_REPLIED: {
                 NotificationUserServiceDTO ownerDTO = userEventService.getUserById(receivedDTO.recipientId());
                 NotificationUserServiceDTO triggerUserDTO = userEventService.getUserById(receivedDTO.createdById());
                 emailService.sendEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
-                Notification notification = getNotification(receivedDTO);
-                return notificationRepository.save(notification);
+                notificationRepository.save(getNotification(receivedDTO));
+                return NotificationResponseDTO.builder()
+                        .triggererName(triggerUserDTO.getUsername())
+                        .type(type)
+                        .createdAt(receivedDTO.createdAt())
+                        .build();
             }
             case FOLLOWED_BY:  //todo
             case SUBSCRIBED_BY: //todo

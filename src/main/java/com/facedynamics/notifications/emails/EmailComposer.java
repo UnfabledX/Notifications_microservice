@@ -11,7 +11,7 @@ import java.util.Map;
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.*;
 
 
-public class EmailMessageHelper {
+public class EmailComposer {
 
     private static final VelocityEngine engine;
 
@@ -22,8 +22,8 @@ public class EmailMessageHelper {
 
     private static final Map<NotificationContent.Type, EmailMessage> mapOfMails = Map.of(
             USER_REGISTERED,    new UserRegisteredEmailMessage(),
-            PASSWORD_RESET,     new PasswordResetEmailMessage(),
-            COMMENT_CREATED,    new CommentCreatedEmailMessage(),
+            USER_PASSWORD_RESET_REQUEST,     new PasswordResetRequestEmailMessage(),
+            POST_COMMENTED,    new PostCommentedEmailMessage(),
             COMMENT_REPLIED,    new CommentRepliedEmailMessage(),
             FOLLOWED_BY,        new FollowedByEmailMessage(),
             SUBSCRIBED_BY,      new SubscribedByEmailMessage()

@@ -1,19 +1,19 @@
 package com.facedynamics.notifications.emails;
 
-import com.facedynamics.notifications.model.dto.CommentCreated;
+import com.facedynamics.notifications.model.dto.PostCommented;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 
 import java.io.StringWriter;
 
 
-public class CommentCreatedEmailMessage extends EmailMessage {
+public class PostCommentedEmailMessage extends EmailMessage {
 
     public static final String NEW_COMMENT = "Received a NEW Comment!";
 
     @Override
     public StringWriter getLetterBody() {
-        CommentCreated created = (CommentCreated) receivedDTO.content();
+        PostCommented created = (PostCommented) receivedDTO.content();
         String commentBody = created.getCommentText();
         String postBody = created.getPostText();
 
@@ -28,7 +28,7 @@ public class CommentCreatedEmailMessage extends EmailMessage {
         template.merge(context, writer);
         return writer;
     }
-//"src/main/resources/velocity/email-comment.vm"
+
     @Override
     public String getLetterSubject() {
         return NEW_COMMENT;

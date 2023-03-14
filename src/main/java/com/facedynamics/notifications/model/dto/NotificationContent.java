@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
         property = "type")
 @JsonSubTypes({
         @Type(value = UserRegistered.class, name = "USER_REGISTERED"),
-        @Type(value = PasswordReset.class, name = "PASSWORD_RESET"),
-        @Type(value = CommentCreated.class, name = "COMMENT_CREATED"),
+        @Type(value = PasswordResetRequest.class, name = "USER_PASSWORD_RESET_REQUEST"),
+        @Type(value = PostCommented.class, name = "POST_COMMENTED"),
         @Type(value = CommentReplied.class, name = "COMMENT_REPLIED"),
         @Type(value = FollowedBy.class, name = "FOLLOWED_BY"),
         @Type(value = SubscribedBy.class, name = "SUBSCRIBED_BY"),
@@ -34,16 +34,16 @@ public abstract class NotificationContent {
         USER_REGISTERED,
 
         /**
-         * A notification for a user who wants to reset
-         * his password.
+         * A notification for a user who just requested to
+         * reset his password.
          */
-        PASSWORD_RESET,
+        USER_PASSWORD_RESET_REQUEST,
 
         /**
          * A notification for owner-user who just
          * received a comment under his post.
          */
-        COMMENT_CREATED,
+        POST_COMMENTED,
 
         /**
          * A notification for owner-user who just

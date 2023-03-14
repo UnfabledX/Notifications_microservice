@@ -2,7 +2,7 @@ package com.facedynamics.notifications.services;
 
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.NotificationUserServiceDTO;
-import com.facedynamics.notifications.emails.EmailMessageHelper;
+import com.facedynamics.notifications.emails.EmailComposer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,13 +25,13 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendEmail(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,
                           String triggerUserName) {
-        StringWriter writer = EmailMessageHelper.getWriter(receivedDTO, ownerDTO, triggerUserName);
+        StringWriter writer = EmailComposer.getWriter(receivedDTO, ownerDTO, triggerUserName);
 
         MimeMessagePreparator prep = mimeMessage -> {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
             helper.setTo(ownerDTO.getEmail());
             helper.setFrom(emailFrom);
-            helper.setSubject(EmailMessageHelper.getSubject(receivedDTO));
+            helper.setSubject(EmailComposer.getSubject(receivedDTO));
             helper.setText(writer.toString(), true);
         };
         mailSender.send(prep);

@@ -1,7 +1,6 @@
 package com.facedynamics.notifications.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +13,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Component
-@JsonInclude(value = JsonInclude.Include.NON_EMPTY,
-        content = JsonInclude.Include.NON_NULL)
 @Table(name = "notifications", schema = "notification_db")
 @NoArgsConstructor
 @AllArgsConstructor

@@ -2,7 +2,7 @@ package com.facedynamics.notifications.emails;
 
 import java.io.StringWriter;
 
-public class PasswordResetEmailMessage extends EmailMessage {
+public class PasswordResetRequestEmailMessage extends EmailMessage {
 
     public static final String NEW_RESET_PASSWORD = "Request to Reset Password!";
 
