@@ -2,20 +2,28 @@ package com.facedynamics.notifications.model.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+
+import static com.facedynamics.notifications.utils.Constants.*;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
 public class CommentReplied extends NotificationContent {
 
-    @Min(1)
+    @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1)
+    @NotNull(message = THE_COMMENT_ID_MUST_BE_PRESENT)
     private final Long commentId;
-    @Min(1)
+
+    @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1)
+    @NotNull(message = "The reply id must be present.")
     private final Long replyId;
-    @NotEmpty
+
+    @NotEmpty(message = THE_COMMENT_TEXT_MUST_BE_PRESENT)
     private final String commentText;
-    @NotEmpty
+
+    @NotEmpty(message = "The reply text must be present.")
     private final String replyText;
 
     public CommentReplied(Long commentId, Long replyId, String commentText, String replyText) {

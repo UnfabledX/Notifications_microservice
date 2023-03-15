@@ -2,6 +2,7 @@ package com.facedynamics.notifications.services;
 
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.controllers.UserEventService;
+import com.facedynamics.notifications.handler.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationType;
 import com.facedynamics.notifications.model.dto.NotificationDetails;
@@ -17,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,16 +84,16 @@ class NotificationServiceUnitTest extends BaseTest {
     public void getAllNotificationsByUserIdTest_notValidId() {
         ownerId = 12345;
         when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE)))
-                .thenThrow(ValidationException.class);
-        assertThrows(ValidationException.class,
+                .thenThrow(NotFoundException.class);
+        assertThrows(NotFoundException.class,
                 () -> service.getAllNotificationsByUserId(0, ownerId));
     }
 
     @Test
     void deleteAllNotificationsByUserIdTest_notValidId() {
         ownerId = 3210;
-        doThrow(ValidationException.class).when(repository).deleteNotificationsByOwnerId(ownerId);
-        assertThrows(ValidationException.class,
+        doThrow(NotFoundException.class).when(repository).deleteNotificationsByOwnerId(ownerId);
+        assertThrows(NotFoundException.class,
                 () -> service.deleteAllNotificationsByOwnerId(ownerId));
     }
 
@@ -111,7 +111,7 @@ class NotificationServiceUnitTest extends BaseTest {
         doAnswer(invocation -> null).when(repository).deleteNotificationById(anyLong());
         when(repository.findNotificationById(eq(notificationId)))
                 .thenReturn(Optional.empty());
-        assertThrows(ValidationException.class,
+        assertThrows(NotFoundException.class,
                 () -> service.deleteNotificationById(notificationId));
     }
 
@@ -134,12 +134,12 @@ class NotificationServiceUnitTest extends BaseTest {
         NotificationGetDTO getDTO = new NotificationGetDTO(321, "comment", details);
 
         NotificationUserServiceDTO userServiceDTO321 = NotificationUserServiceDTO.builder()
-                .ownerName("Oleksii")
+                .name("Oleksii")
                 .username("Unfabled")
                 .email("alex0destroyer@gmail.com")
                 .build();
         NotificationUserServiceDTO userServiceDTO123 = NotificationUserServiceDTO.builder()
-                .ownerName("Pasha")
+                .name("Pasha")
                 .username("Dragon")
                 .email("pasha@gmail.com")
                 .build();
