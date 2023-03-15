@@ -6,13 +6,16 @@ import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import static com.facedynamics.notifications.utils.Constants.NO_BIGGER_THEN_24_AND_NO_LESS_THEN_3_LETTERS;
+import static com.facedynamics.notifications.utils.Constants.LETTER_WRONG_FORMAT;
+
 @Getter
 @EqualsAndHashCode(callSuper = true)
 public class PasswordResetRequest extends NotificationContent {
 
-    @Size(min = 3, max = 24, message = "Username mustn't be bigger then 24 letters and less then 3 letters")
+    @Size(min = 3, max = 24, message = NO_BIGGER_THEN_24_AND_NO_LESS_THEN_3_LETTERS)
     private final String username;
-    @Email(message = "Email is written in a wrong format")
+    @Email(message = LETTER_WRONG_FORMAT)
     private final String email;
     @NotEmpty
     private final String confirmationLink;

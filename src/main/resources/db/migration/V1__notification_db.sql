@@ -15,6 +15,7 @@ USE notification_db;
 CREATE TABLE notification_details
 (
     id           BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    type         VARCHAR(60),
     post_id      BIGINT,
     comment_id   BIGINT,
     reply_id     BIGINT
@@ -38,7 +39,7 @@ CREATE TABLE notifications
     createdBy_id            BIGINT,
 -- details_id in notifications table is associated with id in notification_details table
 -- details_id of notifications = id of notification_details
-    details_id              BIGINT,
+    details_id              BIGINT    NOT NULL,
     createdAt               TIMESTAMP NOT NULL,
     updatedAt               TIMESTAMP,
 

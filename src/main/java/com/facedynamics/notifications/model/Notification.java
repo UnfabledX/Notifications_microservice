@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+import static com.facedynamics.notifications.utils.Constants.GREATER_THAN_OR_EQUAL_TO_1;
+
 @Entity
 @Component
 @Table(name = "notifications", schema = "notification_db")
@@ -27,11 +29,11 @@ public class Notification {
     private Long id;
 
     @Column(name = "owner_id", nullable = false)
-    @Min(value = 1, message = "Id must be greater than 1")
+    @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1)
     private Long ownerId;
 
     @Column(name = "createdBy_id")
-    @Min(value = 1, message = "Id must be greater than 1")
+    @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1)
     private Long createdById;
 
     @Column(name = "createdAt")
