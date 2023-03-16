@@ -9,7 +9,7 @@ public class NotificationUserServiceDTO {
 
     private String username;
 
-    private String name;
+    private String ownerName;
 
     private String email;
 

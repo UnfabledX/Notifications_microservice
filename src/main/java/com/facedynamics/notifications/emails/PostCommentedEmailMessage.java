@@ -18,7 +18,7 @@ public class PostCommentedEmailMessage extends EmailMessage {
         String postBody = created.getPostText();
 
         VelocityContext context = new VelocityContext();
-        context.put("ownerName", ownerDTO.getName());
+        context.put("ownerName", ownerDTO.getOwnerName());
         context.put("triggererUsername", triggerUserName);
         context.put("commentBody", commentBody.length() > 40 ? commentBody.substring(0, 40) : commentBody);
         context.put("postBody", postBody.length() > 50 ? postBody.substring(0, 50) : postBody);
