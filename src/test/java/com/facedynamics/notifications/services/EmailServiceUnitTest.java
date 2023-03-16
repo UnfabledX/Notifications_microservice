@@ -41,7 +41,7 @@ public class EmailServiceUnitTest extends BaseTest {
         NotificationDto getDTO = new NotificationDto(321L, 123L,
                 new PostCommented(4L, 3L, "some post...", "some comment"), dateTime, null);
         NotificationUserServiceDTO userServiceDTO321 = NotificationUserServiceDTO.builder()
-                .name("Oleksii")
+                .ownerName("Oleksii")
                 .username("Unfabled")
                 .email("alex0destroyer@gmail.com")
                 .build();

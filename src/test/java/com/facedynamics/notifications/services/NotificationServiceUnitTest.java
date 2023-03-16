@@ -27,7 +27,6 @@ import java.util.Optional;
 
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.FOLLOWED_BY;
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
-import static com.facedynamics.notifications.utils.Constants.PAGE_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -51,7 +50,7 @@ class NotificationServiceUnitTest extends BaseTest {
 
     private Page<Notification> resultList;
 
-    private int ownerId;
+    private Long ownerId;
 
     private Pageable pageable;
 
@@ -89,7 +88,7 @@ class NotificationServiceUnitTest extends BaseTest {
 
     @Test
     void getAllNotificationsByUserIdTest_validId() {
-        ownerId = 3;
+        ownerId = 3L;
         when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE_DEFAULT))).thenReturn(resultList);
         when(repository.existsByOwnerId(ownerId)).thenReturn(true);
         Page<Notification> actualList = service.getAllNotificationsByUserId(ownerId, pageable);
@@ -99,7 +98,7 @@ class NotificationServiceUnitTest extends BaseTest {
 
     @Test
     public void getAllNotificationsByUserIdTest_notValidId() {
-        ownerId = 12345;
+        ownerId = 12345L;
         when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE_DEFAULT)))
                 .thenThrow(NotFoundException.class);
         assertThrows(NotFoundException.class,
@@ -108,7 +107,7 @@ class NotificationServiceUnitTest extends BaseTest {
 
     @Test
     void deleteAllNotificationsByUserIdTest_notValidId() {
-        ownerId = 3210;
+        ownerId = 3210L;
         doThrow(NotFoundException.class).when(repository).deleteNotificationsByOwnerId(ownerId);
         assertThrows(NotFoundException.class,
                 () -> service.deleteAllNotificationsByOwnerId(ownerId));
@@ -116,7 +115,7 @@ class NotificationServiceUnitTest extends BaseTest {
 
     @Test
     void deleteAllNotificationsByUserIdTest_validId() {
-        ownerId = 3;
+        ownerId = 3L;
         doNothing().when(repository).deleteNotificationsByOwnerId(ownerId);
         when(repository.existsByOwnerId(ownerId)).thenReturn(true);
         assertDoesNotThrow(() -> service.deleteAllNotificationsByOwnerId(ownerId));
@@ -146,12 +145,12 @@ class NotificationServiceUnitTest extends BaseTest {
         NotificationDto getDTO = new NotificationDto(321L, 123L,
                 new PostCommented(4L, 3L, "some post...", "some comment"), dateTime, null);
         NotificationUserServiceDTO userServiceDTO321 = NotificationUserServiceDTO.builder()
-                .name("Oleksii")
+                .ownerName("Oleksii")
                 .username("Unfabled")
                 .email("alex0destroyer@gmail.com")
                 .build();
         NotificationUserServiceDTO userServiceDTO123 = NotificationUserServiceDTO.builder()
-                .name("Pasha")
+                .ownerName("Pasha")
                 .username("Dragon")
                 .email("pasha@gmail.com")
                 .build();

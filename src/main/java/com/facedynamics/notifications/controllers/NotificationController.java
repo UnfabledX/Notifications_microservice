@@ -29,7 +29,7 @@ public class NotificationController {
 
     @GetMapping("/users/{userId}")
     public Map<String, Object> getAllNotificationsByUserId(
-            @PathVariable("userId") @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) int ownerUserId,
+            @PathVariable("userId") @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) Long ownerUserId,
             @PageableDefault(size = 5, sort = "createdAt", direction = DESC) Pageable pageable) {
         Page<Notification> page = notificationService.getAllNotificationsByUserId(ownerUserId, pageable);
         return getResponse(page);
@@ -37,13 +37,13 @@ public class NotificationController {
 
     @DeleteMapping("/users/{userId}")
     public void deleteAllNotificationsByUserId(
-            @PathVariable("userId") @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) int ownerId) {
+            @PathVariable("userId") @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) Long ownerId) {
         notificationService.deleteAllNotificationsByOwnerId(ownerId);
     }
 
     @DeleteMapping("/{notificationId}")
     public Long deleteNotificationById(
-            @PathVariable @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) long notificationId) {
+            @PathVariable @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) Long notificationId) {
         return notificationService.deleteNotificationById(notificationId);
     }
 

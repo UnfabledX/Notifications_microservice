@@ -2,10 +2,10 @@ package com.facedynamics.notifications;
 
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.handler.Error;
-import com.facedynamics.notifications.model.NotificationType;
-import com.facedynamics.notifications.model.dto.NotificationDetails;
-import com.facedynamics.notifications.model.dto.NotificationGetDTO;
-import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
+import com.facedynamics.notifications.model.NotificationResponseDTO;
+import com.facedynamics.notifications.model.dto.NotificationContent;
+import com.facedynamics.notifications.model.dto.NotificationDto;
+import com.facedynamics.notifications.model.dto.PostCommented;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
+import static com.facedynamics.notifications.utils.SqlStatements.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -121,49 +124,24 @@ public class IntegrationTests extends BaseTest {
 
     @Test
     public void createNotificationCommentTest_OK() {
-        NotificationGetDTO getDTO = new NotificationGetDTO(321, "comment", NotificationDetails.builder()
-                .userId(123)
-                .postText("Some post")
-                .commentText("Some comment")
-                .createdAt(LocalDateTime.parse("2021-12-03T10:15:30"))
-                .build());
+        LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
+        NotificationContent content = new PostCommented(4L, 3L, "some post...", "some comment");
+        NotificationDto getDTO = new NotificationDto(321L, 123L, content, dateTime, null);
+
         ResponseEntity<NotificationResponseDTO> response = template.postForEntity(createURLWithPort(),
                 getDTO, NotificationResponseDTO.class);
         NotificationResponseDTO responseDTO = response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(responseDTO);
-        assertEquals(NotificationType.COMMENT, responseDTO.getType());
-    }
-
-    @Test
-    public void createNotificationCommentTest_InvalidNotificationType() {
-        NotificationGetDTO getDTO = new NotificationGetDTO(321, "wrong type", NotificationDetails.builder()
-                .userId(123)
-                .postText("Some post")
-                .commentText("Some comment")
-                .createdAt(LocalDateTime.parse("2021-12-03T10:15:30"))
-                .build());
-        ResponseEntity<ProblemDetail> response = template.postForEntity(createURLWithPort(),
-                getDTO, ProblemDetail.class);
-        ProblemDetail detail = response.getBody();
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertNotNull(detail);
-        assertNotNull(detail.getProperties());
-
-        Map<String, Object> map = detail.getProperties();
-        LinkedHashMap<?,?> innerData = (LinkedHashMap<?,?>) map.get("problem details");
-        String actual = innerData.get("wrongValue").toString();
-        assertEquals("wrong type", actual);
+        assertEquals(POST_COMMENTED, responseDTO.getType());
     }
 
     @Test
     public void createNotificationCommentTest_InvalidUserId() {
-        NotificationGetDTO getDTO = new NotificationGetDTO(321, "wrong type", NotificationDetails.builder()
-                .userId(-123)
-                .postText("Some post")
-                .commentText("Some comment")
-                .createdAt(LocalDateTime.parse("2021-12-03T10:15:30"))
-                .build());
+        LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
+        NotificationContent content = new PostCommented(4L, 3L, "some post...", "some comment");
+        NotificationDto getDTO = new NotificationDto(-321L, 123L, content, dateTime, null);
+
         ResponseEntity<ProblemDetail> response = template.postForEntity(createURLWithPort(),
                 getDTO, ProblemDetail.class);
         ProblemDetail detail = response.getBody();
@@ -172,8 +150,9 @@ public class IntegrationTests extends BaseTest {
         assertNotNull(detail.getProperties());
 
         Map<String, Object> map = detail.getProperties();
-        LinkedHashMap<?,?> innerData = (LinkedHashMap<?,?>) map.get("problem details");
+        ArrayList<?> list = (ArrayList<?>) map.get("problemDetails");
+        LinkedHashMap<?,?> innerData = (LinkedHashMap<?,?>) list.get(0);
         String actual = innerData.get("wrongValue").toString();
-        assertEquals("-123", actual);
+        assertEquals("-321", actual);
     }
 }

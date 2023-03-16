@@ -13,7 +13,7 @@ import java.util.Properties;
 public class MailConfiguration {
 
     @Bean
-    public JavaMailSender getJavaMailSender() {
+    public JavaMailSender mailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
