@@ -1,8 +1,8 @@
 package com.facedynamics.notifications;
 
 import com.facedynamics.BaseTest;
-import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.handler.Error;
+import com.facedynamics.notifications.model.Notification;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.facedynamics.notifications.utils.Constants.PAGE_SIZE;
+import static com.facedynamics.notifications.utils.SqlStatements.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -73,12 +74,9 @@ public class IntegrationTests extends BaseTest {
 
     @Test
     @Order(4)
-    @Sql(statements = "INSERT INTO notification_db.notifications VALUES " +
-            "(DEFAULT, 3, 8, 4, '2023-01-12 13:47:36')," +
-            "(DEFAULT, 3, 10, 1, '2022-06-23 13:47:36')",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(statements = {details1, notific1}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void deleteAllNotificationsByUserIdTest_validId() {
-        userId = 3;
+        userId = 10;
         ResponseEntity<String> response = template.exchange(createURLWithPort() + "/users/{userId}",
                 HttpMethod.DELETE, null, String.class, userId);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -95,11 +93,9 @@ public class IntegrationTests extends BaseTest {
 
     @Test
     @Order(6)
-    @Sql(statements = "INSERT INTO notification_db.notifications VALUES " +
-            "(7, 4, 20, 1, '2022-08-23 08:22:07')",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(statements = {details2, notific2}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void deleteNotificationByIdTest_idIsPresent() {
-        long notificationId = 7;
+        long notificationId = 11;
         ResponseEntity<Long> response = template.exchange(createURLWithPort() + "/{notificationId}",
                 HttpMethod.DELETE, null, Long.class, notificationId);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -117,6 +113,6 @@ public class IntegrationTests extends BaseTest {
 
     @Test
     public void createNotificationCommentTest() {
-        
+
     }
 }

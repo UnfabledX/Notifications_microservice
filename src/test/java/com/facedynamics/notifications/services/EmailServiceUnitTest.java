@@ -1,9 +1,10 @@
 package com.facedynamics.notifications.services;
 
 import com.facedynamics.BaseTest;
-import com.facedynamics.notifications.model.dto.NotificationDetails;
-import com.facedynamics.notifications.model.dto.NotificationGetDTO;
-import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.emails.EmailComposer;
+import com.facedynamics.notifications.model.NotificationUserServiceDTO;
+import com.facedynamics.notifications.model.dto.NotificationDto;
+import com.facedynamics.notifications.model.dto.PostCommented;
 import lombok.RequiredArgsConstructor;
 import org.apache.velocity.app.VelocityEngine;
 import org.junit.jupiter.api.Assertions;
@@ -28,25 +29,22 @@ public class EmailServiceUnitTest extends BaseTest {
 
     private EmailServiceImpl service;
 
+    private final EmailComposer emailComposer;
+
     @BeforeEach
     public void init() {
         VelocityEngine engine = new VelocityEngine();
         engine.init();
-        service = new EmailServiceImpl(mailSender);
+        service = new EmailServiceImpl(mailSender, emailComposer);
     }
 
     @Test
     public void sendCommentEmailTest() throws Exception {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
-        NotificationDetails details = NotificationDetails.builder()
-                .userId(123)
-                .postText("some post...")
-                .commentText("some comment")
-                .createdAt(dateTime).build();
-        NotificationGetDTO getDTO = new NotificationGetDTO(321, "comment", details);
-
+        NotificationDto getDTO = new NotificationDto(321L, 123L,
+                new PostCommented(4L, 3L, "some post...", "some comment"), dateTime, null);
         NotificationUserServiceDTO userServiceDTO321 = NotificationUserServiceDTO.builder()
-                .name("Oleksii")
+                .ownerName("Oleksii")
                 .username("Unfabled")
                 .email("alex0destroyer@gmail.com")
                 .build();

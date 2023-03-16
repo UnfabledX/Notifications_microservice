@@ -3,6 +3,7 @@ package com.facedynamics.notifications.model.dto;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 @JsonTypeInfo(
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
         @Type(value = SubscribedBy.class, name = "SUBSCRIBED_BY"),
 })
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public abstract class NotificationContent {
 
     protected final Type type;

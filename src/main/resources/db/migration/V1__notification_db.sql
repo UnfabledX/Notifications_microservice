@@ -46,4 +46,5 @@ CREATE TABLE notifications
 -- this declaration contains the foreign key constraint
     CONSTRAINT details_fk
     FOREIGN KEY (details_id) REFERENCES notification_details (id)
+    ON DELETE CASCADE
 ) CHARACTER SET=utf8mb4;
