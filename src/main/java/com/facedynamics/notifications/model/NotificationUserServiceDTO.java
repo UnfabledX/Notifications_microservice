@@ -12,5 +12,4 @@ public class NotificationUserServiceDTO {
     private String ownerName;
 
     private String email;
-
 }

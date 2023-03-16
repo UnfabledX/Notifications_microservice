@@ -1,5 +1,9 @@
 package com.facedynamics.notifications.emails;
 
+import com.facedynamics.notifications.model.dto.UserRegistered;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+
 import java.io.StringWriter;
 
 public class UserRegisteredEmailMessage extends EmailMessage {
@@ -8,8 +12,18 @@ public class UserRegisteredEmailMessage extends EmailMessage {
 
     @Override
     public StringWriter getLetterBody() {
-        //todo
-        return null;
+        UserRegistered registered = (UserRegistered) receivedDTO.content();
+
+        VelocityContext context = new VelocityContext();
+        context.put("ownerName", registered.getOwnerName());
+        context.put("email", registered.getEmail());
+        context.put("link", registered.getConfirmationLink());
+        context.put("timeToLive", registered.getTimeToLive());
+        context.put("createdAt", receivedDTO.createdAt());
+        Template template = engine.getTemplate("src/main/resources/velocity/email-user-registered.vm");
+        StringWriter writer = new StringWriter();
+        template.merge(context, writer);
+        return writer;
     }
 
     @Override
