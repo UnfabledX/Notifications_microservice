@@ -134,12 +134,12 @@ class NotificationServiceUnitTest extends BaseTest {
         NotificationGetDTO getDTO = new NotificationGetDTO(321, "comment", details);
 
         NotificationUserServiceDTO userServiceDTO321 = NotificationUserServiceDTO.builder()
-                .name("Oleksii")
+                .ownerName("Oleksii")
                 .username("Unfabled")
                 .email("alex0destroyer@gmail.com")
                 .build();
         NotificationUserServiceDTO userServiceDTO123 = NotificationUserServiceDTO.builder()
-                .name("Pasha")
+                .ownerName("Pasha")
                 .username("Dragon")
                 .email("pasha@gmail.com")
                 .build();

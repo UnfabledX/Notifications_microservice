@@ -15,7 +15,7 @@ public class ReplyEmailMessage extends EmailMessage {
         String commentBody = receivedDTO.getDetails().getCommentText();
 
         VelocityContext context = new VelocityContext();
-        context.put("ownerName", ownerDTO.getName());
+        context.put("ownerName", ownerDTO.getOwnerName());
         context.put("triggererUsername", triggerUserName);
         context.put("replyBody", replyBody.length() > 40 ? replyBody.substring(0, 40) : replyBody);
         context.put("commentBody", commentBody.length() > 50 ? commentBody.substring(0, 50) : commentBody);
