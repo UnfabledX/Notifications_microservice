@@ -4,11 +4,11 @@ import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.controllers.UserEventService;
 import com.facedynamics.notifications.handler.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.model.NotificationType;
-import com.facedynamics.notifications.model.dto.NotificationDetails;
-import com.facedynamics.notifications.model.dto.NotificationGetDTO;
-import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
-import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.model.NotificationDetails;
+import com.facedynamics.notifications.model.NotificationResponseDTO;
+import com.facedynamics.notifications.model.NotificationUserServiceDTO;
+import com.facedynamics.notifications.model.dto.NotificationDto;
+import com.facedynamics.notifications.model.dto.PostCommented;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.facedynamics.notifications.model.NotificationType.COMMENT;
+import static com.facedynamics.notifications.model.dto.NotificationContent.Type.FOLLOWED_BY;
+import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
 import static com.facedynamics.notifications.utils.Constants.PAGE_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -54,16 +55,26 @@ class NotificationServiceUnitTest extends BaseTest {
         notificationList = new ArrayList<>();
         Notification n1 = Notification.builder()
                 .id(1L)
-                .ownerId(3)
-                .triggererId(5)
-                .notificationType(COMMENT.getId())
+                .ownerId(3L)
+                .createdById(5L)
+                .details(NotificationDetails.builder()
+                        .id(1L)
+                        .type(POST_COMMENTED.name())
+                        .postId(33L)
+                        .commentId(12L)
+                        .build())
                 .createdAt(LocalDateTime.of(2022, 12, 1, 16, 36, 54))
                 .build();
         Notification n2 = Notification.builder()
                 .id(2L)
-                .ownerId(3)
-                .triggererId(4)
-                .notificationType(NotificationType.FOLLOW.getId())
+                .ownerId(3L)
+                .createdById(4L)
+                .details(NotificationDetails.builder()
+                        .id(2L)
+                        .type(FOLLOWED_BY.name())
+                        .postId(33L)
+                        .commentId(13L)
+                        .build())
                 .createdAt(LocalDateTime.of(2021, 10, 12, 12, 12, 33))
                 .build();
         notificationList.addAll(Arrays.asList(n1, n2));
@@ -126,13 +137,8 @@ class NotificationServiceUnitTest extends BaseTest {
     @Test
     void createNotificationCommentTest() {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
-        NotificationDetails details = NotificationDetails.builder()
-                .userId(123)
-                .postText("some post...")
-                .commentText("some comment")
-                .createdAt(dateTime).build();
-        NotificationGetDTO getDTO = new NotificationGetDTO(321, "comment", details);
-
+        NotificationDto getDTO = new NotificationDto(321L, 123L,
+                new PostCommented(4L, 3L, "some post...", "some comment"), dateTime, null);
         NotificationUserServiceDTO userServiceDTO321 = NotificationUserServiceDTO.builder()
                 .name("Oleksii")
                 .username("Unfabled")
@@ -148,7 +154,7 @@ class NotificationServiceUnitTest extends BaseTest {
         doNothing().when(emailService)
                 .sendEmail(getDTO, userServiceDTO321, userServiceDTO123.getUsername());
         NotificationResponseDTO actualReturnDTO = service.createNotification(getDTO);
-        NotificationResponseDTO expected = new NotificationResponseDTO(userServiceDTO123.getUsername(), COMMENT, dateTime);
+        NotificationResponseDTO expected = new NotificationResponseDTO(userServiceDTO123.getUsername(), POST_COMMENTED, dateTime);
         assertEquals(expected, actualReturnDTO);
     }
 }

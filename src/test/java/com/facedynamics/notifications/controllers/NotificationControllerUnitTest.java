@@ -3,11 +3,13 @@ package com.facedynamics.notifications.controllers;
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.handler.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.model.NotificationType;
-import com.facedynamics.notifications.model.dto.NotificationDetails;
-import com.facedynamics.notifications.model.dto.NotificationGetDTO;
-import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
+import com.facedynamics.notifications.model.NotificationDetails;
+import com.facedynamics.notifications.model.NotificationResponseDTO;
+import com.facedynamics.notifications.model.dto.NotificationContent;
+import com.facedynamics.notifications.model.dto.NotificationDto;
+import com.facedynamics.notifications.model.dto.PostCommented;
 import com.facedynamics.notifications.services.NotificationServiceImpl;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +25,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -50,26 +54,40 @@ public class NotificationControllerUnitTest extends BaseTest {
 
     @BeforeEach
     public void init() {
-        NotificationType type = NotificationType.FOLLOW;
         Notification n1 = Notification.builder()
                 .id(1L)
-                .ownerId(3)
-                .triggererId(5)
-                .notificationType(type.getId())
+                .ownerId(3L)
+                .createdById(5L)
+                .details(NotificationDetails.builder()
+                        .id(1L)
+                        .type(POST_COMMENTED.name())
+                        .postId(33L)
+                        .commentId(12L)
+                        .build())
                 .createdAt(LocalDateTime.of(2022, 12, 1, 16, 36, 54))
                 .build();
         Notification n2 = Notification.builder()
                 .id(2L)
-                .ownerId(3)
-                .triggererId(6)
-                .notificationType(type.getId())
+                .ownerId(3L)
+                .createdById(6L)
+                .details(NotificationDetails.builder()
+                        .id(2L)
+                        .type(POST_COMMENTED.name())
+                        .postId(33L)
+                        .commentId(13L)
+                        .build())
                 .createdAt(LocalDateTime.of(2021, 10, 12, 12, 12, 33))
                 .build();
         Notification n3 = Notification.builder()
-                .id(5L)
-                .ownerId(3)
-                .triggererId(7)
-                .notificationType(type.getId())
+                .id(3L)
+                .ownerId(3L)
+                .createdById(7L)
+                .details(NotificationDetails.builder()
+                        .id(3L)
+                        .type(POST_COMMENTED.name())
+                        .postId(33L)
+                        .commentId(14L)
+                        .build())
                 .createdAt(LocalDateTime.of(2019, 10, 14, 12, 12, 33))
                 .build();
         list = Arrays.asList(n1, n2, n3);
@@ -84,7 +102,7 @@ public class NotificationControllerUnitTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", Matchers.hasSize(3)))
-                .andExpect(jsonPath("$[1].triggererId", Matchers.is(6)));
+                .andExpect(jsonPath("$[1].createdById", Matchers.is(6)));
         Mockito.verify(service, times(1))
                 .getAllNotificationsByUserId(0, ownerId);
     }
@@ -156,21 +174,22 @@ public class NotificationControllerUnitTest extends BaseTest {
     @Test
     public void createNotificationCommentTest() throws Exception {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
-        NotificationDetails details = NotificationDetails.builder()
-                .userId(123)
-                .postText("some post...")
-                .commentText("some comment")
-                .createdAt(dateTime).build();
-        NotificationGetDTO getDTO = new NotificationGetDTO(321, "comment", details);
-        Mockito.when(service.createNotification(getDTO))
-                .thenReturn(new NotificationResponseDTO("Dragon", NotificationType.COMMENT, dateTime));
+        NotificationContent content = new PostCommented(4L, 3L, "some post...", "some comment");
+        NotificationDto getDTO = new NotificationDto(321L, 123L, content, dateTime, null);
 
-        mockMvc.perform(post("/notifications").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(getDTO)))
+        NotificationResponseDTO dto = new NotificationResponseDTO("Dragon", POST_COMMENTED, dateTime);
+        Mockito.when(service.createNotification(eq(getDTO)))
+                .thenReturn(dto);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        String json = objectMapper.writeValueAsString(getDTO);
+        mockMvc.perform(post("/notifications")
+                        .content(json)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", Matchers.aMapWithSize(3)))
-                .andExpect(jsonPath("$.type", Matchers.is("COMMENT")));
+                .andExpect(jsonPath("$.type", Matchers.is("POST_COMMENTED")));
 
         verify(service, times(1)).createNotification(getDTO);
     }

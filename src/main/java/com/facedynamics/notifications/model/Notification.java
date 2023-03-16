@@ -2,7 +2,6 @@ package com.facedynamics.notifications.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,8 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-
-import static com.facedynamics.notifications.utils.Constants.GREATER_THAN_OR_EQUAL_TO_1;
 
 @Entity
 @Component
@@ -29,11 +26,9 @@ public class Notification {
     private Long id;
 
     @Column(name = "owner_id", nullable = false)
-    @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1)
     private Long ownerId;
 
     @Column(name = "createdBy_id")
-    @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1)
     private Long createdById;
 
     @Column(name = "createdAt")

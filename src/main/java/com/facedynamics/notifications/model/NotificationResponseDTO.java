@@ -5,12 +5,14 @@ import com.facedynamics.notifications.model.dto.NotificationContent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
 @Data
 @Builder
 @AllArgsConstructor
+@EqualsAndHashCode
 public class NotificationResponseDTO {
 
     private String triggererName;
