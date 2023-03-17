@@ -1,33 +1,26 @@
 package com.facedynamics.notifications.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-import org.springframework.stereotype.Component;
 
-@Entity
-@Component
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "notifications_types", schema = "notification_db")
-public class NotificationType {
+public enum NotificationType {
+    REGISTRATION    (1, "registration"),
+    RESET_PASSWORD  (2, "password reset"),
+    COMMENT         (3, "comment"),
+    REPLY           (4, "reply"),
+    FOLLOW          (5, "follow"),
+    SUBSCRIPTION    (6, "subscription");
 
-    @Id
-    @JsonIgnore
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    @JdbcTypeCode(SqlTypes.SMALLINT)
-    private Long id;
+    private final int id;
+    private final String name;
 
-    @Column(nullable = false)
-    private String name;
+    NotificationType(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
-    @JsonIgnore
-    @Column(name = "text_body", nullable = false)
-    private String textBody;
+    public static NotificationType getType(String name) {
+
+        return NotificationType.valueOf(name.toUpperCase().trim());
+    }
 }

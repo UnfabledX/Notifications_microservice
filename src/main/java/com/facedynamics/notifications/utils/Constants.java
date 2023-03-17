@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.util;
+package com.facedynamics.notifications.utils;
 
 public class Constants {
 
@@ -9,5 +9,4 @@ public class Constants {
     public static final String ID_OF_THE_NOTIFICATION_IS_NOT_FOUND = "ID of the notification is not found.";
 
     public static final String ID_OR_PAGE_IS_NOT_FOUND = "ID of the user or a content on the given page is not found.";
-
 }

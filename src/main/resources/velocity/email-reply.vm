@@ -1,0 +1,18 @@
+<html lang="en">
+<head>
+    <title>FaceDynamics reply notification</title>
+</head>
+<body bgcolor="#faf7f1">
+<div style="text-align: -webkit-left;">
+    <h3>Hello $ownerName, you have a new reply to your comment!</h3>
+    <div>
+        $triggererUsername has replied <i>"$replyBody ..." </i><br/>
+        on your comment <i>"$commentBody ..." </i><br/>
+        at $replyCreatedAt
+    </div>
+
+    <p><i>Best regards, <br/>
+        your FaceDynamics Team</i> </p>
+</div>
+</body>
+</html>
