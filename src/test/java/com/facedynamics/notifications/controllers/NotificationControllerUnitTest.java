@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.facedynamics.notifications.controllers.NotificationController.NOTIFICATION;
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -36,9 +37,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(NotificationController.class)
 public class NotificationControllerUnitTest extends BaseTest {
 
-    public static final String NOTIFICATIONS_BY_USER_ID = "/notifications/users/{userId}";
+    public static final String NOTIFICATIONS_BY_USER_ID = NOTIFICATION + "/users/{userId}";
 
-    public static final String NOTIFICATIONS_NOTIFICATION_ID = "/notifications/{notificationId}";
+    public static final String NOTIFICATIONS_NOTIFICATION_ID = NOTIFICATION + "/{notificationId}";
 
     @Autowired
     private MockMvc mockMvc;
@@ -189,7 +190,7 @@ public class NotificationControllerUnitTest extends BaseTest {
                 .thenReturn(dto);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = objectMapper.writeValueAsString(getDTO);
-        mockMvc.perform(post("/notifications")
+        mockMvc.perform(post(NOTIFICATION)
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
