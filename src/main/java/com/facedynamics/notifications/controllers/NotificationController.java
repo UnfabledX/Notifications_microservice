@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+import static com.facedynamics.notifications.controllers.NotificationController.NOTIFICATION;
 import static com.facedynamics.notifications.utils.Constants.GREATER_THAN_OR_EQUAL_TO_1;
 import static com.facedynamics.notifications.utils.Converter.getResponse;
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -22,9 +23,10 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/notifications")
+@RequestMapping(NOTIFICATION)
 public class NotificationController {
 
+    public static final String NOTIFICATION = "/api/v1/notifications";
     private final NotificationService notificationService;
 
     @GetMapping("/users/{userId}")
