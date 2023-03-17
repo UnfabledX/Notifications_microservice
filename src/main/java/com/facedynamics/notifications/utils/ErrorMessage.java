@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.util;
+package com.facedynamics.notifications.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

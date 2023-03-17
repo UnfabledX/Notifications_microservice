@@ -1,0 +1,18 @@
+<html lang="en">
+<head>
+    <title>FaceDynamics comment notification</title>
+</head>
+<body bgcolor="#faf7f1">
+<div style="text-align: -webkit-left;">
+    <h3>Hello $ownerName, you have a new comment!</h3>
+    <div>
+        $triggererUsername has left the comment <i>"$commentBody ..." </i><br/>
+        on your post <i>"$postBody ..." </i><br/>
+        at $commentCreatedAt
+    </div>
+
+    <p><i>Best regards, <br/>
+        your FaceDynamics Team</i> </p>
+</div>
+</body>
+</html>
