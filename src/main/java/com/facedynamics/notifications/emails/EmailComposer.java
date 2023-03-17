@@ -1,9 +1,11 @@
 package com.facedynamics.notifications.emails;
 
+import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.io.StringWriter;
 import java.util.Map;
@@ -17,6 +19,8 @@ public class EmailComposer {
 
     static {
         engine = new VelocityEngine();
+        engine.setProperty(RuntimeConstants.RESOURCE_LOADER,"classpath");
+        engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
         engine.init();
     }
 
