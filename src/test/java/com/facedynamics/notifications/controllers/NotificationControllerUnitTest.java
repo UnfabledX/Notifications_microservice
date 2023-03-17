@@ -190,7 +190,7 @@ public class NotificationControllerUnitTest extends BaseTest {
                 .thenReturn(dto);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = objectMapper.writeValueAsString(getDTO);
-        mockMvc.perform(post(NOTIFICATION)
+        mockMvc.perform(post("/api/v1/notifications")
                         .content(json)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
