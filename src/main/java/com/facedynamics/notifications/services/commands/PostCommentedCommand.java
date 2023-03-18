@@ -7,7 +7,7 @@ import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.PostCommented;
 
-public class PostCommentedCommand extends AbstractCommand {
+public class PostCommentedCommand extends NotificationProcessor {
 
     @Override
     public NotificationResponseDTO execute(NotificationDto receivedDTO) {

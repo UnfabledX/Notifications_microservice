@@ -6,7 +6,7 @@ import com.facedynamics.notifications.services.EmailService;
 import lombok.Setter;
 
 @Setter
-public abstract class AbstractCommand implements CommandInterface {
+public abstract class NotificationProcessor implements CommandInterface {
     protected UserEventService userEventService;
     protected EmailService emailService;
     protected NotificationRepository notificationRepository;

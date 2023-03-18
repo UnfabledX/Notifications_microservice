@@ -6,7 +6,7 @@ import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.repository.NotificationRepository;
-import com.facedynamics.notifications.services.commands.CommandFactory;
+import com.facedynamics.notifications.services.commands.NotificationFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,7 +37,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final EmailService emailService;
 
-    private CommandFactory factory;
+    private NotificationFactory factory;
 
     /**
      * Finds all notifications of specified user ID.
@@ -99,7 +99,7 @@ public class NotificationServiceImpl implements NotificationService {
     public NotificationResponseDTO createNotification(NotificationDto receivedDTO) {
         NotificationContent.Type type = receivedDTO.content().getType();
         if (factory == null) {
-            factory = new CommandFactory(userEventService, emailService, notificationRepository);
+            factory = new NotificationFactory(userEventService, emailService, notificationRepository);
         }
         return factory.createCommand(type).execute(receivedDTO);
     }

@@ -20,18 +20,20 @@ public class EmailServiceImpl implements EmailService {
     @Value("${source.mail.address}")
     protected String emailFrom;
 
-    protected final JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
+
+    private final EmailComposer emailComposer;
 
     @Override
     public void sendEmail(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,
                           String triggerUserName) {
-        StringWriter writer = EmailComposer.getWriter(receivedDTO, ownerDTO, triggerUserName);
+        StringWriter writer = emailComposer.getWriter(receivedDTO, ownerDTO, triggerUserName);
 
         MimeMessagePreparator prep = mimeMessage -> {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
             helper.setTo(ownerDTO.getEmail());
             helper.setFrom(emailFrom);
-            helper.setSubject(EmailComposer.getSubject(receivedDTO));
+            helper.setSubject(emailComposer.getSubject(receivedDTO));
             helper.setText(writer.toString(), true);
         };
         mailSender.send(prep);

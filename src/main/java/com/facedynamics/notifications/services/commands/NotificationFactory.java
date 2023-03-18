@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
  * @author Oleksii Synelnyk
  */
 @RequiredArgsConstructor
-public class CommandFactory {
+public class NotificationFactory {
 
     private final UserEventService userEventService;
     private final EmailService emailService;
@@ -27,21 +27,21 @@ public class CommandFactory {
      *             to create.
      * @return Command that corresponds to specific enum.
      */
-    public AbstractCommand createCommand(NotificationContent.Type type) {
-        AbstractCommand command = null;
+    public NotificationProcessor createCommand(NotificationContent.Type type) {
+        NotificationProcessor processor = null;
         switch (type) {
-            case USER_REGISTERED             -> command = new UserRegisteredCommand();
-            case USER_PASSWORD_RESET_REQUEST -> command = new PasswordResetRequestCommand();
-            case POST_COMMENTED              -> command = new PostCommentedCommand();
-            case COMMENT_REPLIED             -> command = new CommentRepliedCommand();
-            case FOLLOWED_BY                 -> command = new FollowedByCommand();
-            case SUBSCRIBED_BY               -> command = new SubscribedByCommand();
+            case USER_REGISTERED             -> processor = new UserRegisteredCommand();
+            case USER_PASSWORD_RESET_REQUEST -> processor = new PasswordResetRequestCommand();
+            case POST_COMMENTED              -> processor = new PostCommentedCommand();
+            case COMMENT_REPLIED             -> processor = new CommentRepliedCommand();
+            case FOLLOWED_BY                 -> processor = new FollowedByCommand();
+            case SUBSCRIBED_BY               -> processor = new SubscribedByCommand();
         }
-        if (command != null) {
-            command.setUserEventService(userEventService);
-            command.setEmailService(emailService);
-            command.setNotificationRepository(notificationRepository);
+        if (processor != null) {
+            processor.setUserEventService(userEventService);
+            processor.setEmailService(emailService);
+            processor.setNotificationRepository(notificationRepository);
         }
-        return command;
+        return processor;
     }
 }

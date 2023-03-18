@@ -1,5 +1,6 @@
 package com.facedynamics.notifications.config;
 
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,13 @@ public class MailConfiguration {
         props.put("mail.smtp.writetimeout", 5000);
 
         return mailSender;
+    }
+
+    @Bean
+    public VelocityEngine getVelocityEngine(){
+        VelocityEngine engine = new VelocityEngine();
+        engine.init();
+        return engine;
     }
 }
 
