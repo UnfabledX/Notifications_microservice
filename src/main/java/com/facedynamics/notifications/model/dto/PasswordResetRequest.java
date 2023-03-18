@@ -16,7 +16,7 @@ public class PasswordResetRequest extends NotificationContent implements Content
 
     @NotEmpty(message = "The name must be present")
     @Size(min = 3, max = 24, message = NO_BIGGER_THEN_24_AND_NO_LESS_THEN_3_LETTERS)
-    private final String username;
+    private final String ownerName;
 
     @NotEmpty(message = "Email address must not be empty")
     @Email(message = LETTER_WRONG_FORMAT)
@@ -28,9 +28,9 @@ public class PasswordResetRequest extends NotificationContent implements Content
     @NotNull(message = "Time of link to be active must be present")
     private final Integer timeToLive;
 
-    public PasswordResetRequest(String username, String email, String confirmationLink, Integer timeToLive) {
+    public PasswordResetRequest(String ownerName, String email, String confirmationLink, Integer timeToLive) {
         super(Type.USER_PASSWORD_RESET_REQUEST);
-        this.username = username;
+        this.ownerName = ownerName;
         this.email = email;
         this.confirmationLink = confirmationLink;
         this.timeToLive = timeToLive;
