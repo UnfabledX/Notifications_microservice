@@ -10,22 +10,13 @@ import org.springframework.stereotype.Component;
 import java.io.StringWriter;
 import java.util.Map;
 
-import static com.facedynamics.notifications.model.dto.NotificationContent.Type.*;
-
 @Component
 @RequiredArgsConstructor
 public class EmailComposer {
 
     private final VelocityEngine engine;
 
-    private static final Map<NotificationContent.Type, EmailMessage> mapOfMails = Map.of(
-            USER_REGISTERED,                new UserRegisteredEmailMessage(),
-            USER_PASSWORD_RESET_REQUEST,    new PasswordResetRequestEmailMessage(),
-            POST_COMMENTED,                 new PostCommentedEmailMessage(),
-            COMMENT_REPLIED,                new CommentRepliedEmailMessage(),
-            FOLLOWED_BY,                    new FollowedByEmailMessage(),
-            SUBSCRIBED_BY,                  new SubscribedByEmailMessage()
-    );
+    private final Map<String, EmailMessage> mapOfMails;
 
     public StringWriter getWriter(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,
                                          String triggerUserName) {
@@ -44,6 +35,6 @@ public class EmailComposer {
 
     private EmailMessage getEmailMessage(NotificationDto receivedDTO) {
         NotificationContent.Type type = receivedDTO.content().getType();
-        return mapOfMails.get(type);
+        return mapOfMails.get(type.name());
     }
 }

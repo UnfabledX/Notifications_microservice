@@ -3,10 +3,11 @@ package com.facedynamics.notifications.emails;
 import com.facedynamics.notifications.model.dto.PostCommented;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
+import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
-
+@Component("POST_COMMENTED")
 public class PostCommentedEmailMessage extends EmailMessage {
 
     public static final String NEW_COMMENT = "Received a NEW Comment!";

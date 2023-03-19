@@ -1,6 +1,5 @@
 package com.facedynamics.notifications.services;
 
-import com.facedynamics.notifications.controllers.UserEventService;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationContent;
@@ -33,11 +32,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    private final UserEventService userEventService;
-
-    private final EmailService emailService;
-
-    private NotificationFactory factory;
+    private final NotificationFactory factory;
 
     /**
      * Finds all notifications of specified user ID.
@@ -92,15 +87,15 @@ public class NotificationServiceImpl implements NotificationService {
     /**
      * Creates notification of specified type, saves it to database,
      * sends an email letter to recipient user (who received a notification)
+     *
      * @param receivedDTO dto with incoming necessary data
      * @return returns a response body of a saved notification
      */
     @Override
     public NotificationResponseDTO createNotification(NotificationDto receivedDTO) {
         NotificationContent.Type type = receivedDTO.content().getType();
-        if (factory == null) {
-            factory = new NotificationFactory(userEventService, emailService, notificationRepository);
-        }
-        return factory.createCommand(type).execute(receivedDTO);
+        return factory
+                .getProcessor(type.name() + "_COMMAND")
+                .execute(receivedDTO);
     }
 }

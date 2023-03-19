@@ -6,7 +6,9 @@ import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.PostCommented;
+import org.springframework.stereotype.Component;
 
+@Component("POST_COMMENTED_COMMAND")
 public class PostCommentedCommand extends NotificationProcessor {
 
     @Override

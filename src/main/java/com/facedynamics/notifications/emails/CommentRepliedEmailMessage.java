@@ -3,9 +3,11 @@ package com.facedynamics.notifications.emails;
 import com.facedynamics.notifications.model.dto.CommentReplied;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
+import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
+@Component("COMMENT_REPLIED")
 public class CommentRepliedEmailMessage extends EmailMessage {
 
     public static final String NEW_REPLY = "Received a NEW Reply!";

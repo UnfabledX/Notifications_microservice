@@ -6,7 +6,9 @@ import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import com.facedynamics.notifications.model.dto.CommentReplied;
 import com.facedynamics.notifications.model.dto.NotificationDto;
+import org.springframework.stereotype.Component;
 
+@Component("COMMENT_REPLIED_COMMAND")
 public class CommentRepliedCommand extends NotificationProcessor {
 
     @Override

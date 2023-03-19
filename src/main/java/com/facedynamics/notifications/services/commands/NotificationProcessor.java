@@ -3,11 +3,15 @@ package com.facedynamics.notifications.services.commands;
 import com.facedynamics.notifications.controllers.UserEventService;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import com.facedynamics.notifications.services.EmailService;
-import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Setter
+@Component
 public abstract class NotificationProcessor implements CommandInterface {
+    @Autowired
     protected UserEventService userEventService;
+    @Autowired
     protected EmailService emailService;
+    @Autowired
     protected NotificationRepository notificationRepository;
 }

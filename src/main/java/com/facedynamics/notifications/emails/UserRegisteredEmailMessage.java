@@ -1,7 +1,10 @@
 package com.facedynamics.notifications.emails;
 
+import org.springframework.stereotype.Component;
+
 import java.io.StringWriter;
 
+@Component("USER_REGISTERED")
 public class UserRegisteredEmailMessage extends EmailMessage {
 
     public static final String NEW_REGISTRATION = "Your registration for FaceDynamics social network!";
