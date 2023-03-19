@@ -16,10 +16,10 @@ public class EmailComposer {
 
     private final VelocityEngine engine;
 
-    private final Map<String, EmailMessage> mapOfMails;
+    private final Map<NotificationContent.Type, EmailMessage> mails;
 
     public StringWriter getWriter(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,
-                                         String triggerUserName) {
+                                  String triggerUserName) {
         EmailMessage specificEmailMessage = getEmailMessage(receivedDTO);
         specificEmailMessage.setEngine(engine);
         specificEmailMessage.setReceivedDTO(receivedDTO);
@@ -35,6 +35,6 @@ public class EmailComposer {
 
     private EmailMessage getEmailMessage(NotificationDto receivedDTO) {
         NotificationContent.Type type = receivedDTO.content().getType();
-        return mapOfMails.get(type.name());
+        return mails.get(type);
     }
 }

@@ -1,16 +1,23 @@
 package com.facedynamics.notifications.config;
 
+import com.facedynamics.notifications.emails.*;
+import com.facedynamics.notifications.model.dto.NotificationContent;
 import org.apache.velocity.app.VelocityEngine;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import java.util.Map;
 import java.util.Properties;
+
+import static com.facedynamics.notifications.model.dto.NotificationContent.Type.*;
 
 @Configuration
 @ComponentScan(basePackages = "com.facedynamics.notifications")
+@ConfigurationProperties(prefix = "email-addresses")
 public class MailConfiguration {
 
     @Bean
@@ -32,11 +39,21 @@ public class MailConfiguration {
         return mailSender;
     }
 
-    @Bean
+    @Bean(initMethod = "init")
     public VelocityEngine getVelocityEngine(){
-        VelocityEngine engine = new VelocityEngine();
-        engine.init();
-        return engine;
+        return new VelocityEngine();
+    }
+
+    @Bean(name = "mails")
+    public Map<NotificationContent.Type, EmailMessage> getMails(){
+        return Map.of(
+                USER_REGISTERED,                new UserRegisteredEmailMessage(),
+                USER_PASSWORD_RESET_REQUEST,    new PasswordResetRequestEmailMessage(),
+                POST_COMMENTED,                 new PostCommentedEmailMessage(),
+                COMMENT_REPLIED,                new CommentRepliedEmailMessage(),
+                SUBSCRIBED_BY,                  new SubscribedByEmailMessage(),
+                FOLLOWED_BY,                    new FollowedByEmailMessage()
+        );
     }
 }
 

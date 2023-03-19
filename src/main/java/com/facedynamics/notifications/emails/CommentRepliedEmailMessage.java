@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
-@Component("COMMENT_REPLIED")
+@Component
 public class CommentRepliedEmailMessage extends EmailMessage {
 
     public static final String NEW_REPLY = "Received a NEW Reply!";

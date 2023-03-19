@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
-@Component("FOLLOWED_BY")
+@Component
 public class FollowedByEmailMessage extends EmailMessage {
 
     public static final String NEW_FOLLOW = "You have a NEW Follow!";

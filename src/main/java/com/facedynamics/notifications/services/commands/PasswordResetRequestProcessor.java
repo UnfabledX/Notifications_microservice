@@ -4,8 +4,8 @@ import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import org.springframework.stereotype.Component;
 
-@Component("FOLLOWED_BY_COMMAND")
-public class FollowedByCommand extends NotificationProcessor {
+@Component("USER_PASSWORD_RESET_REQUEST")
+public class PasswordResetRequestProcessor extends NotificationProcessor {
     @Override
     public NotificationResponseDTO execute(NotificationDto dto) {
         return null;

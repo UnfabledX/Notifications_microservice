@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
-@Component("USER_REGISTERED")
+@Component
 public class UserRegisteredEmailMessage extends EmailMessage {
 
     public static final String NEW_REGISTRATION = "Your registration for FaceDynamics social network!";

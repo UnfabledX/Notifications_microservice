@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
-@Component("SUBSCRIBED_BY")
+@Component
 public class SubscribedByEmailMessage extends EmailMessage {
 
     public static final String NEW_SUBSCRIPTION = "You have a NEW Subscription!";

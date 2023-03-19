@@ -4,8 +4,8 @@ import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import org.springframework.stereotype.Component;
 
-@Component("USER_REGISTERED_COMMAND")
-public class UserRegisteredCommand extends NotificationProcessor {
+@Component("USER_REGISTERED")
+public class UserRegisteredNotificationProcessor extends NotificationProcessor {
     @Override
     public NotificationResponseDTO execute(NotificationDto dto) {
         return null;

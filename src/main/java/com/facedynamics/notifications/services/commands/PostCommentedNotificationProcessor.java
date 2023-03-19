@@ -8,8 +8,8 @@ import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.PostCommented;
 import org.springframework.stereotype.Component;
 
-@Component("POST_COMMENTED_COMMAND")
-public class PostCommentedCommand extends NotificationProcessor {
+@Component("POST_COMMENTED")
+public class PostCommentedNotificationProcessor extends NotificationProcessor {
 
     @Override
     public NotificationResponseDTO execute(NotificationDto receivedDTO) {

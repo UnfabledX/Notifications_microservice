@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public abstract class NotificationProcessor implements CommandInterface {
+public abstract class NotificationProcessor implements Executable {
     @Autowired
     protected UserEventService userEventService;
     @Autowired
