@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
@@ -26,6 +24,9 @@ import static com.facedynamics.notifications.utils.Constants.GREATER_THAN_OR_EQU
 import static com.facedynamics.notifications.utils.SqlStatements.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpStatus.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IntegrationTests extends BaseTest {
@@ -55,7 +56,7 @@ public class IntegrationTests extends BaseTest {
         Map<String, Object> notifications = response.getBody();
         assertNotNull(notifications);
         assertEquals(PAGE_SIZE_DEFAULT, notifications.size());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(OK, response.getStatusCode());
     }
 
     @Test
@@ -64,9 +65,9 @@ public class IntegrationTests extends BaseTest {
         userId = 4321L;
         int pageNumber = 0;
         ResponseEntity<Error> response = template.exchange(
-                createURLWithPort() + "/users/{userId}?page={pageNumber}", HttpMethod.GET,
+                createURLWithPort() + "/users/{userId}?page={pageNumber}", GET,
                 null, Error.class, userId, pageNumber);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -74,10 +75,10 @@ public class IntegrationTests extends BaseTest {
     public void getAllNotificationsByUserIdTest_notValidInput() {
         userId = 4L;
         ResponseEntity<Map> response = template.exchange(
-                createURLWithPort() + "/users/{userId}?page={pageNumber}", HttpMethod.GET,
+                createURLWithPort() + "/users/{userId}?page={pageNumber}", GET,
                 null, Map.class, userId, "abc");
         Map<String, Object> notifications = response.getBody();
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(OK, response.getStatusCode());
         assertNotNull(notifications);
         assertEquals(PAGE_SIZE_DEFAULT, notifications.size());
     }
@@ -88,8 +89,8 @@ public class IntegrationTests extends BaseTest {
     public void deleteAllNotificationsByUserIdTest_validId() {
         userId = 10L;
         ResponseEntity<String> response = template.exchange(createURLWithPort() + "/users/{userId}",
-                HttpMethod.DELETE, null, String.class, userId);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+                DELETE, null, String.class, userId);
+        assertEquals(OK, response.getStatusCode());
     }
 
     @Test
@@ -97,8 +98,8 @@ public class IntegrationTests extends BaseTest {
     public void deleteAllNotificationsByUserIdTest_IdIsNotPresent() {
         userId = 432100L;
         ResponseEntity<Error> response = template.exchange(createURLWithPort() + "/users/{userId}",
-                HttpMethod.DELETE, null, Error.class, userId);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+                DELETE, null, Error.class, userId);
+        assertEquals(NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -106,8 +107,8 @@ public class IntegrationTests extends BaseTest {
     public void deleteAllNotificationsByUserIdTest_IdIsNegative() {
         userId = -1L;
         ResponseEntity<ProblemDetail> response = template.exchange(createURLWithPort() + "/users/{userId}",
-                HttpMethod.DELETE, null, ProblemDetail.class, userId);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+                DELETE, null, ProblemDetail.class, userId);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
 
         ProblemDetail details = response.getBody();
         assertNotNull(details);
@@ -126,8 +127,8 @@ public class IntegrationTests extends BaseTest {
     public void deleteNotificationByIdTest_idIsPresent() {
         long notificationId = 11;
         ResponseEntity<Long> response = template.exchange(createURLWithPort() + "/{notificationId}",
-                HttpMethod.DELETE, null, Long.class, notificationId);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+                DELETE, null, Long.class, notificationId);
+        assertEquals(OK, response.getStatusCode());
         assertEquals(notificationId, response.getBody());
     }
 
@@ -136,8 +137,8 @@ public class IntegrationTests extends BaseTest {
     public void deleteNotificationByIdTest_idIsNotPresent() {
         long notificationId = 5321;
         ResponseEntity<ProblemDetail> response = template.exchange(createURLWithPort() + "/{notificationId}",
-                HttpMethod.DELETE, null, ProblemDetail.class, notificationId);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+                DELETE, null, ProblemDetail.class, notificationId);
+        assertEquals(NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -145,8 +146,8 @@ public class IntegrationTests extends BaseTest {
     public void deleteNotificationByIdTest_wrongInput() {
         String notificationId = "321ffs";
         ResponseEntity<ProblemDetail> response = template.exchange(createURLWithPort() + "/{notificationId}",
-                HttpMethod.DELETE, null, ProblemDetail.class, notificationId);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+                DELETE, null, ProblemDetail.class, notificationId);
+        assertEquals(BAD_REQUEST, response.getStatusCode());
 
         ProblemDetail details = response.getBody();
         assertNotNull(details);
@@ -169,7 +170,7 @@ public class IntegrationTests extends BaseTest {
         ResponseEntity<NotificationResponseDTO> response = template.postForEntity(createURLWithPort(),
                 getDTO, NotificationResponseDTO.class);
         NotificationResponseDTO responseDTO = response.getBody();
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(OK, response.getStatusCode());
         assertNotNull(responseDTO);
         assertEquals(POST_COMMENTED, responseDTO.getType());
     }
@@ -184,7 +185,7 @@ public class IntegrationTests extends BaseTest {
         ResponseEntity<ProblemDetail> response = template.postForEntity(createURLWithPort(),
                 getDTO, ProblemDetail.class);
         ProblemDetail detail = response.getBody();
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(BAD_REQUEST, response.getStatusCode());
         assertNotNull(detail);
         assertNotNull(detail.getProperties());
 
@@ -205,7 +206,7 @@ public class IntegrationTests extends BaseTest {
         ResponseEntity<NotificationResponseDTO> response = template.postForEntity(createURLWithPort(),
                 getDTO, NotificationResponseDTO.class);
         NotificationResponseDTO responseDTO = response.getBody();
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(OK, response.getStatusCode());
         assertNotNull(responseDTO);
         assertEquals(COMMENT_REPLIED, responseDTO.getType());
     }
@@ -220,7 +221,7 @@ public class IntegrationTests extends BaseTest {
         ResponseEntity<NotificationResponseDTO> response = template.postForEntity(createURLWithPort(),
                 getDTO, NotificationResponseDTO.class);
         NotificationResponseDTO responseDTO = response.getBody();
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(OK, response.getStatusCode());
         assertNotNull(responseDTO);
         assertEquals(USER_REGISTERED, responseDTO.getType());
     }

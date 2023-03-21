@@ -12,7 +12,7 @@ import static com.facedynamics.notifications.utils.Constants.LETTER_WRONG_FORMAT
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class PasswordResetRequest extends NotificationContent implements ContentWithEmail{
+public class PasswordResetRequest extends NotificationContent<PasswordResetRequest> implements ContentWithEmail{
 
     @NotEmpty(message = "The name must be present")
     @Size(min = 3, max = 24, message = NO_BIGGER_THEN_24_AND_NO_LESS_THEN_3_LETTERS)

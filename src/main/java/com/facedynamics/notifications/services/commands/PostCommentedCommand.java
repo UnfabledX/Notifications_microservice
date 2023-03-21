@@ -4,6 +4,7 @@ import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
 import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.NotificationUserServiceDTO;
+import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.PostCommented;
 
@@ -23,7 +24,8 @@ public class PostCommentedCommand extends AbstractCommand {
     }
 
     private static Notification getNotification(NotificationDto receivedDTO) {
-        PostCommented commented = (PostCommented) receivedDTO.content();
+        NotificationContent<PostCommented> content = receivedDTO.content();
+        PostCommented commented = content.getChild();
         return Notification.builder()
                 .ownerId(receivedDTO.recipientId())
                 .createdById(receivedDTO.createdById())
