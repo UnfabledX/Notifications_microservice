@@ -1,6 +1,7 @@
 package com.facedynamics.notifications.emails;
 
 import com.facedynamics.notifications.model.dto.PostCommented;
+import lombok.Setter;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.StringWriter;
 
+@Setter
 @Component
 public class PostCommentedEmailMessage extends EmailMessage {
 

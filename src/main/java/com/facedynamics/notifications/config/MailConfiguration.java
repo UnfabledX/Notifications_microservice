@@ -3,6 +3,9 @@ package com.facedynamics.notifications.config;
 import com.facedynamics.notifications.emails.*;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -35,20 +38,31 @@ public class MailConfiguration {
         return mailSender;
     }
 
-    @Bean(initMethod = "init")
+    @Bean(name = "engine")
     public VelocityEngine getVelocityEngine(){
-        return new VelocityEngine();
+        VelocityEngine engine = new VelocityEngine();
+        engine.setProperty(RuntimeConstants.RESOURCE_LOADERS,"classpath");
+        engine.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
+        engine.init();
+        return engine;
     }
+
+    @Autowired private UserRegisteredEmailMessage userRegisteredEmailMessage;
+    @Autowired private PasswordResetRequestEmailMessage passwordResetRequestEmailMessage;
+    @Autowired private PostCommentedEmailMessage postCommentedEmailMessage;
+    @Autowired private CommentRepliedEmailMessage commentRepliedEmailMessage;
+    @Autowired private SubscribedByEmailMessage subscribedByEmailMessage;
+    @Autowired private FollowedByEmailMessage followedByEmailMessage;
 
     @Bean(name = "mails")
     public Map<NotificationContent.Type, EmailMessage> getMails(){
         return Map.of(
-                USER_REGISTERED,                new UserRegisteredEmailMessage(),
-                USER_PASSWORD_RESET_REQUEST,    new PasswordResetRequestEmailMessage(),
-                POST_COMMENTED,                 new PostCommentedEmailMessage(),
-                COMMENT_REPLIED,                new CommentRepliedEmailMessage(),
-                SUBSCRIBED_BY,                  new SubscribedByEmailMessage(),
-                FOLLOWED_BY,                    new FollowedByEmailMessage()
+                USER_REGISTERED,                userRegisteredEmailMessage,
+                USER_PASSWORD_RESET_REQUEST,    passwordResetRequestEmailMessage,
+                POST_COMMENTED,                 postCommentedEmailMessage,
+                COMMENT_REPLIED,                commentRepliedEmailMessage,
+                SUBSCRIBED_BY,                  subscribedByEmailMessage,
+                FOLLOWED_BY,                    followedByEmailMessage
         );
     }
 }

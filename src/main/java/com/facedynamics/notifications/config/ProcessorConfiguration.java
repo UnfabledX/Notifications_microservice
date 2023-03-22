@@ -2,6 +2,7 @@ package com.facedynamics.notifications.config;
 
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.services.commands.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,15 +13,28 @@ import static com.facedynamics.notifications.model.dto.NotificationContent.Type.
 @Configuration
 public class ProcessorConfiguration {
 
+    @Autowired
+    private UserRegisteredNotificationProcessor userRegisteredNotificationProcessor;
+    @Autowired
+    private PasswordResetRequestProcessor passwordResetRequestProcessor;
+    @Autowired
+    private PostCommentedNotificationProcessor postCommentedNotificationProcessor;
+    @Autowired
+    private CommentRepliedNotificationProcessor commentRepliedNotificationProcessor;
+    @Autowired
+    private SubscribedByNotificationProcessor subscribedByNotificationProcessor;
+    @Autowired
+    private FollowedByNotificationProcessor followedByNotificationProcessor;
+
     @Bean(name = "processor")
-    public Map<NotificationContent.Type, AbstractNotificationProcessor> getProcessor(){
+    public Map<NotificationContent.Type, AbstractNotificationProcessor> getProcessor() {
         return Map.of(
-                USER_REGISTERED,                new UserRegisteredNotificationProcessor(),
-                USER_PASSWORD_RESET_REQUEST,    new PasswordResetRequestProcessor(),
-                POST_COMMENTED,                 new PostCommentedNotificationProcessor(),
-                COMMENT_REPLIED,                new CommentRepliedNotificationProcessor(),
-                SUBSCRIBED_BY,                  new SubscribedByNotificationProcessor(),
-                FOLLOWED_BY,                    new FollowedByNotificationProcessor()
+                USER_REGISTERED,                userRegisteredNotificationProcessor,
+                USER_PASSWORD_RESET_REQUEST,    passwordResetRequestProcessor,
+                POST_COMMENTED,                 postCommentedNotificationProcessor,
+                COMMENT_REPLIED,                commentRepliedNotificationProcessor,
+                SUBSCRIBED_BY,                  subscribedByNotificationProcessor,
+                FOLLOWED_BY,                    followedByNotificationProcessor
         );
     }
 }

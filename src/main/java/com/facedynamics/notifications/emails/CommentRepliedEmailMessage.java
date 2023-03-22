@@ -1,6 +1,7 @@
 package com.facedynamics.notifications.emails;
 
 import com.facedynamics.notifications.model.dto.CommentReplied;
+import lombok.Setter;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
+@Setter
 @Component
 public class CommentRepliedEmailMessage extends EmailMessage {
 
