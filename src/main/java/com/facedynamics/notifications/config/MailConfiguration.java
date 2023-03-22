@@ -3,9 +3,7 @@ package com.facedynamics.notifications.config;
 import com.facedynamics.notifications.emails.*;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import org.apache.velocity.app.VelocityEngine;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -16,8 +14,6 @@ import java.util.Properties;
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.*;
 
 @Configuration
-@ComponentScan(basePackages = "com.facedynamics.notifications")
-@ConfigurationProperties(prefix = "email-addresses")
 public class MailConfiguration {
 
     @Bean

@@ -95,7 +95,7 @@ public class NotificationServiceImpl implements NotificationService {
     public NotificationResponseDTO createNotification(NotificationDto receivedDTO) {
         NotificationContent.Type type = receivedDTO.content().getType();
         return factory
-                .getProcessor(type.name())
+                .getProcessor(type)
                 .execute(receivedDTO);
     }
 }

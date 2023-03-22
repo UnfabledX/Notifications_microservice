@@ -1,5 +1,6 @@
 package com.facedynamics.notifications.services.commands;
 
+import com.facedynamics.notifications.model.dto.NotificationContent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,9 +18,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class NotificationFactory {
 
-    private final Map<String, NotificationProcessor> processor;
+    private final Map<NotificationContent.Type, NotificationProcessor> processor;
 
-    public NotificationProcessor getProcessor(String commandType){
+    public NotificationProcessor getProcessor(NotificationContent.Type commandType){
         return processor.get(commandType);
     }
 }
