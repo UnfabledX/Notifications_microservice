@@ -1,6 +1,7 @@
 package com.facedynamics.notifications.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,5 +42,6 @@ public class Notification {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "details_id", referencedColumnName = "id")
+    @JsonProperty("content")
     private NotificationDetails details;
 }
