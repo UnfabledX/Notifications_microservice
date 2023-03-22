@@ -1,6 +1,5 @@
 package com.facedynamics.notifications.services;
 
-import com.facedynamics.notifications.controllers.UserEventService;
 import com.facedynamics.notifications.handler.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationResponseDTO;
@@ -14,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 

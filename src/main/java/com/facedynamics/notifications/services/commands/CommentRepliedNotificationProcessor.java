@@ -27,7 +27,7 @@ public class CommentRepliedNotificationProcessor extends AbstractNotificationPro
 
     private static Notification getNotification(NotificationDto receivedDTO) {
         NotificationContent<CommentReplied> content = receivedDTO.content();
-        CommentReplied replied  = content.getChild();
+        CommentReplied replied = content.getChild();
         return Notification.builder()
                 .ownerId(receivedDTO.recipientId())
                 .createdById(receivedDTO.createdById())
