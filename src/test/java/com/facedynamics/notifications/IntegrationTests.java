@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static com.facedynamics.notifications.controllers.NotificationController.NOTIFICATION;
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.*;
 import static com.facedynamics.notifications.utils.Constants.GREATER_THAN_OR_EQUAL_TO_1;
 import static com.facedynamics.notifications.utils.SqlStatements.*;
@@ -42,7 +43,7 @@ public class IntegrationTests extends BaseTest {
     private Long userId;
 
     private String createURLWithPort() {
-        return "http://localhost:" + port + "/notifications";
+        return "http://localhost:" + port + NOTIFICATION;
     }
 
     @Test
@@ -125,7 +126,7 @@ public class IntegrationTests extends BaseTest {
     @Order(7)
     @Sql(statements = {details2, notific2}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void deleteNotificationByIdTest_idIsPresent() {
-        long notificationId = 11;
+        long notificationId = 102;
         ResponseEntity<Long> response = template.exchange(createURLWithPort() + "/{notificationId}",
                 DELETE, null, Long.class, notificationId);
         assertEquals(OK, response.getStatusCode());
