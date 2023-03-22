@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,12 +27,13 @@ import java.util.Optional;
 
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.FOLLOWED_BY;
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
-import static com.facedynamics.notifications.utils.Constants.PAGE_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 class NotificationServiceUnitTest extends BaseTest {
+
+    public final static int PAGE_SIZE_DEFAULT = 5;
 
     private final NotificationRepository repository = mock(NotificationRepository.class);
 
@@ -48,7 +50,9 @@ class NotificationServiceUnitTest extends BaseTest {
 
     private Page<Notification> resultList;
 
-    private int ownerId;
+    private Long ownerId;
+
+    private Pageable pageable;
 
     @BeforeEach
     public void init() {
@@ -79,30 +83,31 @@ class NotificationServiceUnitTest extends BaseTest {
                 .build();
         notificationList.addAll(Arrays.asList(n1, n2));
         resultList = new PageImpl<>(notificationList);
+        pageable = PageRequest.of(0, 5);
     }
 
     @Test
     void getAllNotificationsByUserIdTest_validId() {
-        ownerId = 3;
-        when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE))).thenReturn(resultList);
+        ownerId = 3L;
+        when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE_DEFAULT))).thenReturn(resultList);
         when(repository.existsByOwnerId(ownerId)).thenReturn(true);
-        List<Notification> actualList = service.getAllNotificationsByUserId(0, ownerId);
+        Page<Notification> actualList = service.getAllNotificationsByUserId(ownerId, pageable);
         assertNotNull(actualList);
-        assertEquals(notificationList, actualList);
+        assertEquals(resultList, actualList);
     }
 
     @Test
     public void getAllNotificationsByUserIdTest_notValidId() {
-        ownerId = 12345;
-        when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE)))
+        ownerId = 12345L;
+        when(repository.findAllByOwnerId(ownerId, PageRequest.of(0, PAGE_SIZE_DEFAULT)))
                 .thenThrow(NotFoundException.class);
         assertThrows(NotFoundException.class,
-                () -> service.getAllNotificationsByUserId(0, ownerId));
+                () -> service.getAllNotificationsByUserId(ownerId, pageable));
     }
 
     @Test
     void deleteAllNotificationsByUserIdTest_notValidId() {
-        ownerId = 3210;
+        ownerId = 3210L;
         doThrow(NotFoundException.class).when(repository).deleteNotificationsByOwnerId(ownerId);
         assertThrows(NotFoundException.class,
                 () -> service.deleteAllNotificationsByOwnerId(ownerId));
@@ -110,7 +115,7 @@ class NotificationServiceUnitTest extends BaseTest {
 
     @Test
     void deleteAllNotificationsByUserIdTest_validId() {
-        ownerId = 3;
+        ownerId = 3L;
         doNothing().when(repository).deleteNotificationsByOwnerId(ownerId);
         when(repository.existsByOwnerId(ownerId)).thenReturn(true);
         assertDoesNotThrow(() -> service.deleteAllNotificationsByOwnerId(ownerId));

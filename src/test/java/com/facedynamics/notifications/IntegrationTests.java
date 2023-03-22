@@ -2,7 +2,6 @@ package com.facedynamics.notifications;
 
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.handler.Error;
-import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
@@ -20,16 +19,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
-import static com.facedynamics.notifications.utils.Constants.PAGE_SIZE;
 import static com.facedynamics.notifications.utils.SqlStatements.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IntegrationTests extends BaseTest {
+
+    public final static int PAGE_SIZE_DEFAULT = 5;
 
     @Autowired
     private TestRestTemplate template;
@@ -45,16 +47,15 @@ public class IntegrationTests extends BaseTest {
 
     @Test
     @Order(1)
-    public void getAllNotificationsByUserIdTest_validIdAndPage() {
+    public void getAllNotificationsByUserIdTest_validId() {
         userId = 4;
         int pageNumber = 0;
-        ResponseEntity<List> response = template.getForEntity(
+        ResponseEntity<Map> response = template.getForEntity(
                 createURLWithPort() + "/users/{userId}?page={pageNumber}",
-                List.class, userId, pageNumber);
-        List<Notification> notifications = response.getBody();
-        if (Optional.ofNullable(notifications).isPresent()) {
-            assertEquals(PAGE_SIZE, notifications.size());
-        }
+                Map.class, userId, pageNumber);
+        Map<String, Object> notifications = response.getBody();
+        assertNotNull(notifications);
+        assertEquals(PAGE_SIZE_DEFAULT, notifications.size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -73,10 +74,13 @@ public class IntegrationTests extends BaseTest {
     @Order(2)
     public void getAllNotificationsByUserIdTest_notValidInput() {
         userId = 4;
-        ResponseEntity<Error> response = template.exchange(
+        ResponseEntity<Map> response = template.exchange(
                 createURLWithPort() + "/users/{userId}?page={pageNumber}", HttpMethod.GET,
-                null, Error.class, userId, "abc");
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+                null, Map.class, userId, "abc");
+        Map<String, Object> notifications = response.getBody();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(notifications);
+        assertEquals(PAGE_SIZE_DEFAULT, notifications.size());
     }
 
     @Test

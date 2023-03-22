@@ -10,7 +10,6 @@ import com.facedynamics.notifications.repository.NotificationRepository;
 import com.facedynamics.notifications.services.commands.AbstractNotificationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.facedynamics.notifications.utils.Constants.*;
+import static com.facedynamics.notifications.utils.Constants.ID_OF_THE_NOTIFICATION_IS_NOT_FOUND;
+import static com.facedynamics.notifications.utils.Constants.USER_IS_NOT_FOUND;
 
 /**
  * Service class that is responsible for business logic of
@@ -45,11 +45,9 @@ public class NotificationServiceImpl implements NotificationService {
      * if ID of the user is not found in the database.
      */
     @Override
-    public List<Notification> getAllNotificationsByUserId(int page, int ownerId) {
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+    public Page<Notification> getAllNotificationsByUserId(Long ownerId, Pageable pageable) {
         if (notificationRepository.existsByOwnerId(ownerId)) {
-            Page<Notification> notifications = notificationRepository.findAllByOwnerId(ownerId, pageable);
-            return notifications.getContent();
+            return notificationRepository.findAllByOwnerId(ownerId, pageable);
         } else {
             throw new NotFoundException(USER_IS_NOT_FOUND, ownerId);
         }
@@ -61,7 +59,7 @@ public class NotificationServiceImpl implements NotificationService {
      * @param ownerId ID of the user who owns his notifications
      */
     @Override
-    public void deleteAllNotificationsByOwnerId(int ownerId) {
+    public void deleteAllNotificationsByOwnerId(Long ownerId) {
         if (notificationRepository.existsByOwnerId(ownerId)) {
             notificationRepository.deleteNotificationsByOwnerId(ownerId);
         } else {
@@ -78,7 +76,7 @@ public class NotificationServiceImpl implements NotificationService {
      * found in the database.
      */
     @Override
-    public Long deleteNotificationById(long Id) {
+    public Long deleteNotificationById(Long Id) {
         Optional<Notification> notification = notificationRepository.findNotificationById(Id);
         if (notification.isEmpty()) {
             throw new NotFoundException(ID_OF_THE_NOTIFICATION_IS_NOT_FOUND, Id);

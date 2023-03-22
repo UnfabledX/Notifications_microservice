@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -48,9 +49,12 @@ public class NotificationControllerUnitTest extends BaseTest {
     @MockBean
     private NotificationServiceImpl service;
 
-    private List<Notification> list;
+    private Page<Notification> pageList;
 
-    private int ownerId;
+    private Long ownerId;
+
+    private  Pageable pageable;
+
 
     @BeforeEach
     public void init() {
@@ -90,39 +94,42 @@ public class NotificationControllerUnitTest extends BaseTest {
                         .build())
                 .createdAt(LocalDateTime.of(2019, 10, 14, 12, 12, 33))
                 .build();
-        list = Arrays.asList(n1, n2, n3);
+        List<Notification> list = Arrays.asList(n1, n2, n3);
+        pageList = new PageImpl<>(list);
+        pageable = PageRequest.of(0, 5, Sort.by("createdAt").descending());
     }
 
     @Test
     public void getNotificationsByUserIdTest_ownerIdIsPresent() throws Exception {
-        ownerId = 3;
-        Mockito.when(service.getAllNotificationsByUserId(0, ownerId)).thenReturn(list);
+        ownerId = 3L;
+        Mockito.when(service.getAllNotificationsByUserId(ownerId, pageable)).thenReturn(pageList);
 
         mockMvc.perform(get(NOTIFICATIONS_BY_USER_ID, ownerId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", Matchers.hasSize(3)))
-                .andExpect(jsonPath("$[1].createdById", Matchers.is(6)));
+                .andExpect(jsonPath("$.notifications", Matchers.hasSize(3)))
+                .andExpect(jsonPath("$.notifications[1].createdById", Matchers.is(6)));
         Mockito.verify(service, times(1))
-                .getAllNotificationsByUserId(0, ownerId);
+                .getAllNotificationsByUserId(ownerId, pageable);
     }
 
     @Test
     public void getNotificationsByUserIdTest_IdIsNotPresent() throws Exception {
-        ownerId = 12212;
-        Mockito.when(service.getAllNotificationsByUserId(1, ownerId))
+        ownerId = 12212L;
+        pageable = PageRequest.of(1, 5, Sort.by("createdAt").descending());
+        Mockito.when(service.getAllNotificationsByUserId(ownerId, pageable))
                 .thenThrow(NotFoundException.class);
 
         mockMvc.perform(get(NOTIFICATIONS_BY_USER_ID + "?page={page}", ownerId, 1))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE));
         Mockito.verify(service, times(1))
-                .getAllNotificationsByUserId(1, ownerId);
+                .getAllNotificationsByUserId(ownerId, pageable);
     }
 
     @Test
     public void deleteNotificationsByUserIdTest_IdIsNotPresent() throws Exception {
-        ownerId = 54321;
+        ownerId = 54321L;
         Mockito.doThrow(NotFoundException.class)
                 .when(service).deleteAllNotificationsByOwnerId(ownerId);
 
@@ -135,7 +142,7 @@ public class NotificationControllerUnitTest extends BaseTest {
 
     @Test
     public void deleteNotificationsByUserIdTest_IdIsPresent() throws Exception {
-        ownerId = 7;
+        ownerId = 7L;
         Mockito.doNothing().when(service)
                 .deleteAllNotificationsByOwnerId(ownerId);
 

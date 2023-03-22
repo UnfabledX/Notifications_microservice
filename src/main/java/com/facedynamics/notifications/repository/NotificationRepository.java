@@ -11,11 +11,11 @@ import java.util.Optional;
 @Component
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    boolean existsByOwnerId(int ownerId);
+    boolean existsByOwnerId(Long ownerId);
 
-    Page<Notification> findAllByOwnerId(int ownerId, Pageable pageable);
+    Page<Notification> findAllByOwnerId(Long ownerId, Pageable pageable);
 
-    void deleteNotificationsByOwnerId(int ownerId);
+    void deleteNotificationsByOwnerId(Long ownerId);
 
     void deleteNotificationById(long Id);
 

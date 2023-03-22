@@ -3,16 +3,17 @@ package com.facedynamics.notifications.services;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface NotificationService {
 
-    List<Notification> getAllNotificationsByUserId(int page, int ownerId);
+    Page<Notification> getAllNotificationsByUserId(Long ownerId, Pageable pageable);
 
-    void deleteAllNotificationsByOwnerId(int ownerId);
+    void deleteAllNotificationsByOwnerId(Long ownerId);
 
-    Long deleteNotificationById(long notificationId);
+    Long deleteNotificationById(Long notificationId);
 
     NotificationResponseDTO createNotification(NotificationDto notification);
 
