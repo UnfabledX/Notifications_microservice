@@ -4,7 +4,7 @@ import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import org.springframework.stereotype.Component;
 
-@Component("SUBSCRIBED_BY")
+@Component
 public class SubscribedByNotificationProcessor extends AbstractNotificationProcessor {
     @Override
     public NotificationResponseDTO process(NotificationDto dto) {

@@ -9,7 +9,7 @@ import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.PostCommented;
 import org.springframework.stereotype.Component;
 
-@Component("POST_COMMENTED")
+@Component
 public class PostCommentedNotificationProcessor extends AbstractNotificationProcessor {
 
     @Override

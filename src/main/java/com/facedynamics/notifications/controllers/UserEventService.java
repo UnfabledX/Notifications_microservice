@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Component
 @FeignClient(name = "user-service", url = "${user.service.url}")
+@Component
 public interface UserEventService {
     /**
      * Receives user information such as:
@@ -15,6 +15,6 @@ public interface UserEventService {
      * @param id user Id
      * @return user object with necessary information.
      */
-    @GetMapping("users/{id}")
-    NotificationUserServiceDTO getUserById(@PathVariable long id);
+    @GetMapping("/users/{id}")
+    NotificationUserServiceDTO getUserById(@PathVariable Long id);
 }
