@@ -10,7 +10,7 @@ import static com.facedynamics.notifications.utils.Constants.*;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class PostCommented extends NotificationContent {
+public class PostCommented extends NotificationContent<PostCommented> {
 
     @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1)
     @NotNull(message = "The post id must be present.")

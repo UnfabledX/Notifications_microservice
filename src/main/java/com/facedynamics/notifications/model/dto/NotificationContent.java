@@ -20,12 +20,16 @@ import lombok.RequiredArgsConstructor;
 })
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public abstract class NotificationContent {
+public abstract class NotificationContent<T extends NotificationContent<T>> {
 
     protected final Type type;
 
     public Type getType() {
         return type;
+    }
+
+    public T getChild(){
+        return (T) this;
     }
 
     public enum Type {

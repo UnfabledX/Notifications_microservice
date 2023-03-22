@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class SubscribedBy extends NotificationContent {
+public class SubscribedBy extends NotificationContent<SubscribedBy> {
 
     @Size(min = 3, max = 24, message = "Username mustn't be bigger then 24 letters and less then 3 letters")
     private final String username;

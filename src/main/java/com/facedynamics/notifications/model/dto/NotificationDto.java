@@ -2,6 +2,7 @@ package com.facedynamics.notifications.model.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -9,6 +10,7 @@ import java.util.Objects;
 import static com.facedynamics.notifications.utils.Constants.GREATER_THAN_OR_EQUAL_TO_1;
 public record NotificationDto(
 
+        @NotNull(message = "The recipient id must be present.")
         @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1)
         Long recipientId,
 

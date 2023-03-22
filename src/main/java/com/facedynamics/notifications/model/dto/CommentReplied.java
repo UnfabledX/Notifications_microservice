@@ -10,7 +10,7 @@ import static com.facedynamics.notifications.utils.Constants.*;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class CommentReplied extends NotificationContent {
+public class CommentReplied extends NotificationContent<CommentReplied> {
 
     @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1)
     @NotNull(message = THE_COMMENT_ID_MUST_BE_PRESENT)

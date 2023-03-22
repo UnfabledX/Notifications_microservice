@@ -5,6 +5,7 @@ import com.facedynamics.notifications.model.NotificationDetails;
 import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import com.facedynamics.notifications.model.dto.CommentReplied;
+import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,8 @@ public class CommentRepliedNotificationProcessor extends AbstractNotificationPro
     }
 
     private static Notification getNotification(NotificationDto receivedDTO) {
-        CommentReplied replied = (CommentReplied) receivedDTO.content();
+        NotificationContent<CommentReplied> content = receivedDTO.content();
+        CommentReplied replied  = content.getChild();
         return Notification.builder()
                 .ownerId(receivedDTO.recipientId())
                 .createdById(receivedDTO.createdById())
