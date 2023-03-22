@@ -1,7 +1,6 @@
 package com.facedynamics.notifications.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +13,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Component
-@JsonInclude(value = JsonInclude.Include.NON_EMPTY,
-        content = JsonInclude.Include.NON_NULL)
 @Table(name = "notifications", schema = "notification_db")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,16 +28,21 @@ public class Notification {
 
     @Column(name = "owner_id", nullable = false)
     @Min(value = 1, message = "Id must be greater than 1")
-    private int ownerId;
+    private Long ownerId;
 
-    @Column(name = "triggerer_id")
+    @Column(name = "createdBy_id")
     @Min(value = 1, message = "Id must be greater than 1")
-    private Integer triggererId;
+    private Long createdById;
 
     @Column(name = "createdAt")
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
 
-    @Column(name = "notification_type_id")
-    private int notificationType;
+    @Column(name = "updatedAt")
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private LocalDateTime updatedAt;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "details_id", referencedColumnName = "id")
+    private NotificationDetails details;
 }

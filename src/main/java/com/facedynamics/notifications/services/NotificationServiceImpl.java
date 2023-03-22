@@ -1,12 +1,11 @@
 package com.facedynamics.notifications.services;
 
-import com.facedynamics.notifications.controllers.UserEventService;
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.model.NotificationType;
-import com.facedynamics.notifications.model.dto.NotificationGetDTO;
-import com.facedynamics.notifications.model.dto.NotificationResponseDTO;
-import com.facedynamics.notifications.model.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.model.NotificationResponseDTO;
+import com.facedynamics.notifications.model.dto.NotificationContent;
+import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.repository.NotificationRepository;
+import com.facedynamics.notifications.services.commands.AbstractNotificationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,11 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import static com.facedynamics.notifications.model.NotificationType.*;
 import static com.facedynamics.notifications.utils.Constants.*;
 
 /**
@@ -35,9 +33,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    private final UserEventService userEventService;
-
-    private final EmailService emailService;
+    private final Map<NotificationContent.Type, AbstractNotificationProcessor> processor;
 
     /**
      * Finds all notifications of specified user ID.
@@ -89,47 +85,18 @@ public class NotificationServiceImpl implements NotificationService {
         return notification.get().getId();
     }
 
+    /**
+     * Creates notification of specified type, saves it to database,
+     * sends an email letter to recipient user (who received a notification)
+     *
+     * @param receivedDTO dto with incoming necessary data
+     * @return returns a response body of a saved notification
+     */
     @Override
-    public NotificationResponseDTO createNotification(NotificationGetDTO receivedDTO) {
-        NotificationType type = getType(receivedDTO.getNotificationType());
-        saveNotificationToDatabase(receivedDTO, type);
-
-        switch (type) {
-            case REGISTRATION: //todo
-            case RESET_PASSWORD: //todo
-            case COMMENT, REPLY:
-                return sendCommentReplyNotificationReturnDTO(receivedDTO, type);
-            case FOLLOW:  //todo
-            case SUBSCRIPTION: //todo
-        }
-        return null;
-    }
-
-    private NotificationResponseDTO sendCommentReplyNotificationReturnDTO(NotificationGetDTO receivedDTO,
-                                                                          NotificationType type) {
-        int triggerUserId = receivedDTO.getDetails().getUserId();
-        LocalDateTime createdAt = receivedDTO.getDetails().getCreatedAt();
-        int ownerId = receivedDTO.getOwnerId();
-
-        NotificationUserServiceDTO ownerDTO = userEventService.getUserById(ownerId);
-        NotificationUserServiceDTO triggerUserDTO = userEventService.getUserById(triggerUserId);
-
-        emailService.sendEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
-
-        return new NotificationResponseDTO(triggerUserDTO.getUsername(),
-                type, createdAt);
-    }
-
-    private void saveNotificationToDatabase(NotificationGetDTO receivedDTO, NotificationType type) {
-        int triggerUserId = receivedDTO.getDetails().getUserId();
-        LocalDateTime createdAt = receivedDTO.getDetails().getCreatedAt();
-        int ownerId = receivedDTO.getOwnerId();
-        Notification notification = Notification.builder()
-                .ownerId(ownerId)
-                .triggererId(triggerUserId)
-                .createdAt(createdAt)
-                .notificationType(type.getId())
-                .build();
-        notificationRepository.save(notification);
+    public NotificationResponseDTO createNotification(NotificationDto receivedDTO) {
+        NotificationContent.Type type = receivedDTO.content().getType();
+        return processor
+                .get(type)
+                .process(receivedDTO);
     }
 }

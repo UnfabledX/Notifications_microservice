@@ -4,9 +4,11 @@ import com.facedynamics.notifications.model.Notification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
     boolean existsByOwnerId(int ownerId);

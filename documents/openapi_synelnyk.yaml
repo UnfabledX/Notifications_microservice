@@ -59,11 +59,6 @@ paths:
                   type: integer
                   example: 3215
 
-                isEnabled:
-                  description: true or false
-                  type: boolean
-                  example: true
-
                 notification_type:
                   type: string
                   example: "registration" #or pass reset
