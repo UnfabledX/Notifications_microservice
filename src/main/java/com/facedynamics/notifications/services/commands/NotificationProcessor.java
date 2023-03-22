@@ -1,17 +1,8 @@
 package com.facedynamics.notifications.services.commands;
 
-import com.facedynamics.notifications.controllers.UserEventService;
-import com.facedynamics.notifications.repository.NotificationRepository;
-import com.facedynamics.notifications.services.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import com.facedynamics.notifications.model.NotificationResponseDTO;
+import com.facedynamics.notifications.model.dto.NotificationDto;
 
-@Component
-public abstract class NotificationProcessor implements Executable {
-    @Autowired
-    protected UserEventService userEventService;
-    @Autowired
-    protected EmailService emailService;
-    @Autowired
-    protected NotificationRepository notificationRepository;
+public interface NotificationProcessor {
+    NotificationResponseDTO process(NotificationDto dto);
 }

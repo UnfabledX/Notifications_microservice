@@ -7,7 +7,7 @@ import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.repository.NotificationRepository;
-import com.facedynamics.notifications.services.commands.NotificationFactory;
+import com.facedynamics.notifications.services.commands.AbstractNotificationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.facedynamics.notifications.utils.Constants.*;
@@ -34,7 +35,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    private final NotificationFactory factory;
+    private final Map<NotificationContent.Type, AbstractNotificationProcessor> processor;
 
     /**
      * Finds all notifications of specified user ID.
@@ -96,8 +97,8 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public NotificationResponseDTO createNotification(NotificationDto receivedDTO) {
         NotificationContent.Type type = receivedDTO.content().getType();
-        return factory
-                .getProcessor(type.name())
-                .execute(receivedDTO);
+        return processor
+                .get(type)
+                .process(receivedDTO);
     }
 }

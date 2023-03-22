@@ -9,10 +9,10 @@ import com.facedynamics.notifications.model.dto.PostCommented;
 import org.springframework.stereotype.Component;
 
 @Component("POST_COMMENTED")
-public class PostCommentedNotificationProcessor extends NotificationProcessor {
+public class PostCommentedNotificationProcessor extends AbstractNotificationProcessor {
 
     @Override
-    public NotificationResponseDTO execute(NotificationDto receivedDTO) {
+    public NotificationResponseDTO process(NotificationDto receivedDTO) {
         NotificationUserServiceDTO ownerDTO = userEventService.getUserById(receivedDTO.recipientId());
         NotificationUserServiceDTO triggerUserDTO = userEventService.getUserById(receivedDTO.createdById());
         notificationRepository.save(getNotification(receivedDTO));
