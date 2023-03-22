@@ -1,5 +1,4 @@
 CREATE schema IF NOT EXISTS notification_db;
-USE notification_db;
 
 -- --------------------------------------------------------------
 -- NOTIFICATIONS DETAILS
@@ -7,19 +6,21 @@ USE notification_db;
 -- of notification:
 --      + PostCommented - details about post_id, comment_id
 --      + CommentReplied - details about comment_id, reply_id
---      + UserRegistered -
---      + PasswordResetRequest -
+--      + UserRegistered - name and email
+--      + PasswordResetRequest - name and email
 --      + to be continued...
 -- --------------------------------------------------------------
 
-CREATE TABLE notification_details
+CREATE TABLE IF NOT EXISTS notification_details
 (
-    id           BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    type         VARCHAR(60),
-    post_id      BIGINT,
-    comment_id   BIGINT,
-    reply_id     BIGINT
-) CHARACTER SET=utf8mb4;
+    id           bigserial,
+    type         character varying,
+    name         character varying,
+    email        character varying,
+    post_id      bigint,
+    comment_id   bigint,
+    reply_id     bigint
+);
 
 -- --------------------------------------------------------------
 -- NOTIFICATIONS
@@ -29,22 +30,22 @@ CREATE TABLE notification_details
 --      + createdBy_id - user id who triggered notification
 --      + details_id - id of details if any present
 --      + createdAt - time when notification was created
---      + updatedAt - time when the notified entity was updated
+--      + updatedAt - time when the entity was created
 -- --------------------------------------------------------------
-CREATE TABLE notifications
+CREATE TABLE IF NOT EXISTS notifications
 (
 -- 'generated always AS identity' means id is autoincrement field
-    id                      BIGINT    NOT NULL   AUTO_INCREMENT  PRIMARY KEY,
-    owner_id                BIGINT    NOT NULL,
-    createdBy_id            BIGINT,
+    id                      bigserial,
+    owner_id                bigint    NOT NULL,
+    createdBy_id            bigint,
 -- details_id in notifications table is associated with id in notification_details table
 -- details_id of notifications = id of notification_details
-    details_id              BIGINT    NOT NULL,
-    createdAt               TIMESTAMP NOT NULL,
-    updatedAt               TIMESTAMP,
+    details_id              bigint    NOT NULL,
+    notification_createdAt  TIMESTAMP NOT NULL,
+    entity_createdAt        TIMESTAMP NOT NULL ,
 
 -- this declaration contains the foreign key constraint
     CONSTRAINT details_fk
     FOREIGN KEY (details_id) REFERENCES notification_details (id)
     ON DELETE CASCADE
-) CHARACTER SET=utf8mb4;
+);

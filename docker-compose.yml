@@ -1,31 +1,13 @@
 version: '3.3'
 services:
-  mysql_db:
-    image: mysql
-    container_name: mysql_notification_db
+  notification_database:
+    image: postgres
+    container_name: notification_database
     environment:
       TZ: Europe/Kyiv
-      MYSQL_DATABASE: 'notification_db'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'pluralsight'
-      MYSQL_ROOT_PASSWORD: 'pluralsight'
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
     restart: on-failure
     ports:
-      - '3307:3306'
-    expose:
-      - '3307'
-
-  mysql_test_db:
-    image: mysql
-    container_name: mysql_notif_test_db
-    environment:
-      TZ: Europe/Kyiv
-      MYSQL_DATABASE: 'notification_db'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'pluralsight'
-      MYSQL_ROOT_PASSWORD: 'pluralsight'
-    restart: on-failure
-    ports:
-      - '3311:3306'
-    expose:
-      - '3311'
+      - "5433:5432"
