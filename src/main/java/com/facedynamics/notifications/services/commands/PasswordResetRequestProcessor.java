@@ -5,9 +5,9 @@ import com.facedynamics.notifications.model.dto.NotificationDto;
 import org.springframework.stereotype.Component;
 
 @Component("USER_PASSWORD_RESET_REQUEST")
-public class PasswordResetRequestProcessor extends NotificationProcessor {
+public class PasswordResetRequestProcessor extends AbstractNotificationProcessor {
     @Override
-    public NotificationResponseDTO execute(NotificationDto dto) {
+    public NotificationResponseDTO process(NotificationDto dto) {
         return null;
     }
 }

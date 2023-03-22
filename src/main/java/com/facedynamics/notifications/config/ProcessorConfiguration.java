@@ -13,7 +13,7 @@ import static com.facedynamics.notifications.model.dto.NotificationContent.Type.
 public class ProcessorConfiguration {
 
     @Bean(name = "processor")
-    public Map<NotificationContent.Type, NotificationProcessor> getProcessor(){
+    public Map<NotificationContent.Type, AbstractNotificationProcessor> getProcessor(){
         return Map.of(
                 USER_REGISTERED,                new UserRegisteredNotificationProcessor(),
                 USER_PASSWORD_RESET_REQUEST,    new PasswordResetRequestProcessor(),
