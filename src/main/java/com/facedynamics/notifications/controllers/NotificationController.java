@@ -1,7 +1,6 @@
 package com.facedynamics.notifications.controllers;
 
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.services.NotificationService;
 import jakarta.validation.Valid;
@@ -50,7 +49,7 @@ public class NotificationController {
     }
 
     @PostMapping
-    public NotificationResponseDTO createNotification(@RequestBody @Valid NotificationDto receivedDTO) {
+    public NotificationDto createNotification(@RequestBody @Valid NotificationDto receivedDTO) {
         return notificationService.createNotification(receivedDTO);
     }
 }

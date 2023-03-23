@@ -2,7 +2,6 @@ package com.facedynamics.notifications.services;
 
 import com.facedynamics.notifications.handler.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.repository.NotificationRepository;
@@ -90,7 +89,7 @@ public class NotificationServiceImpl implements NotificationService {
      * @return returns a response body of a saved notification
      */
     @Override
-    public NotificationResponseDTO createNotification(NotificationDto receivedDTO) {
+    public NotificationDto createNotification(NotificationDto receivedDTO) {
         NotificationContent.Type type = receivedDTO.content().getType();
         return processor
                 .get(type)

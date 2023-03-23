@@ -13,13 +13,14 @@ CREATE schema IF NOT EXISTS notification_db;
 
 CREATE TABLE IF NOT EXISTS notification_details
 (
-    id           bigserial,
-    type         character varying,
-    name         character varying,
-    email        character varying,
-    post_id      bigint,
-    comment_id   bigint,
-    reply_id     bigint
+    id                  bigserial,
+    type                character varying,
+    name                character varying,
+    email               character varying,
+    post_id             bigint,
+    comment_id          bigint,
+    reply_id            bigint,
+    entity_createdAt    timestamp NOT NULL
 );
 
 -- --------------------------------------------------------------
@@ -42,7 +43,6 @@ CREATE TABLE IF NOT EXISTS notifications
 -- details_id of notifications = id of notification_details
     details_id              bigint    NOT NULL,
     notification_createdAt  TIMESTAMP NOT NULL,
-    entity_createdAt        TIMESTAMP NOT NULL ,
 
 -- this declaration contains the foreign key constraint
     CONSTRAINT details_fk

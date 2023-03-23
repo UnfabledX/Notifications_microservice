@@ -1,10 +1,10 @@
 package com.facedynamics.notifications.emails;
 
+import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.PasswordResetRequest;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
@@ -19,11 +19,12 @@ public class PasswordResetRequestEmailMessage extends EmailMessage {
 
     @Override
     public StringWriter getLetterBody() {
-        PasswordResetRequest passwordResetRequest = (PasswordResetRequest) receivedDTO.content();
+        NotificationContent<PasswordResetRequest> content = receivedDTO.content();
+        PasswordResetRequest passwordResetRequest = content.getChild();
 
         VelocityContext context = new VelocityContext();
         context.put("ownerName", passwordResetRequest.getOwnerName());
-        context.put("createdAt", receivedDTO.createdAt());
+        context.put("createdAt", passwordResetRequest.getEntityCreatedAt());
         context.put("link", passwordResetRequest.getConfirmationLink());
         context.put("timeToLive", passwordResetRequest.getTimeToLive());
         Template template = engine.getTemplate(emailTemplate);

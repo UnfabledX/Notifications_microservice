@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Component
 @Getter
@@ -26,6 +28,12 @@ public class NotificationDetails {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "post_id")
     private Long postId;
 
@@ -34,5 +42,10 @@ public class NotificationDetails {
 
     @Column(name = "reply_id")
     private Long replyId;
+
+    @Column(name = "entity_createdAt")
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private LocalDateTime entityCreatedAt;
+
 }
 

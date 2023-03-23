@@ -19,21 +19,21 @@ public record NotificationDto(
 
         @Valid
         NotificationContent content,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime notificationCreatedAt
 ) {
         @Override
         public boolean equals(Object o) {
                 if (this == o) return true;
                 if (o == null || getClass() != o.getClass()) return false;
                 NotificationDto that = (NotificationDto) o;
-                return recipientId.equals(that.recipientId) && createdById.equals(that.createdById)
-                        && content.equals(that.content) && createdAt.equals(that.createdAt)
-                        && Objects.equals(updatedAt, that.updatedAt);
+                return recipientId.equals(that.recipientId) &&
+                        Objects.equals(createdById, that.createdById) &&
+                        content.equals(that.content) &&
+                        notificationCreatedAt.equals(that.notificationCreatedAt);
         }
 
         @Override
         public int hashCode() {
-                return Objects.hash(recipientId, createdById, content, createdAt, updatedAt);
+                return Objects.hash(recipientId, createdById, content, notificationCreatedAt);
         }
 }

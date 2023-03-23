@@ -1,5 +1,6 @@
 package com.facedynamics.notifications.emails;
 
+import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.PostCommented;
 import lombok.Setter;
 import org.apache.velocity.Template;
@@ -20,7 +21,8 @@ public class PostCommentedEmailMessage extends EmailMessage {
 
     @Override
     public StringWriter getLetterBody() {
-        PostCommented created = (PostCommented) receivedDTO.content();
+        NotificationContent<PostCommented> content = receivedDTO.content();
+        PostCommented created = content.getChild();
         String commentBody = created.getCommentText();
         String postBody = created.getPostText();
 
@@ -29,7 +31,7 @@ public class PostCommentedEmailMessage extends EmailMessage {
         context.put("triggererUsername", triggerUserName);
         context.put("commentBody", commentBody.length() > 40 ? commentBody.substring(0, 40) : commentBody);
         context.put("postBody", postBody.length() > 50 ? postBody.substring(0, 50) : postBody);
-        context.put("commentCreatedAt", receivedDTO.createdAt());
+        context.put("commentCreatedAt", created.getEntityCreatedAt());
         Template template = engine.getTemplate(emailTemplate);
         StringWriter writer = new StringWriter();
         template.merge(context, writer);

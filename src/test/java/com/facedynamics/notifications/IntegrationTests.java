@@ -2,7 +2,6 @@ package com.facedynamics.notifications;
 
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.handler.Error;
-import com.facedynamics.notifications.model.NotificationResponseDTO;
 import com.facedynamics.notifications.model.dto.*;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

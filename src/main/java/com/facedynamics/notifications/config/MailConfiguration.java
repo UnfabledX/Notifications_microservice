@@ -51,7 +51,6 @@ public class MailConfiguration {
     @Autowired private PasswordResetRequestEmailMessage passwordResetRequestEmailMessage;
     @Autowired private PostCommentedEmailMessage postCommentedEmailMessage;
     @Autowired private CommentRepliedEmailMessage commentRepliedEmailMessage;
-    @Autowired private SubscribedByEmailMessage subscribedByEmailMessage;
     @Autowired private FollowedByEmailMessage followedByEmailMessage;
 
     @Bean(name = "mails")
@@ -61,7 +60,6 @@ public class MailConfiguration {
                 USER_PASSWORD_RESET_REQUEST,    passwordResetRequestEmailMessage,
                 POST_COMMENTED,                 postCommentedEmailMessage,
                 COMMENT_REPLIED,                commentRepliedEmailMessage,
-                SUBSCRIBED_BY,                  subscribedByEmailMessage,
                 FOLLOWED_BY,                    followedByEmailMessage
         );
     }

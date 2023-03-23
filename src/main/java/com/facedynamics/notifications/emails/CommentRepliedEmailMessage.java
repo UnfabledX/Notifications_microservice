@@ -1,6 +1,7 @@
 package com.facedynamics.notifications.emails;
 
 import com.facedynamics.notifications.model.dto.CommentReplied;
+import com.facedynamics.notifications.model.dto.NotificationContent;
 import lombok.Setter;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -20,7 +21,8 @@ public class CommentRepliedEmailMessage extends EmailMessage {
 
     @Override
     public StringWriter getLetterBody() {
-        CommentReplied created = (CommentReplied) receivedDTO.content();
+        NotificationContent<CommentReplied> content = receivedDTO.content();
+        CommentReplied created = content.getChild();
         String replyBody = created.getReplyText();
         String commentBody = created.getCommentText();
 
@@ -29,7 +31,7 @@ public class CommentRepliedEmailMessage extends EmailMessage {
         context.put("triggererUsername", triggerUserName);
         context.put("replyBody", replyBody.length() > 40 ? replyBody.substring(0, 40) : replyBody);
         context.put("commentBody", commentBody.length() > 50 ? commentBody.substring(0, 50) : commentBody);
-        context.put("replyCreatedAt", receivedDTO.createdAt());
+        context.put("replyCreatedAt", created.getEntityCreatedAt());
         Template template = engine.getTemplate(emailTemplate);
         StringWriter writer = new StringWriter();
         template.merge(context, writer);

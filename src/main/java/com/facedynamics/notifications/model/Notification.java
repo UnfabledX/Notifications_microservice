@@ -32,13 +32,9 @@ public class Notification {
     @Column(name = "createdBy_id")
     private Long createdById;
 
-    @Column(name = "createdAt")
+    @Column(name = "notification_createdAt")
     @Temporal(value = TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updatedAt")
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private LocalDateTime updatedAt;
+    private LocalDateTime notificationCreatedAt;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "details_id", referencedColumnName = "id")

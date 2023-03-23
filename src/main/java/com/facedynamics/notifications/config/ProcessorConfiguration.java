@@ -22,8 +22,6 @@ public class ProcessorConfiguration {
     @Autowired
     private CommentRepliedNotificationProcessor commentRepliedNotificationProcessor;
     @Autowired
-    private SubscribedByNotificationProcessor subscribedByNotificationProcessor;
-    @Autowired
     private FollowedByNotificationProcessor followedByNotificationProcessor;
 
     @Bean(name = "processor")
@@ -33,7 +31,6 @@ public class ProcessorConfiguration {
                 USER_PASSWORD_RESET_REQUEST,    passwordResetRequestProcessor,
                 POST_COMMENTED,                 postCommentedNotificationProcessor,
                 COMMENT_REPLIED,                commentRepliedNotificationProcessor,
-                SUBSCRIBED_BY,                  subscribedByNotificationProcessor,
                 FOLLOWED_BY,                    followedByNotificationProcessor
         );
     }
