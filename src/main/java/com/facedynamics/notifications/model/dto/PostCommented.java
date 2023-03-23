@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 import static com.facedynamics.notifications.utils.Constants.*;
 
 @Getter
@@ -26,8 +28,9 @@ public class PostCommented extends NotificationContent<PostCommented> {
     @NotEmpty(message = THE_COMMENT_TEXT_MUST_BE_PRESENT)
     private final String commentText;
 
-    public PostCommented(Long postId, Long commentId, String postText, String commentText) {
-        super(Type.POST_COMMENTED);
+    public PostCommented(Long postId, Long commentId, String postText,
+                         String commentText, LocalDateTime entityCreatedAt) {
+        super(Type.POST_COMMENTED, entityCreatedAt);
         this.postId = postId;
         this.commentId = commentId;
         this.postText = postText;

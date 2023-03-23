@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 import static com.facedynamics.notifications.utils.Constants.*;
 
 @Getter
@@ -26,8 +28,8 @@ public class CommentReplied extends NotificationContent<CommentReplied> {
     @NotEmpty(message = "The reply text must be present.")
     private final String replyText;
 
-    public CommentReplied(Long commentId, Long replyId, String commentText, String replyText) {
-        super(Type.COMMENT_REPLIED);
+    public CommentReplied(Long commentId, Long replyId, String commentText, String replyText, LocalDateTime entityCreatedAt) {
+        super(Type.COMMENT_REPLIED, entityCreatedAt);
         this.commentId = commentId;
         this.replyId = replyId;
         this.commentText = commentText;

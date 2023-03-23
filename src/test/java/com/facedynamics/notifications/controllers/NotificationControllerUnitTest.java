@@ -67,8 +67,9 @@ public class NotificationControllerUnitTest extends BaseTest {
                         .type(POST_COMMENTED.name())
                         .postId(33L)
                         .commentId(12L)
+                        .entityCreatedAt(LocalDateTime.of(2022, 12, 1, 16, 36, 54))
                         .build())
-                .createdAt(LocalDateTime.of(2022, 12, 1, 16, 36, 54))
+                .notificationCreatedAt(LocalDateTime.now())
                 .build();
         Notification n2 = Notification.builder()
                 .id(2L)
@@ -79,8 +80,9 @@ public class NotificationControllerUnitTest extends BaseTest {
                         .type(POST_COMMENTED.name())
                         .postId(33L)
                         .commentId(13L)
+                        .entityCreatedAt(LocalDateTime.of(2021, 10, 12, 12, 12, 33))
                         .build())
-                .createdAt(LocalDateTime.of(2021, 10, 12, 12, 12, 33))
+                .notificationCreatedAt(LocalDateTime.now())
                 .build();
         Notification n3 = Notification.builder()
                 .id(3L)
@@ -91,12 +93,13 @@ public class NotificationControllerUnitTest extends BaseTest {
                         .type(POST_COMMENTED.name())
                         .postId(33L)
                         .commentId(14L)
+                        .entityCreatedAt(LocalDateTime.of(2021, 10, 12, 12, 12, 33))
                         .build())
-                .createdAt(LocalDateTime.of(2019, 10, 14, 12, 12, 33))
+                .notificationCreatedAt(LocalDateTime.now())
                 .build();
         List<Notification> list = Arrays.asList(n1, n2, n3);
         pageList = new PageImpl<>(list);
-        pageable = PageRequest.of(0, 5, Sort.by("createdAt").descending());
+        pageable = PageRequest.of(0, 5, Sort.by("notificationCreatedAt").descending());
     }
 
     @Test
@@ -181,12 +184,11 @@ public class NotificationControllerUnitTest extends BaseTest {
     @Test
     public void createNotificationCommentTest() throws Exception {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
-        NotificationContent content = new PostCommented(4L, 3L, "some post...", "some comment");
-        NotificationDto getDTO = new NotificationDto(321L, 123L, content, dateTime, null);
+        NotificationContent<PostCommented> content = new PostCommented(4L, 3L, "some post...", "some comment", dateTime);
+        NotificationDto getDTO = new NotificationDto(321L, 123L, content);
 
-        NotificationResponseDTO dto = new NotificationResponseDTO("Dragon", POST_COMMENTED, dateTime);
         Mockito.when(service.createNotification(eq(getDTO)))
-                .thenReturn(dto);
+                .thenReturn(getDTO);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = objectMapper.writeValueAsString(getDTO);
         mockMvc.perform(post("/api/v1/notifications")

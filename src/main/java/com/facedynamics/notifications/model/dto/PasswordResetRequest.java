@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 import static com.facedynamics.notifications.utils.Constants.NO_BIGGER_THEN_24_AND_NO_LESS_THEN_3_LETTERS;
 import static com.facedynamics.notifications.utils.Constants.LETTER_WRONG_FORMAT;
 
@@ -28,8 +30,9 @@ public class PasswordResetRequest extends NotificationContent<PasswordResetReque
     @NotNull(message = "Time of link to be active must be present")
     private final Integer timeToLive;
 
-    public PasswordResetRequest(String ownerName, String email, String confirmationLink, Integer timeToLive) {
-        super(Type.USER_PASSWORD_RESET_REQUEST);
+    public PasswordResetRequest(String ownerName, String email, String confirmationLink,
+                                Integer timeToLive, LocalDateTime entityCreatedAt) {
+        super(Type.USER_PASSWORD_RESET_REQUEST, entityCreatedAt);
         this.ownerName = ownerName;
         this.email = email;
         this.confirmationLink = confirmationLink;

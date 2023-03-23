@@ -1,7 +1,6 @@
 package com.facedynamics.notifications.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -28,8 +27,7 @@ import java.time.LocalDateTime;
 public abstract class NotificationContent<T extends NotificationContent<T>> {
 
     protected final Type type;
-    @JsonPropertyOrder()
-    protected LocalDateTime entityCreatedAt;
+    protected final LocalDateTime entityCreatedAt;
 
     @JsonIgnore
     public T getChild(){

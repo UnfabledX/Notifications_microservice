@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 import static com.facedynamics.notifications.utils.Constants.NO_BIGGER_THEN_24_AND_NO_LESS_THEN_3_LETTERS;
 
 @Getter
@@ -27,8 +29,9 @@ public class UserRegistered extends NotificationContent<UserRegistered> implemen
     @NotNull(message = "Time of link to be active must be present")
     private final Integer timeToLive;
 
-    public UserRegistered(String ownerName, String email, String confirmationLink, int timeToLive) {
-        super(Type.USER_REGISTERED);
+    public UserRegistered(String ownerName, String email, String confirmationLink,
+                          int timeToLive, LocalDateTime entityCreatedAt) {
+        super(Type.USER_REGISTERED, entityCreatedAt);
         this.ownerName = ownerName;
         this.email = email;
         this.confirmationLink = confirmationLink;
