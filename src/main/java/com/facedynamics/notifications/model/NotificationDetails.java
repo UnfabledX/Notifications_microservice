@@ -16,13 +16,13 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "notification_details", schema = "notification_db")
+@Table(name = "notification_details", schema = "notifications_db")
 public class NotificationDetails {
 
     @Id
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "details_id", nullable = false)
     private Long id;
 
     @Column(name = "type")

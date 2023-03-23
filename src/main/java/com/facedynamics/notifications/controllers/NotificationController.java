@@ -31,7 +31,7 @@ public class NotificationController {
     @GetMapping("/users/{userId}")
     public Map<String, Object> getAllNotificationsByUserId(
             @PathVariable("userId") @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) Long ownerUserId,
-            @PageableDefault(size = 5, sort = "createdAt", direction = DESC) Pageable pageable) {
+            @PageableDefault(size = 5, sort = "notificationCreatedAt", direction = DESC) Pageable pageable) {
         Page<Notification> page = notificationService.getAllNotificationsByUserId(ownerUserId, pageable);
         return getResponse(page);
     }

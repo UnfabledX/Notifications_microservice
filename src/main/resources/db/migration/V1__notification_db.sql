@@ -1,4 +1,4 @@
-CREATE schema IF NOT EXISTS notification_db;
+CREATE schema IF NOT EXISTS notifications_db;
 
 -- --------------------------------------------------------------
 -- NOTIFICATIONS DETAILS
@@ -11,16 +11,17 @@ CREATE schema IF NOT EXISTS notification_db;
 --      + to be continued...
 -- --------------------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS notification_details
+CREATE TABLE IF NOT EXISTS notifications_db.notification_details
 (
-    id                  bigserial,
-    type                character varying,
-    name                character varying,
-    email               character varying,
-    post_id             bigint,
-    comment_id          bigint,
-    reply_id            bigint,
-    entity_createdAt    timestamp NOT NULL
+    details_id       bigserial,
+    type             character varying NOT NULL,
+    name             character varying,
+    email            character varying,
+    post_id          bigint,
+    comment_id       bigint,
+    reply_id         bigint,
+    entity_createdAt timestamp         NOT NULL,
+    PRIMARY KEY (details_id)
 );
 
 -- --------------------------------------------------------------
@@ -33,19 +34,18 @@ CREATE TABLE IF NOT EXISTS notification_details
 --      + createdAt - time when notification was created
 --      + updatedAt - time when the entity was created
 -- --------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS notifications
+CREATE TABLE IF NOT EXISTS notifications_db.notifications
 (
 -- 'generated always AS identity' means id is autoincrement field
-    id                      bigserial,
-    owner_id                bigint    NOT NULL,
-    createdBy_id            bigint,
+    id                     bigserial,
+    owner_id               bigint        NOT NULL,
+    createdBy_id           bigint,
 -- details_id in notifications table is associated with id in notification_details table
 -- details_id of notifications = id of notification_details
-    details_id              bigint    NOT NULL,
-    notification_createdAt  TIMESTAMP NOT NULL,
-
--- this declaration contains the foreign key constraint
-    CONSTRAINT details_fk
-    FOREIGN KEY (details_id) REFERENCES notification_details (id)
-    ON DELETE CASCADE
+    details_id             bigint UNIQUE NOT NULL,
+    notification_createdAt TIMESTAMP     NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_details
+        FOREIGN KEY(details_id)
+            REFERENCES notifications_db.notification_details(details_id)
 );

@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static com.facedynamics.notifications.utils.Constants.GREATER_THAN_OR_EQUAL_TO_1;
@@ -18,8 +17,7 @@ public record NotificationDto(
         Long createdById,
 
         @Valid
-        NotificationContent content,
-        LocalDateTime notificationCreatedAt
+        NotificationContent content
 ) {
         @Override
         public boolean equals(Object o) {
@@ -28,12 +26,11 @@ public record NotificationDto(
                 NotificationDto that = (NotificationDto) o;
                 return recipientId.equals(that.recipientId) &&
                         Objects.equals(createdById, that.createdById) &&
-                        content.equals(that.content) &&
-                        notificationCreatedAt.equals(that.notificationCreatedAt);
+                        content.equals(that.content);
         }
 
         @Override
         public int hashCode() {
-                return Objects.hash(recipientId, createdById, content, notificationCreatedAt);
+                return Objects.hash(recipientId, createdById, content);
         }
 }
