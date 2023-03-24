@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.facedynamics.notifications.model.dto.NotificationContent.Type.FOLLOWED_BY;
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -65,8 +64,9 @@ class NotificationServiceUnitTest extends BaseTest {
                         .type(POST_COMMENTED.name())
                         .postId(33L)
                         .commentId(12L)
+                        .entityCreatedAt(LocalDateTime.of(2022, 12, 1, 16, 36, 54))
                         .build())
-                .createdAt(LocalDateTime.of(2022, 12, 1, 16, 36, 54))
+                .notificationCreatedAt(LocalDateTime.now())
                 .build();
         Notification n2 = Notification.builder()
                 .id(2L)
@@ -74,11 +74,12 @@ class NotificationServiceUnitTest extends BaseTest {
                 .createdById(4L)
                 .details(NotificationDetails.builder()
                         .id(2L)
-                        .type(FOLLOWED_BY.name())
+                        .type(POST_COMMENTED.name())
                         .postId(33L)
                         .commentId(13L)
+                        .entityCreatedAt(LocalDateTime.of(2021, 10, 12, 12, 12, 33))
                         .build())
-                .createdAt(LocalDateTime.of(2021, 10, 12, 12, 12, 33))
+                .notificationCreatedAt(LocalDateTime.now())
                 .build();
         notificationList.addAll(Arrays.asList(n1, n2));
         resultList = new PageImpl<>(notificationList);
@@ -140,9 +141,11 @@ class NotificationServiceUnitTest extends BaseTest {
 
     @Test
     void createNotificationCommentTest() {
+        long ownerId = 321L;
+        long createdById = 123L;
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
-        NotificationDto getDTO = new NotificationDto(321L, 123L,
-                new PostCommented(4L, 3L, "some post...", "some comment"), dateTime, null);
+        NotificationDto getDTO = new NotificationDto(ownerId, createdById,
+                new PostCommented(4L, 3L, "some post...", "some comment", dateTime));
         NotificationUserServiceDTO userServiceDTO321 = NotificationUserServiceDTO.builder()
                 .ownerName("Oleksii")
                 .username("Unfabled")
@@ -153,12 +156,13 @@ class NotificationServiceUnitTest extends BaseTest {
                 .username("Dragon")
                 .email("pasha@gmail.com")
                 .build();
-        when(userEventService.getUserById(321)).thenReturn(userServiceDTO321);
-        when(userEventService.getUserById(123)).thenReturn(userServiceDTO123);
+        when(userEventService.getUserById(ownerId)).thenReturn(userServiceDTO321);
+        when(userEventService.getUserById(createdById)).thenReturn(userServiceDTO123);
         doNothing().when(emailService)
                 .sendEmail(getDTO, userServiceDTO321, userServiceDTO123.getUsername());
-        NotificationResponseDTO actualReturnDTO = service.createNotification(getDTO);
-        NotificationResponseDTO expected = new NotificationResponseDTO(userServiceDTO123.getUsername(), POST_COMMENTED, dateTime);
+        NotificationDto actualReturnDTO = service.createNotification(getDTO);
+        NotificationDto expected = new NotificationDto(ownerId, createdById,
+                new PostCommented(4L, 3L, "some post...", "some comment", dateTime));
         assertEquals(expected, actualReturnDTO);
     }
 }

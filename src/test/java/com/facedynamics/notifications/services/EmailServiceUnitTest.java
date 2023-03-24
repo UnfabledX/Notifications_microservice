@@ -44,7 +44,7 @@ public class EmailServiceUnitTest extends BaseTest {
     public void sendPostCommentedTest() throws Exception {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
         NotificationDto getDTO = new NotificationDto(321L, 123L,
-                new PostCommented(4L, 3L, "some post...", "some comment"), dateTime, null);
+                new PostCommented(4L, 3L, "some post...", "some comment", dateTime));
         NotificationUserServiceDTO userServiceDTO321 = NotificationUserServiceDTO.builder()
                 .ownerName("Oleksii")
                 .username("Unfabled")
@@ -80,7 +80,7 @@ public class EmailServiceUnitTest extends BaseTest {
     public void sendCommentRepliedTest() throws Exception {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
         NotificationDto getDTO = new NotificationDto(321L, 123L,
-                new CommentReplied(4L, 3L, "some comment", "some reply"), dateTime, null);
+                new CommentReplied(4L, 3L, "some comment", "some reply", dateTime));
         NotificationUserServiceDTO userServiceDTO321 = NotificationUserServiceDTO.builder()
                 .ownerName("Oleksii")
                 .username("Unfabled")
@@ -116,7 +116,7 @@ public class EmailServiceUnitTest extends BaseTest {
     public void sendUserRegisteredTest() throws Exception {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
         NotificationDto getDTO = new NotificationDto(321L, null,
-                new UserRegistered("Oleksii", "some_mail@gmail.com", "some link", 15), dateTime, null);
+                new UserRegistered("Oleksii", "some_mail@gmail.com", "some link", 15, dateTime));
 
         service.sendEmail(getDTO, null, null);
 

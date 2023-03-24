@@ -164,23 +164,23 @@ public class IntegrationTests extends BaseTest {
     @Order(10)
     public void createPostCommentedTest_OK() {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
-        NotificationContent content = new PostCommented(4L, 3L, "some post...", "some comment");
-        NotificationDto getDTO = new NotificationDto(321L, 123L, content, dateTime, null);
+        NotificationContent<PostCommented> content = new PostCommented(4L, 3L, "some post...", "some comment", dateTime);
+        NotificationDto getDTO = new NotificationDto(321L, 123L, content);
 
-        ResponseEntity<NotificationResponseDTO> response = template.postForEntity(createURLWithPort(),
-                getDTO, NotificationResponseDTO.class);
-        NotificationResponseDTO responseDTO = response.getBody();
+        ResponseEntity<NotificationDto> response = template.postForEntity(createURLWithPort(),
+                getDTO, NotificationDto.class);
+        NotificationDto responseDTO = response.getBody();
         assertEquals(OK, response.getStatusCode());
         assertNotNull(responseDTO);
-        assertEquals(POST_COMMENTED, responseDTO.getType());
+        assertEquals(POST_COMMENTED, responseDTO.content().getType());
     }
 
     @Test
     @Order(11)
     public void createPostCommentedTest_InvalidUserId() {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
-        NotificationContent content = new PostCommented(4L, 3L, "some post...", "some comment");
-        NotificationDto getDTO = new NotificationDto(-321L, 123L, content, dateTime, null);
+        NotificationContent<PostCommented> content = new PostCommented(4L, 3L, "some post...", "some comment", dateTime);
+        NotificationDto getDTO = new NotificationDto(-321L, 123L, content);
 
         ResponseEntity<ProblemDetail> response = template.postForEntity(createURLWithPort(),
                 getDTO, ProblemDetail.class);
@@ -200,15 +200,15 @@ public class IntegrationTests extends BaseTest {
     @Order(12)
     public void createCommentRepliedTest_OK() {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
-        NotificationContent content = new CommentReplied(4L, 3L, "some post...", "some comment");
-        NotificationDto getDTO = new NotificationDto(321L, 123L, content, dateTime, null);
+        NotificationContent<CommentReplied> content = new CommentReplied(4L, 3L, "some post...", "some comment", dateTime);
+        NotificationDto getDTO = new NotificationDto(321L, 123L, content);
 
-        ResponseEntity<NotificationResponseDTO> response = template.postForEntity(createURLWithPort(),
-                getDTO, NotificationResponseDTO.class);
-        NotificationResponseDTO responseDTO = response.getBody();
+        ResponseEntity<NotificationDto> response = template.postForEntity(createURLWithPort(),
+                getDTO, NotificationDto.class);
+        NotificationDto responseDTO = response.getBody();
         assertEquals(OK, response.getStatusCode());
         assertNotNull(responseDTO);
-        assertEquals(COMMENT_REPLIED, responseDTO.getType());
+        assertEquals(COMMENT_REPLIED, responseDTO.content().getType());
     }
 
     @Test
@@ -216,13 +216,13 @@ public class IntegrationTests extends BaseTest {
     public void createUserRegisteredTest_OK() {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
         NotificationDto getDTO = new NotificationDto(321L, null,
-                new UserRegistered("Oleksii", "oleksiisynelnyk@gmail.com", "some link", 15), dateTime, null);
+                new UserRegistered("Oleksii", "oleksiisynelnyk@gmail.com", "some link", 15, dateTime));
 
-        ResponseEntity<NotificationResponseDTO> response = template.postForEntity(createURLWithPort(),
-                getDTO, NotificationResponseDTO.class);
-        NotificationResponseDTO responseDTO = response.getBody();
+        ResponseEntity<NotificationDto> response = template.postForEntity(createURLWithPort(),
+                getDTO, NotificationDto.class);
+        NotificationDto responseDTO = response.getBody();
         assertEquals(OK, response.getStatusCode());
         assertNotNull(responseDTO);
-        assertEquals(USER_REGISTERED, responseDTO.getType());
+        assertEquals(USER_REGISTERED, responseDTO.content().getType());
     }
 }
