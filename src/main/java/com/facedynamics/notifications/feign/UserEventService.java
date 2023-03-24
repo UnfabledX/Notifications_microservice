@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.controllers;
+package com.facedynamics.notifications.feign;
 
 import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "user-service", url = "${user.service.url}")
+@FeignClient(value = "users-service")
 @Component
 public interface UserEventService {
     /**
@@ -16,5 +16,5 @@ public interface UserEventService {
      * @return user object with necessary information.
      */
     @GetMapping("/users/{id}")
-    NotificationUserServiceDTO getUserById(@PathVariable Long id);
+    NotificationUserServiceDTO findById(@PathVariable Long id);
 }

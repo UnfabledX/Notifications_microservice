@@ -1,5 +1,6 @@
 package com.facedynamics.notifications.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,6 +10,7 @@ public class NotificationUserServiceDTO {
 
     private String username;
 
+    @JsonProperty("name")
     private String ownerName;
 
     private String email;

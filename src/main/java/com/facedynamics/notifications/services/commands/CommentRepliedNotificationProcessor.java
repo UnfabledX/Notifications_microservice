@@ -15,8 +15,8 @@ public class CommentRepliedNotificationProcessor extends AbstractNotificationPro
 
     @Override
     public NotificationDto process(NotificationDto receivedDTO) {
-        NotificationUserServiceDTO ownerDTO = userEventService.getUserById(receivedDTO.recipientId());
-        NotificationUserServiceDTO triggerUserDTO = userEventService.getUserById(receivedDTO.createdById());
+        NotificationUserServiceDTO ownerDTO = userEventService.findById(receivedDTO.recipientId());
+        NotificationUserServiceDTO triggerUserDTO = userEventService.findById(receivedDTO.createdById());
         notificationRepository.save(getNotification(receivedDTO));
         emailService.sendEmail(receivedDTO, ownerDTO, triggerUserDTO.getUsername());
         return receivedDTO;

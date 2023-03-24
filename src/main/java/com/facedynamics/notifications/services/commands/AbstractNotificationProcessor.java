@@ -1,6 +1,6 @@
 package com.facedynamics.notifications.services.commands;
 
-import com.facedynamics.notifications.controllers.UserEventService;
+import com.facedynamics.notifications.feign.UserEventService;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import com.facedynamics.notifications.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
