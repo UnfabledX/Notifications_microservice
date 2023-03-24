@@ -5,7 +5,7 @@ services:
     container_name: notification_database
     environment:
       TZ: Europe/Kyiv
-      POSTGRES_DB: notification_db
+      POSTGRES_DB: postgres
       POSTGRES_USER: root
       POSTGRES_PASSWORD: password
     restart: on-failure
