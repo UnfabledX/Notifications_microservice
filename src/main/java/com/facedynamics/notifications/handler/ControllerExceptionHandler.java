@@ -2,6 +2,7 @@ package com.facedynamics.notifications.handler;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.InvalidTypeIdException;
+import feign.FeignException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,14 @@ public class ControllerExceptionHandler {
 
     private final static String PROBLEMS = "problemDetails";
     public static final String MUST_HAVE_A_VALID_TYPE = "The field '%s' must have a valid type of '%s'";
+
+    @ExceptionHandler(FeignException.class)
+    public ProblemDetail handleFeignException(FeignException e) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "External data is not found");
+        Error error = Error.builder().message(e.getMessage()).build();
+        pd.setProperty(PROBLEMS, List.of(error));
+        return pd;
+    }
 
     @ExceptionHandler(NotFoundException.class)
     public ProblemDetail handleNotFoundException(NotFoundException e) {
