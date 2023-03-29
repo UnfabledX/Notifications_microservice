@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @GetMapping("/users/{userId}")
+    @PreAuthorize("(hasAuthority('USER') and @auth.hasId(#ownerUserId)) or hasAuthority('ADMIN')")
     public Map<String, Object> getAllNotificationsByUserId(
             @PathVariable("userId") @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) Long ownerUserId,
             @PageableDefault(size = 5, sort = "notificationCreatedAt", direction = DESC) Pageable pageable) {
@@ -37,18 +39,21 @@ public class NotificationController {
     }
 
     @DeleteMapping("/users/{userId}")
+    @PreAuthorize("(hasAuthority('USER') and @auth.hasId(#ownerId)) or hasAuthority('ADMIN')")
     public void deleteAllNotificationsByUserId(
             @PathVariable("userId") @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) Long ownerId) {
         notificationService.deleteAllNotificationsByOwnerId(ownerId);
     }
 
     @DeleteMapping("/{notificationId}")
+    @PreAuthorize("(hasAuthority('USER') and @auth.belongsToUser(#notificationId)) or hasAuthority('ADMIN')")
     public Long deleteNotificationById(
             @PathVariable @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) Long notificationId) {
         return notificationService.deleteNotificationById(notificationId);
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public NotificationDto createNotification(@RequestBody @Valid NotificationDto receivedDTO) {
         return notificationService.createNotification(receivedDTO);
     }

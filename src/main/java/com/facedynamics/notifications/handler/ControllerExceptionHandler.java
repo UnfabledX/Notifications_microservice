@@ -29,7 +29,8 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(FeignException.class)
     public ProblemDetail handleFeignException(FeignException e) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "External data is not found");
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.valueOf(e.status()),
+                "External data is not found or not accessible/unauthorized");
         Error error = Error.builder().message(e.getMessage()).build();
         pd.setProperty(PROBLEMS, List.of(error));
         return pd;
