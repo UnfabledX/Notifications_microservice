@@ -52,6 +52,10 @@ public class MailConfiguration {
     @Autowired private PostCommentedEmailMessage postCommentedEmailMessage;
     @Autowired private CommentRepliedEmailMessage commentRepliedEmailMessage;
     @Autowired private FollowedByEmailMessage followedByEmailMessage;
+    @Autowired private PostLikedEmailMessage postLikedEmailMessage;
+    @Autowired private PostDislikedEmailMessage postDislikedEmailMessage;
+    @Autowired private CommentLikedEmailMessage commentLikedEmailMessage;
+    @Autowired private CommentDislikedEmailMessage commentDislikedEmailMessage;
 
     @Bean(name = "mails")
     public Map<NotificationContent.Type, EmailMessage> getMails(){
@@ -60,7 +64,11 @@ public class MailConfiguration {
                 USER_PASSWORD_RESET_REQUEST,    passwordResetRequestEmailMessage,
                 POST_COMMENTED,                 postCommentedEmailMessage,
                 COMMENT_REPLIED,                commentRepliedEmailMessage,
-                FOLLOWED_BY,                    followedByEmailMessage
+                FOLLOWED_BY,                    followedByEmailMessage,
+                POST_LIKED,                     postLikedEmailMessage,
+                POST_DISLIKED,                  postDislikedEmailMessage,
+                COMMENT_LIKED,                  commentLikedEmailMessage,
+                COMMENT_DISLIKED,               commentDislikedEmailMessage
         );
     }
 }

@@ -23,6 +23,14 @@ public class ProcessorConfiguration {
     private CommentRepliedNotificationProcessor commentRepliedNotificationProcessor;
     @Autowired
     private FollowedByNotificationProcessor followedByNotificationProcessor;
+    @Autowired
+    private PostLikedNotificationProcessor postLikedNotificationProcessor;
+    @Autowired
+    private PostDislikedNotificationProcessor postDislikedNotificationProcessor;
+    @Autowired
+    private CommentLikedNotificationProcessor commentLikedNotificationProcessor;
+    @Autowired
+    private CommentDislikedNotificationProcessor commentDislikedNotificationProcessor;
 
     @Bean(name = "processor")
     public Map<NotificationContent.Type, AbstractNotificationProcessor> getProcessor() {
@@ -31,7 +39,11 @@ public class ProcessorConfiguration {
                 USER_PASSWORD_RESET_REQUEST,    passwordResetRequestProcessor,
                 POST_COMMENTED,                 postCommentedNotificationProcessor,
                 COMMENT_REPLIED,                commentRepliedNotificationProcessor,
-                FOLLOWED_BY,                    followedByNotificationProcessor
+                FOLLOWED_BY,                    followedByNotificationProcessor,
+                POST_LIKED,                     postLikedNotificationProcessor,
+                POST_DISLIKED,                  postDislikedNotificationProcessor,
+                COMMENT_LIKED,                  commentLikedNotificationProcessor,
+                COMMENT_DISLIKED,               commentDislikedNotificationProcessor
         );
     }
 }

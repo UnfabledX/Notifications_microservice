@@ -19,12 +19,12 @@ public class EmailComposer {
     private final Map<NotificationContent.Type, EmailMessage> mails;
 
     public StringWriter getWriter(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,
-                                  String triggerUserName) {
+                                  Object payload) {
         EmailMessage specificEmailMessage = getEmailMessage(receivedDTO);
         specificEmailMessage.setEngine(engine);
         specificEmailMessage.setReceivedDTO(receivedDTO);
         specificEmailMessage.setOwnerDTO(ownerDTO);
-        specificEmailMessage.setTriggerUserName(triggerUserName);
+        specificEmailMessage.setPayload(payload);
         return specificEmailMessage.getLetterBody();
     }
 

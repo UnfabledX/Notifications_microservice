@@ -27,8 +27,8 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendEmail(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,
-                          String triggerUserName) {
-        StringWriter writer = emailComposer.getWriter(receivedDTO, ownerDTO, triggerUserName);
+                          Object payload) {
+        StringWriter writer = emailComposer.getWriter(receivedDTO, ownerDTO, payload);
 
         MimeMessagePreparator prep = mimeMessage -> {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
