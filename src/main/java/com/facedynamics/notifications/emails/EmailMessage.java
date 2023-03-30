@@ -13,5 +13,5 @@ public abstract class EmailMessage implements MailTextBody{
     protected VelocityEngine engine;
     protected NotificationDto receivedDTO;
     protected NotificationUserServiceDTO ownerDTO;
-    protected String triggerUserName;
+    protected Object payload;
 }

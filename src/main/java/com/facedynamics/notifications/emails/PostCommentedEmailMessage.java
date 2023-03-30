@@ -2,15 +2,13 @@ package com.facedynamics.notifications.emails;
 
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.PostCommented;
-import lombok.Setter;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
-@Setter
 @Component
 public class PostCommentedEmailMessage extends EmailMessage {
 
@@ -28,7 +26,7 @@ public class PostCommentedEmailMessage extends EmailMessage {
 
         VelocityContext context = new VelocityContext();
         context.put("ownerName", ownerDTO.getOwnerName());
-        context.put("triggererUsername", triggerUserName);
+        context.put("triggererUsername", payload);
         context.put("commentBody", commentBody.length() > 40 ? commentBody.substring(0, 40) : commentBody);
         context.put("postBody", postBody.length() > 50 ? postBody.substring(0, 50) : postBody);
         context.put("commentCreatedAt", created.getEntityCreatedAt());

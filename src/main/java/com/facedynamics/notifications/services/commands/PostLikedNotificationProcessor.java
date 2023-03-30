@@ -1,35 +1,43 @@
 package com.facedynamics.notifications.services.commands;
 
+import com.facedynamics.notifications.events.PostLikeEvent;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
+import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.dto.PasswordResetRequest;
+import com.facedynamics.notifications.model.dto.PostLiked;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Component
-public class PasswordResetRequestProcessor extends AbstractNotificationProcessor {
+public class PostLikedNotificationProcessor extends AbstractNotificationProcessor {
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @Override
     public NotificationDto process(NotificationDto receivedDTO) {
+        NotificationUserServiceDTO ownerDTO = userEventService.findById(receivedDTO.recipientId());
         notificationRepository.save(getNotification(receivedDTO));
-        emailService.sendEmail(receivedDTO, null, null);
+        applicationEventPublisher.publishEvent(new PostLikeEvent(this, receivedDTO, ownerDTO));
         return receivedDTO;
     }
 
     private static Notification getNotification(NotificationDto receivedDTO) {
-        NotificationContent<PasswordResetRequest> content = receivedDTO.content();
-        PasswordResetRequest resetRequest = content.getChild();
+        NotificationContent<PostLiked> content = receivedDTO.content();
+        PostLiked postLiked = content.getChild();
         return Notification.builder()
                 .ownerId(receivedDTO.recipientId())
                 .createdById(receivedDTO.createdById())
                 .notificationCreatedAt(LocalDateTime.now())
                 .details(NotificationDetails.builder()
-                        .type(resetRequest.getType().name())
-                        .name(resetRequest.getOwnerName())
-                        .email(resetRequest.getEmail())
-                        .entityCreatedAt(resetRequest.getEntityCreatedAt())
+                        .type(postLiked.getType().name())
+                        .postId(postLiked.getPostId())
+                        .entityCreatedAt(postLiked.getEntityCreatedAt())
                         .build())
                 .build();
     }

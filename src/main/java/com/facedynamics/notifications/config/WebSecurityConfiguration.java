@@ -28,7 +28,6 @@ public class WebSecurityConfiguration {
                 .oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(jwtAuthenticationConverter());
-
         return http.build();
     }
 

@@ -1,0 +1,18 @@
+<html lang="en">
+<head>
+    <title>FaceDynamics comment like notification</title>
+</head>
+<body bgcolor="#faf7f1">
+<div style="text-align: -webkit-left;">
+    <h3>Hello $ownerName, you have new likes!</h3>
+    <div>
+        Your comment <i>"$commentBody ..." </i><br/>
+        is liked $numberOfLikes $times during $min $minutes<br/>
+        First like was made at $likeCreatedAt
+    </div>
+
+    <p><i>Best regards, <br/>
+        your FaceDynamics Team</i> </p>
+</div>
+</body>
+</html>

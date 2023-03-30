@@ -16,10 +16,13 @@ import java.time.LocalDateTime;
         property = "type")
 @JsonSubTypes({
         @Type(value = UserRegistered.class, name = "USER_REGISTERED"),
-        @Type(value = PasswordResetRequest.class, name = "USER_PASSWORD_RESET_REQUEST"),
         @Type(value = PostCommented.class, name = "POST_COMMENTED"),
         @Type(value = CommentReplied.class, name = "COMMENT_REPLIED"),
         @Type(value = FollowedBy.class, name = "FOLLOWED_BY"),
+        @Type(value = PostLiked.class, name = "POST_LIKED"),
+        @Type(value = PostDisliked.class, name = "POST_DISLIKED"),
+        @Type(value = CommentLiked.class, name = "COMMENT_LIKED"),
+        @Type(value = CommentDisliked.class, name = "COMMENT_DISLIKED"),
 })
 @Getter
 @RequiredArgsConstructor
@@ -42,12 +45,6 @@ public abstract class NotificationContent<T extends NotificationContent<T>> {
         USER_REGISTERED,
 
         /**
-         * A notification for a user who just requested to
-         * reset his password.
-         */
-        USER_PASSWORD_RESET_REQUEST,
-
-        /**
          * A notification for owner-user who just
          * received a comment under his post.
          */
@@ -66,9 +63,33 @@ public abstract class NotificationContent<T extends NotificationContent<T>> {
         FOLLOWING,
 
         /**
-         * A notification for owner-user who is
+         * c is
          * followed by another user.
          */
         FOLLOWED_BY,
+
+        /**
+         * A notification for owner-user who created
+         * the post and somebody liked it.
+         */
+        POST_LIKED,
+
+        /**
+         * A notification for owner-user who created
+         * the post and somebody disliked it.
+         */
+        POST_DISLIKED,
+
+        /**
+         * A notification for owner-user who created
+         * the comment and somebody liked it.
+         */
+        COMMENT_LIKED,
+
+        /**
+         * A notification for owner-user who created
+         * the comment and somebody disliked it.
+         */
+        COMMENT_DISLIKED
     }
 }
