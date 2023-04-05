@@ -13,22 +13,14 @@ import static com.facedynamics.notifications.model.dto.NotificationContent.Type.
 @Configuration
 public class ProcessorConfiguration {
 
-    @Autowired
-    private UserRegisteredNotificationProcessor userRegisteredNotificationProcessor;
-    @Autowired
-    private PostCommentedNotificationProcessor postCommentedNotificationProcessor;
-    @Autowired
-    private CommentRepliedNotificationProcessor commentRepliedNotificationProcessor;
-    @Autowired
-    private FollowedByNotificationProcessor followedByNotificationProcessor;
-    @Autowired
-    private PostLikedNotificationProcessor postLikedNotificationProcessor;
-    @Autowired
-    private PostDislikedNotificationProcessor postDislikedNotificationProcessor;
-    @Autowired
-    private CommentLikedNotificationProcessor commentLikedNotificationProcessor;
-    @Autowired
-    private CommentDislikedNotificationProcessor commentDislikedNotificationProcessor;
+    @Autowired private UserRegisteredNotificationProcessor userRegisteredNotificationProcessor;
+    @Autowired private PostCommentedNotificationProcessor postCommentedNotificationProcessor;
+    @Autowired private CommentRepliedNotificationProcessor commentRepliedNotificationProcessor;
+    @Autowired private FollowedByNotificationProcessor followedByNotificationProcessor;
+    @Autowired private PostLikedNotificationProcessor postLikedNotificationProcessor;
+    @Autowired private PostDislikedNotificationProcessor postDislikedNotificationProcessor;
+    @Autowired private CommentLikedNotificationProcessor commentLikedNotificationProcessor;
+    @Autowired private CommentDislikedNotificationProcessor commentDislikedNotificationProcessor;
 
     @Bean(name = "processor")
     public Map<NotificationContent.Type, AbstractNotificationProcessor> getProcessor() {

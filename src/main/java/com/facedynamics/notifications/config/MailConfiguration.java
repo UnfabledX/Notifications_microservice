@@ -1,6 +1,14 @@
 package com.facedynamics.notifications.config;
 
-import com.facedynamics.notifications.emails.*;
+import com.facedynamics.notifications.emails.CommentDislikedEmailMessage;
+import com.facedynamics.notifications.emails.CommentLikedEmailMessage;
+import com.facedynamics.notifications.emails.CommentRepliedEmailMessage;
+import com.facedynamics.notifications.emails.EmailMessage;
+import com.facedynamics.notifications.emails.FollowedByEmailMessage;
+import com.facedynamics.notifications.emails.PostCommentedEmailMessage;
+import com.facedynamics.notifications.emails.PostDislikedEmailMessage;
+import com.facedynamics.notifications.emails.PostLikedEmailMessage;
+import com.facedynamics.notifications.emails.UserRegisteredEmailMessage;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
@@ -8,35 +16,13 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Map;
-import java.util.Properties;
 
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.*;
 
 @Configuration
 public class MailConfiguration {
-
-    @Bean
-    public JavaMailSender mailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-
-        mailSender.setUsername("alex0destroyer@gmail.com");
-        mailSender.setPassword("hdrvtiqkponeeouv");
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.connectiontimeout", 5000);
-        props.put("mail.smtp.timeout", 3000);
-        props.put("mail.smtp.writetimeout", 5000);
-
-        return mailSender;
-    }
 
     @Bean(name = "engine")
     public VelocityEngine getVelocityEngine(){

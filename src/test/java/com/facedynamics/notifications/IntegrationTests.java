@@ -2,7 +2,11 @@ package com.facedynamics.notifications;
 
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.handler.Error;
-import com.facedynamics.notifications.model.dto.*;
+import com.facedynamics.notifications.model.dto.CommentReplied;
+import com.facedynamics.notifications.model.dto.NotificationContent;
+import com.facedynamics.notifications.model.dto.NotificationDto;
+import com.facedynamics.notifications.model.dto.PostCommented;
+import com.facedynamics.notifications.model.dto.UserRegistered;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +22,21 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.facedynamics.notifications.controllers.NotificationController.NOTIFICATION;
-import static com.facedynamics.notifications.model.dto.NotificationContent.Type.*;
+import static com.facedynamics.notifications.model.dto.NotificationContent.Type.COMMENT_REPLIED;
+import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
+import static com.facedynamics.notifications.model.dto.NotificationContent.Type.USER_REGISTERED;
 import static com.facedynamics.notifications.utils.Constants.GREATER_THAN_OR_EQUAL_TO_1;
-import static com.facedynamics.notifications.utils.SqlStatements.*;
+import static com.facedynamics.notifications.utils.SqlStatements.details1;
+import static com.facedynamics.notifications.utils.SqlStatements.details2;
+import static com.facedynamics.notifications.utils.SqlStatements.notific1;
+import static com.facedynamics.notifications.utils.SqlStatements.notific2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IntegrationTests extends BaseTest {
@@ -42,7 +52,7 @@ public class IntegrationTests extends BaseTest {
     private Long userId;
 
     private String createURLWithPort() {
-        return "http://localhost:" + port + NOTIFICATION;
+        return "http://localhost:" + port + "/api/v1/";
     }
 
     @Test
@@ -51,7 +61,7 @@ public class IntegrationTests extends BaseTest {
         userId = 4L;
         int pageNumber = 0;
         ResponseEntity<Map> response = template.getForEntity(
-                createURLWithPort() + "/users/{userId}?page={pageNumber}",
+                createURLWithPort() + "/users/{userId}/notifications?page={pageNumber}",
                 Map.class, userId, pageNumber);
         Map<String, Object> notifications = response.getBody();
         assertNotNull(notifications);
@@ -65,7 +75,7 @@ public class IntegrationTests extends BaseTest {
         userId = 4321L;
         int pageNumber = 0;
         ResponseEntity<Error> response = template.exchange(
-                createURLWithPort() + "/users/{userId}?page={pageNumber}", GET,
+                createURLWithPort() + "/users/{userId}/notifications?page={pageNumber}", GET,
                 null, Error.class, userId, pageNumber);
         assertEquals(NOT_FOUND, response.getStatusCode());
     }
@@ -75,7 +85,7 @@ public class IntegrationTests extends BaseTest {
     public void getAllNotificationsByUserIdTest_notValidInput() {
         userId = 4L;
         ResponseEntity<Map> response = template.exchange(
-                createURLWithPort() + "/users/{userId}?page={pageNumber}", GET,
+                createURLWithPort() + "/users/{userId}/notifications?page={pageNumber}", GET,
                 null, Map.class, userId, "abc");
         Map<String, Object> notifications = response.getBody();
         assertEquals(OK, response.getStatusCode());
@@ -88,8 +98,8 @@ public class IntegrationTests extends BaseTest {
     @Sql(statements = {details1, notific1}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void deleteAllNotificationsByUserIdTest_validId() {
         userId = 10L;
-        ResponseEntity<String> response = template.exchange(createURLWithPort() + "/users/{userId}",
-                DELETE, null, String.class, userId);
+        ResponseEntity<String> response = template.exchange(
+                createURLWithPort() + "/users/{userId}/notifications", DELETE, null, String.class, userId);
         assertEquals(OK, response.getStatusCode());
     }
 
@@ -97,8 +107,8 @@ public class IntegrationTests extends BaseTest {
     @Order(5)
     public void deleteAllNotificationsByUserIdTest_IdIsNotPresent() {
         userId = 432100L;
-        ResponseEntity<Error> response = template.exchange(createURLWithPort() + "/users/{userId}",
-                DELETE, null, Error.class, userId);
+        ResponseEntity<Error> response = template.exchange(
+                createURLWithPort() + "/users/{userId}/notifications", DELETE, null, Error.class, userId);
         assertEquals(NOT_FOUND, response.getStatusCode());
     }
 
@@ -106,8 +116,8 @@ public class IntegrationTests extends BaseTest {
     @Order(6)
     public void deleteAllNotificationsByUserIdTest_IdIsNegative() {
         userId = -1L;
-        ResponseEntity<ProblemDetail> response = template.exchange(createURLWithPort() + "/users/{userId}",
-                DELETE, null, ProblemDetail.class, userId);
+        ResponseEntity<ProblemDetail> response = template.exchange(
+                createURLWithPort() + "/users/{userId}/notifications", DELETE, null, ProblemDetail.class, userId);
         assertEquals(BAD_REQUEST, response.getStatusCode());
 
         ProblemDetail details = response.getBody();
@@ -126,7 +136,8 @@ public class IntegrationTests extends BaseTest {
     @Sql(statements = {details2, notific2}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void deleteNotificationByIdTest_idIsPresent() {
         long notificationId = 102;
-        ResponseEntity<Long> response = template.exchange(createURLWithPort() + "/{notificationId}",
+        ResponseEntity<Long> response = template.exchange(
+                createURLWithPort() + "/notifications/{notificationId}",
                 DELETE, null, Long.class, notificationId);
         assertEquals(OK, response.getStatusCode());
         assertEquals(notificationId, response.getBody());
@@ -136,7 +147,8 @@ public class IntegrationTests extends BaseTest {
     @Order(8)
     public void deleteNotificationByIdTest_idIsNotPresent() {
         long notificationId = 5321;
-        ResponseEntity<ProblemDetail> response = template.exchange(createURLWithPort() + "/{notificationId}",
+        ResponseEntity<ProblemDetail> response = template.exchange(
+                createURLWithPort() + "/notifications/{notificationId}",
                 DELETE, null, ProblemDetail.class, notificationId);
         assertEquals(NOT_FOUND, response.getStatusCode());
     }
@@ -145,7 +157,8 @@ public class IntegrationTests extends BaseTest {
     @Order(9)
     public void deleteNotificationByIdTest_wrongInput() {
         String notificationId = "321ffs";
-        ResponseEntity<ProblemDetail> response = template.exchange(createURLWithPort() + "/{notificationId}",
+        ResponseEntity<ProblemDetail> response = template.exchange(
+                createURLWithPort() + "/notifications/{notificationId}",
                 DELETE, null, ProblemDetail.class, notificationId);
         assertEquals(BAD_REQUEST, response.getStatusCode());
 
@@ -167,7 +180,7 @@ public class IntegrationTests extends BaseTest {
         NotificationContent<PostCommented> content = new PostCommented(4L, 3L, "some post...", "some comment", dateTime);
         NotificationDto getDTO = new NotificationDto(321L, 123L, content);
 
-        ResponseEntity<NotificationDto> response = template.postForEntity(createURLWithPort(),
+        ResponseEntity<NotificationDto> response = template.postForEntity(createURLWithPort() + "/notifications",
                 getDTO, NotificationDto.class);
         NotificationDto responseDTO = response.getBody();
         assertEquals(OK, response.getStatusCode());
@@ -182,7 +195,7 @@ public class IntegrationTests extends BaseTest {
         NotificationContent<PostCommented> content = new PostCommented(4L, 3L, "some post...", "some comment", dateTime);
         NotificationDto getDTO = new NotificationDto(-321L, 123L, content);
 
-        ResponseEntity<ProblemDetail> response = template.postForEntity(createURLWithPort(),
+        ResponseEntity<ProblemDetail> response = template.postForEntity(createURLWithPort() + "/notifications",
                 getDTO, ProblemDetail.class);
         ProblemDetail detail = response.getBody();
         assertEquals(BAD_REQUEST, response.getStatusCode());
@@ -203,7 +216,7 @@ public class IntegrationTests extends BaseTest {
         NotificationContent<CommentReplied> content = new CommentReplied(4L, 3L, "some post...", "some comment", dateTime);
         NotificationDto getDTO = new NotificationDto(321L, 123L, content);
 
-        ResponseEntity<NotificationDto> response = template.postForEntity(createURLWithPort(),
+        ResponseEntity<NotificationDto> response = template.postForEntity(createURLWithPort() + "/notifications",
                 getDTO, NotificationDto.class);
         NotificationDto responseDTO = response.getBody();
         assertEquals(OK, response.getStatusCode());
@@ -218,7 +231,7 @@ public class IntegrationTests extends BaseTest {
         NotificationDto getDTO = new NotificationDto(321L, null,
                 new UserRegistered("Oleksii", "oleksiisynelnyk@gmail.com", "some link", 15, dateTime));
 
-        ResponseEntity<NotificationDto> response = template.postForEntity(createURLWithPort(),
+        ResponseEntity<NotificationDto> response = template.postForEntity(createURLWithPort() + "/notifications",
                 getDTO, NotificationDto.class);
         NotificationDto responseDTO = response.getBody();
         assertEquals(OK, response.getStatusCode());
