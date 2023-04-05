@@ -52,7 +52,7 @@ public class IntegrationTests extends BaseTest {
     private Long userId;
 
     private String createURLWithPort() {
-        return "http://localhost:" + port + "/api/v1/";
+        return "http://localhost:" + port + "/api/v1";
     }
 
     @Test

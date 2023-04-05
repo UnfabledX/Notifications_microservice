@@ -28,7 +28,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 public class NotificationController {
 
     private final NotificationService notificationService;
@@ -56,7 +56,7 @@ public class NotificationController {
         return notificationService.deleteNotificationById(notificationId);
     }
 
-    @PostMapping
+    @PostMapping("/notifications")
     @PreAuthorize("(hasAuthority('USER') and @auth.hasId(#receivedDTO.createdById())) or hasAuthority('ADMIN')")
     public NotificationDto createNotification(@RequestBody @Valid NotificationDto receivedDTO) {
         return notificationService.createNotification(receivedDTO);
