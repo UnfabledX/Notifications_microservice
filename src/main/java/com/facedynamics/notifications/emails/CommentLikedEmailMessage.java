@@ -13,10 +13,10 @@ import java.util.List;
 @Component
 public class CommentLikedEmailMessage extends EmailMessage {
 
+    public static final String NEW_COMMENT_LIKED = "Received NEW Likes to the comment!";
+
     @Value("${source.mail.islike.delaymillis}")
     private Long delay;
-
-    public static final String NEW_COMMENT_LIKED = "Received NEW Likes to the comment!";
 
     @Value("${source.mail.template.comment-liked}")
     private String emailTemplate;

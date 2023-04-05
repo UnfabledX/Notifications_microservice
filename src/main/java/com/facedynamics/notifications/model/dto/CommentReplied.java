@@ -8,7 +8,9 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-import static com.facedynamics.notifications.utils.Constants.*;
+import static com.facedynamics.notifications.utils.Constants.GREATER_THAN_OR_EQUAL_TO_1;
+import static com.facedynamics.notifications.utils.Constants.THE_COMMENT_ID_MUST_BE_PRESENT;
+import static com.facedynamics.notifications.utils.Constants.THE_COMMENT_TEXT_MUST_BE_PRESENT;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)

@@ -14,10 +14,10 @@ import java.util.List;
 @Component
 public class PostLikedEmailMessage extends EmailMessage {
 
+    public static final String NEW_POST_LIKED = "Received NEW Likes to the post!";
+
     @Value("${source.mail.islike.delaymillis}")
     private Long delay;
-
-    public static final String NEW_POST_LIKED = "Received NEW Likes to the post!";
 
     @Value("${source.mail.template.post-liked}")
     private String emailTemplate;
