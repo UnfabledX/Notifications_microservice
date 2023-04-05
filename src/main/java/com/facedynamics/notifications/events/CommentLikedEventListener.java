@@ -22,7 +22,7 @@ public class CommentLikedEventListener {
 
     private final EmailService emailService;
     /**
-     * Represents the map of postIds, which were liked and corresponding events
+     * Represents the map of commentIds, which were liked and corresponding events
      * were triggered. Number of notifications in list equals to number of likes.
      */
     private static final Map<Long, List<CommentLikeEvent>> listMap = new ConcurrentHashMap<>();
