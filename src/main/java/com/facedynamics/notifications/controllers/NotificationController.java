@@ -19,11 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 import static com.facedynamics.notifications.utils.Constants.GREATER_THAN_OR_EQUAL_TO_1;
-import static com.facedynamics.notifications.utils.Converter.getResponse;
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Validated
 @RestController
@@ -35,11 +31,10 @@ public class NotificationController {
 
     @GetMapping("/users/{userId}/notifications")
     @PreAuthorize("(hasAuthority('USER') and @auth.hasId(#ownerUserId)) or hasAuthority('ADMIN')")
-    public Map<String, Object> getAllNotificationsByUserId(
+    public Page<Notification> getAllNotificationsByUserId(
             @PathVariable("userId") @Min(value = 1, message = GREATER_THAN_OR_EQUAL_TO_1) Long ownerUserId,
-            @PageableDefault(size = 5, sort = "notificationCreatedAt", direction = DESC) Pageable pageable) {
-        Page<Notification> page = notificationService.getAllNotificationsByUserId(ownerUserId, pageable);
-        return getResponse(page);
+            @PageableDefault Pageable pageable) {
+        return notificationService.getAllNotificationsByUserId(ownerUserId, pageable);
     }
 
     @DeleteMapping("/users/{userId}/notifications")
