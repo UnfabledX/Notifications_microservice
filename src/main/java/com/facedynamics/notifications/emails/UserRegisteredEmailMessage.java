@@ -2,21 +2,22 @@ package com.facedynamics.notifications.emails;
 
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.UserRegistered;
+import lombok.RequiredArgsConstructor;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
 @Component
+@RequiredArgsConstructor
 public class UserRegisteredEmailMessage extends EmailMessage {
 
     public static final String NEW_REGISTRATION = "Your registration for FaceDynamics social network!";
 
     @Value("${source.mail.template.user-registered}")
-    private String emailTemplate;
+    private final String emailTemplate;
 
     @Override
     public StringWriter getLetterBody() {

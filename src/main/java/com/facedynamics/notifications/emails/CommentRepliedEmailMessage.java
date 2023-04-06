@@ -2,6 +2,7 @@ package com.facedynamics.notifications.emails;
 
 import com.facedynamics.notifications.model.dto.CommentReplied;
 import com.facedynamics.notifications.model.dto.NotificationContent;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -12,12 +13,13 @@ import java.io.StringWriter;
 
 @Setter
 @Component
+@RequiredArgsConstructor
 public class CommentRepliedEmailMessage extends EmailMessage {
 
     public static final String NEW_REPLY = "Received a NEW Reply!";
 
     @Value("${source.mail.template.comment-replied}")
-    private String emailTemplate;
+    private final String emailTemplate;
 
     @Override
     public StringWriter getLetterBody() {

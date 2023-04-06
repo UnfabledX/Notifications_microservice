@@ -2,6 +2,7 @@ package com.facedynamics.notifications.emails;
 
 import com.facedynamics.notifications.model.dto.CommentLiked;
 import com.facedynamics.notifications.model.dto.NotificationContent;
+import lombok.RequiredArgsConstructor;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,15 +12,16 @@ import java.io.StringWriter;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class CommentLikedEmailMessage extends EmailMessage {
 
     public static final String NEW_COMMENT_LIKED = "Received NEW Likes to the comment!";
 
     @Value("${source.mail.islike.delaymillis}")
-    private Long delay;
+    private final Long delay;
 
     @Value("${source.mail.template.comment-liked}")
-    private String emailTemplate;
+    private final String emailTemplate;
 
     @Override
     public StringWriter getLetterBody() {

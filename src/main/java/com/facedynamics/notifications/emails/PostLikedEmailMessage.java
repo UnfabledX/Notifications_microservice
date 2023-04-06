@@ -3,6 +3,7 @@ package com.facedynamics.notifications.emails;
 import com.facedynamics.notifications.events.PostLikeEvent;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.PostLiked;
+import lombok.RequiredArgsConstructor;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,15 +13,16 @@ import java.io.StringWriter;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class PostLikedEmailMessage extends EmailMessage {
 
     public static final String NEW_POST_LIKED = "Received NEW Likes to the post!";
 
     @Value("${source.mail.islike.delaymillis}")
-    private Long delay;
+    private final Long delay;
 
     @Value("${source.mail.template.post-liked}")
-    private String emailTemplate;
+    private final String emailTemplate;
 
     @Override
     public StringWriter getLetterBody() {
