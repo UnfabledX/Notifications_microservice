@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
         @Type(value = PostDisliked.class, name = "POST_DISLIKED"),
         @Type(value = CommentLiked.class, name = "COMMENT_LIKED"),
         @Type(value = CommentDisliked.class, name = "COMMENT_DISLIKED"),
+        @Type(value = FollowedBy.class, name = "FOLLOWS"),
 })
 @Getter
 @RequiredArgsConstructor
@@ -63,10 +64,10 @@ public abstract class NotificationContent<T extends NotificationContent<T>> {
         FOLLOWING,
 
         /**
-         * c is
-         * followed by another user.
+         * A notification for owner-user when another
+         * user follows him.
          */
-        FOLLOWED_BY,
+        FOLLOWS,
 
         /**
          * A notification for owner-user who created

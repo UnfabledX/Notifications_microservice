@@ -1,18 +1,35 @@
 package com.facedynamics.notifications.emails;
 
-import org.springframework.stereotype.Component;
+import com.facedynamics.notifications.model.dto.FollowedBy;
+import com.facedynamics.notifications.model.dto.NotificationContent;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.StringWriter;
 
-@Component
+import static com.facedynamics.notifications.utils.TimeConverter.convert;
+
 public class FollowedByEmailMessage extends EmailMessage {
 
     public static final String NEW_FOLLOW = "You have a NEW Follow!";
 
+    @Value("${source.mail.template.followed-by}")
+    private String emailTemplate;
+
     @Override
     public StringWriter getLetterBody() {
-        //todo
-        return null;
+        NotificationContent<FollowedBy> content = receivedDTO.content();
+        FollowedBy created = content.getChild();
+
+        VelocityContext context = new VelocityContext();
+        context.put("ownerName", created.getRecipientName());
+        context.put("triggererUsername", created.getCreatedByName());
+        context.put("followCreatedAt", convert(created.getEntityCreatedAt()));
+        Template template = engine.getTemplate(emailTemplate);
+        StringWriter writer = new StringWriter();
+        template.merge(context, writer);
+        return writer;
     }
 
     @Override

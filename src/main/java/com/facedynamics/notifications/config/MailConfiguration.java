@@ -38,7 +38,7 @@ public class MailConfiguration {
                 USER_REGISTERED,    userRegisteredEmailMessage(),
                 POST_COMMENTED,     postCommentedEmailMessage(),
                 COMMENT_REPLIED,    commentRepliedEmailMessage(),
-                FOLLOWED_BY,        followedByEmailMessage(),
+                FOLLOWS,            followedByEmailMessage(),
                 POST_LIKED,         postLikedEmailMessage(),
                 POST_DISLIKED,      postDislikedEmailMessage(),
                 COMMENT_LIKED,      commentLikedEmailMessage(),

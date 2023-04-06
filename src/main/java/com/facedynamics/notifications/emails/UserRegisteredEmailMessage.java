@@ -6,11 +6,10 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
 
-import org.springframework.stereotype.Component;
-
 import java.io.StringWriter;
 
-@Component
+import static com.facedynamics.notifications.utils.TimeConverter.convert;
+
 public class UserRegisteredEmailMessage extends EmailMessage {
 
     public static final String NEW_REGISTRATION = "Your registration for FaceDynamics social network!";
@@ -28,7 +27,7 @@ public class UserRegisteredEmailMessage extends EmailMessage {
         context.put("email", registered.getEmail());
         context.put("link", registered.getConfirmationLink());
         context.put("timeToLive", registered.getTimeToLive());
-        context.put("createdAt", registered.getEntityCreatedAt());
+        context.put("createdAt", convert(registered.getEntityCreatedAt()));
         Template template = engine.getTemplate(emailTemplate);
         StringWriter writer = new StringWriter();
         template.merge(context, writer);

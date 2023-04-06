@@ -1,0 +1,17 @@
+<html lang="en">
+<head>
+    <title>FaceDynamics notification for the follow approval</title>
+</head>
+<body bgcolor="#faf7f1">
+<div style="text-align: -webkit-left;">
+    <h3>Hello $ownerName, you have a new follow to approve!</h3>
+    <div>
+        $triggererUsername requested to follow you at $followCreatedAt<br/>
+         You need to approve or decline follower's request.<br/>
+    </div>
+
+    <p><i>Best regards, <br/>
+        your FaceDynamics Team</i> </p>
+</div>
+</body>
+</html>

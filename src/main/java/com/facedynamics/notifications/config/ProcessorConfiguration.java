@@ -26,7 +26,7 @@ public class ProcessorConfiguration {
                 USER_REGISTERED,    userRegisteredNotificationProcessor(),
                 POST_COMMENTED,     postCommentedNotificationProcessor(),
                 COMMENT_REPLIED,    commentRepliedNotificationProcessor(),
-                FOLLOWED_BY,        followedByNotificationProcessor(),
+                FOLLOWS,            followedByNotificationProcessor(),
                 POST_LIKED,         postLikedNotificationProcessor(),
                 POST_DISLIKED,      postDislikedNotificationProcessor(),
                 COMMENT_LIKED,      commentLikedNotificationProcessor(),

@@ -5,12 +5,12 @@ import com.facedynamics.notifications.model.dto.NotificationContent;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 import java.util.List;
 
-@Component
+import static com.facedynamics.notifications.utils.TimeConverter.convert;
+
 public class CommentDislikedEmailMessage extends EmailMessage {
 
     public static final String NEW_COMMENT_DISLIKED = "Received NEW Dislikes to the comment!";
@@ -35,7 +35,7 @@ public class CommentDislikedEmailMessage extends EmailMessage {
         context.put("times", events.size() == 1 ? "time" : "times");
         context.put("min", delay / 60000);
         context.put("minutes", delay / 60000 == 1 ? "minute" : "minutes");
-        context.put("likeCreatedAt", commentDisliked.getEntityCreatedAt());
+        context.put("likeCreatedAt", convert(commentDisliked.getEntityCreatedAt()));
         Template template = engine.getTemplate(emailTemplate);
         StringWriter writer = new StringWriter();
         template.merge(context, writer);

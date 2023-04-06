@@ -5,11 +5,11 @@ import com.facedynamics.notifications.model.dto.PostCommented;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
-@Component
+import static com.facedynamics.notifications.utils.TimeConverter.convert;
+
 public class PostCommentedEmailMessage extends EmailMessage {
 
     public static final String NEW_COMMENT = "Received a NEW Comment!";
@@ -29,7 +29,7 @@ public class PostCommentedEmailMessage extends EmailMessage {
         context.put("triggererUsername", payload);
         context.put("commentBody", commentBody.length() > 40 ? commentBody.substring(0, 40) : commentBody);
         context.put("postBody", postBody.length() > 50 ? postBody.substring(0, 50) : postBody);
-        context.put("commentCreatedAt", created.getEntityCreatedAt());
+        context.put("commentCreatedAt", convert(created.getEntityCreatedAt()));
         Template template = engine.getTemplate(emailTemplate);
         StringWriter writer = new StringWriter();
         template.merge(context, writer);

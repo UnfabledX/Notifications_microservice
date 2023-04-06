@@ -6,12 +6,12 @@ import com.facedynamics.notifications.model.dto.PostLiked;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 import java.util.List;
 
-@Component
+import static com.facedynamics.notifications.utils.TimeConverter.convert;
+
 public class PostLikedEmailMessage extends EmailMessage {
 
     public static final String NEW_POST_LIKED = "Received NEW Likes to the post!";
@@ -36,7 +36,7 @@ public class PostLikedEmailMessage extends EmailMessage {
         context.put("times", events.size() == 1 ? "time" : "times");
         context.put("min", delay / 60000);
         context.put("minutes", delay / 60000 == 1 ? "minute" : "minutes");
-        context.put("likeCreatedAt", postLiked.getEntityCreatedAt());
+        context.put("likeCreatedAt", convert(postLiked.getEntityCreatedAt()));
         Template template = engine.getTemplate(emailTemplate);
         StringWriter writer = new StringWriter();
         template.merge(context, writer);
