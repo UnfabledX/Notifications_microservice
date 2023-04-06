@@ -15,11 +15,15 @@ public class CommentLikedEmailMessage extends EmailMessage {
 
     public static final String NEW_COMMENT_LIKED = "Received NEW Likes to the comment!";
 
-    @Value("${source.mail.islike.delaymillis}")
-    private Long delay;
+    private final Long delay;
 
-    @Value("${source.mail.template.comment-liked}")
-    private String emailTemplate;
+    private final String emailTemplate;
+
+    public CommentLikedEmailMessage(@Value("${source.mail.islike.delaymillis}") Long delay,
+                                    @Value("${source.mail.template.comment-liked}") String emailTemplate) {
+        this.delay = delay;
+        this.emailTemplate = emailTemplate;
+    }
 
     @Override
     public StringWriter getLetterBody() {

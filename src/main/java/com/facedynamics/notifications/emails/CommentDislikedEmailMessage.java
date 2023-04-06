@@ -15,11 +15,15 @@ public class CommentDislikedEmailMessage extends EmailMessage {
 
     public static final String NEW_COMMENT_DISLIKED = "Received NEW Dislikes to the comment!";
 
-    @Value("${source.mail.islike.delaymillis}")
-    private Long delay;
+    private final Long delay;
 
-    @Value("${source.mail.template.comment-disliked}")
-    private String emailTemplate;
+    private final String emailTemplate;
+
+    public CommentDislikedEmailMessage(@Value("${source.mail.islike.delaymillis}") Long delay,
+                                       @Value("${source.mail.template.comment-disliked}") String emailTemplate) {
+        this.delay = delay;
+        this.emailTemplate = emailTemplate;
+    }
 
     @Override
     public StringWriter getLetterBody() {

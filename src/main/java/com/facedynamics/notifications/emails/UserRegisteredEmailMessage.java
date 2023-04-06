@@ -5,7 +5,6 @@ import com.facedynamics.notifications.model.dto.UserRegistered;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
@@ -15,8 +14,11 @@ public class UserRegisteredEmailMessage extends EmailMessage {
 
     public static final String NEW_REGISTRATION = "Your registration for FaceDynamics social network!";
 
-    @Value("${source.mail.template.user-registered}")
-    private String emailTemplate;
+    private final String emailTemplate;
+
+    public UserRegisteredEmailMessage(@Value("${source.mail.template.user-registered}") String emailTemplate) {
+        this.emailTemplate = emailTemplate;
+    }
 
     @Override
     public StringWriter getLetterBody() {
