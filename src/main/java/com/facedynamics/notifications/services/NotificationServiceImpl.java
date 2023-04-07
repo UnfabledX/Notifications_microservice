@@ -59,7 +59,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (notificationRepository.existsByOwnerId(ownerId)) {
             notificationRepository.deleteNotificationsByOwnerId(ownerId);
         } else {
-            throw new NotFoundException(USER_IS_NOT_FOUND, ownerId);
+            throw new NotFoundException("Notifications of the userId are not found", ownerId);
         }
     }
 

@@ -16,8 +16,11 @@ public class FollowedByEmailMessage extends EmailMessage {
 
     public static final String NEW_FOLLOW = "You have a NEW Follow!";
 
-    @Value("${source.mail.template.followed-by}")
-    private String emailTemplate;
+    private final String emailTemplate;
+
+    public FollowedByEmailMessage(@Value("${source.mail.template.followed-by}") String emailTemplate) {
+        this.emailTemplate = emailTemplate;
+    }
 
     @Override
     public StringWriter getLetterBody() {

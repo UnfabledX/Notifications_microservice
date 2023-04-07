@@ -16,8 +16,11 @@ public class PostCommentedEmailMessage extends EmailMessage {
 
     public static final String NEW_COMMENT = "Received a NEW Comment!";
 
-    @Value("${source.mail.template.post-commented}")
-    private String emailTemplate;
+    private final String emailTemplate;
+
+    public PostCommentedEmailMessage(@Value("${source.mail.template.post-commented}") String emailTemplate) {
+        this.emailTemplate = emailTemplate;
+    }
 
     @Override
     public StringWriter getLetterBody() {

@@ -52,7 +52,6 @@ public class NotificationController {
     }
 
     @PostMapping("/notifications")
-    @PreAuthorize("(hasAuthority('USER') and @auth.hasId(#receivedDTO.createdById())) or hasAuthority('ADMIN')")
     public NotificationDto createNotification(@RequestBody @Valid NotificationDto receivedDTO) {
         return notificationService.createNotification(receivedDTO);
     }

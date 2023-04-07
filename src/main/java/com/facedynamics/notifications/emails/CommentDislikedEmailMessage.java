@@ -16,12 +16,14 @@ import static com.facedynamics.notifications.utils.TimeConverter.convert;
 public class CommentDislikedEmailMessage extends EmailMessage {
 
     public static final String NEW_COMMENT_DISLIKED = "Received NEW Dislikes to the comment!";
+    private final Long delay;
+    private final String emailTemplate;
 
-    @Value("${source.mail.islike.delaymillis}")
-    private Long delay;
-
-    @Value("${source.mail.template.comment-disliked}")
-    private String emailTemplate;
+    public CommentDislikedEmailMessage(@Value("${source.mail.islike.delaymillis}")Long delay,
+                                       @Value("${source.mail.template.comment-disliked}")String emailTemplate) {
+        this.delay = delay;
+        this.emailTemplate = emailTemplate;
+    }
 
     @Override
     public StringWriter getLetterBody() {

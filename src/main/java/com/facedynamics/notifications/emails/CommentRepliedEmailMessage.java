@@ -15,9 +15,12 @@ import static com.facedynamics.notifications.utils.TimeConverter.convert;
 public class CommentRepliedEmailMessage extends EmailMessage {
 
     public static final String NEW_REPLY = "Received a NEW Reply!";
+    
+    private final String emailTemplate;
 
-    @Value("${source.mail.template.comment-replied}")
-    private String emailTemplate;
+    public CommentRepliedEmailMessage(@Value("${source.mail.template.comment-replied}") String emailTemplate) {
+        this.emailTemplate = emailTemplate;
+    }
 
     @Override
     public StringWriter getLetterBody() {
