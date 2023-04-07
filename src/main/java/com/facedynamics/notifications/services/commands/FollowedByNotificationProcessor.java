@@ -5,9 +5,11 @@ import com.facedynamics.notifications.model.NotificationDetails;
 import com.facedynamics.notifications.model.dto.FollowedBy;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+@Component
 public class FollowedByNotificationProcessor extends AbstractNotificationProcessor {
 
     @Override

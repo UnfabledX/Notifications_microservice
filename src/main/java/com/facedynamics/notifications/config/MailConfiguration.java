@@ -10,6 +10,7 @@ import com.facedynamics.notifications.emails.PostDislikedEmailMessage;
 import com.facedynamics.notifications.emails.PostLikedEmailMessage;
 import com.facedynamics.notifications.emails.UserRegisteredEmailMessage;
 import com.facedynamics.notifications.model.dto.NotificationContent;
+import lombok.RequiredArgsConstructor;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
@@ -21,7 +22,17 @@ import java.util.Map;
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.*;
 
 @Configuration
+@RequiredArgsConstructor
 public class MailConfiguration {
+
+    private final UserRegisteredEmailMessage userRegisteredEmailMessage;
+    private final PostCommentedEmailMessage postCommentedEmailMessage;
+    private final CommentRepliedEmailMessage commentRepliedEmailMessage;
+    private final FollowedByEmailMessage followedByEmailMessage;
+    private final PostLikedEmailMessage postLikedEmailMessage;
+    private final PostDislikedEmailMessage postDislikedEmailMessage;
+    private final CommentLikedEmailMessage commentLikedEmailMessage;
+    private final CommentDislikedEmailMessage commentDislikedEmailMessage;
 
     @Bean(name = "engine")
     public VelocityEngine getVelocityEngine(){
@@ -35,55 +46,15 @@ public class MailConfiguration {
     @Bean(name = "mails")
     public Map<NotificationContent.Type, EmailMessage> getMails() {
         return Map.of(
-                USER_REGISTERED,    userRegisteredEmailMessage(),
-                POST_COMMENTED,     postCommentedEmailMessage(),
-                COMMENT_REPLIED,    commentRepliedEmailMessage(),
-                FOLLOWS,            followedByEmailMessage(),
-                POST_LIKED,         postLikedEmailMessage(),
-                POST_DISLIKED,      postDislikedEmailMessage(),
-                COMMENT_LIKED,      commentLikedEmailMessage(),
-                COMMENT_DISLIKED,   commentDislikedEmailMessage()
+                USER_REGISTERED,    userRegisteredEmailMessage,
+                POST_COMMENTED,     postCommentedEmailMessage,
+                COMMENT_REPLIED,    commentRepliedEmailMessage,
+                FOLLOWS,            followedByEmailMessage,
+                POST_LIKED,         postLikedEmailMessage,
+                POST_DISLIKED,      postDislikedEmailMessage,
+                COMMENT_LIKED,      commentLikedEmailMessage,
+                COMMENT_DISLIKED,   commentDislikedEmailMessage
         );
-    }
-
-    @Bean
-    public UserRegisteredEmailMessage userRegisteredEmailMessage() {
-        return new UserRegisteredEmailMessage();
-    }
-
-    @Bean
-    public PostCommentedEmailMessage postCommentedEmailMessage() {
-        return new PostCommentedEmailMessage();
-    }
-
-    @Bean
-    public CommentRepliedEmailMessage commentRepliedEmailMessage() {
-        return new CommentRepliedEmailMessage();
-    }
-
-    @Bean
-    public FollowedByEmailMessage followedByEmailMessage() {
-        return new FollowedByEmailMessage();
-    }
-
-    @Bean
-    public PostLikedEmailMessage postLikedEmailMessage() {
-        return new PostLikedEmailMessage();
-    }
-
-    @Bean
-    public PostDislikedEmailMessage postDislikedEmailMessage() {
-        return new PostDislikedEmailMessage();
-    }
-
-    @Bean
-    public CommentLikedEmailMessage commentLikedEmailMessage() {
-        return new CommentLikedEmailMessage();
-    }
-
-    @Bean
-    public CommentDislikedEmailMessage commentDislikedEmailMessage() {
-        return new CommentDislikedEmailMessage();
     }
 }
 

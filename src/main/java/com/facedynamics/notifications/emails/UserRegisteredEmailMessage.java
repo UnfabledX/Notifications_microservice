@@ -5,11 +5,13 @@ import com.facedynamics.notifications.model.dto.UserRegistered;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
 import static com.facedynamics.notifications.utils.TimeConverter.convert;
 
+@Component
 public class UserRegisteredEmailMessage extends EmailMessage {
 
     public static final String NEW_REGISTRATION = "Your registration for FaceDynamics social network!";

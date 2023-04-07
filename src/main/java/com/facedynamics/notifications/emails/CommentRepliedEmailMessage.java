@@ -2,16 +2,16 @@ package com.facedynamics.notifications.emails;
 
 import com.facedynamics.notifications.model.dto.CommentReplied;
 import com.facedynamics.notifications.model.dto.NotificationContent;
-import lombok.Setter;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.StringWriter;
 
 import static com.facedynamics.notifications.utils.TimeConverter.convert;
 
-@Setter
+@Component
 public class CommentRepliedEmailMessage extends EmailMessage {
 
     public static final String NEW_REPLY = "Received a NEW Reply!";

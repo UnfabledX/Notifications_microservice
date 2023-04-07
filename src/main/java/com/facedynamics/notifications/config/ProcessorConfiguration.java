@@ -10,6 +10,7 @@ import com.facedynamics.notifications.services.commands.PostCommentedNotificatio
 import com.facedynamics.notifications.services.commands.PostDislikedNotificationProcessor;
 import com.facedynamics.notifications.services.commands.PostLikedNotificationProcessor;
 import com.facedynamics.notifications.services.commands.UserRegisteredNotificationProcessor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,59 +19,29 @@ import java.util.Map;
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.*;
 
 @Configuration
+@RequiredArgsConstructor
 public class ProcessorConfiguration {
+
+    private final UserRegisteredNotificationProcessor userRegisteredNotificationProcessor;
+    private final PostCommentedNotificationProcessor postCommentedNotificationProcessor;
+    private final CommentRepliedNotificationProcessor commentRepliedNotificationProcessor;
+    private final FollowedByNotificationProcessor followedByNotificationProcessor;
+    private final PostLikedNotificationProcessor postLikedNotificationProcessor;
+    private final PostDislikedNotificationProcessor postDislikedNotificationProcessor;
+    private final CommentLikedNotificationProcessor commentLikedNotificationProcessor;
+    private final CommentDislikedNotificationProcessor commentDislikedNotificationProcessor;
 
     @Bean(name = "processor")
     public Map<NotificationContent.Type, AbstractNotificationProcessor> getProcessor() {
         return Map.of(
-                USER_REGISTERED,    userRegisteredNotificationProcessor(),
-                POST_COMMENTED,     postCommentedNotificationProcessor(),
-                COMMENT_REPLIED,    commentRepliedNotificationProcessor(),
-                FOLLOWS,            followedByNotificationProcessor(),
-                POST_LIKED,         postLikedNotificationProcessor(),
-                POST_DISLIKED,      postDislikedNotificationProcessor(),
-                COMMENT_LIKED,      commentLikedNotificationProcessor(),
-                COMMENT_DISLIKED,   commentDislikedNotificationProcessor()
+                USER_REGISTERED,    userRegisteredNotificationProcessor,
+                POST_COMMENTED,     postCommentedNotificationProcessor,
+                COMMENT_REPLIED,    commentRepliedNotificationProcessor,
+                FOLLOWS,            followedByNotificationProcessor,
+                POST_LIKED,         postLikedNotificationProcessor,
+                POST_DISLIKED,      postDislikedNotificationProcessor,
+                COMMENT_LIKED,      commentLikedNotificationProcessor,
+                COMMENT_DISLIKED,   commentDislikedNotificationProcessor
         );
-    }
-
-    @Bean
-    public UserRegisteredNotificationProcessor userRegisteredNotificationProcessor() {
-        return new UserRegisteredNotificationProcessor();
-    }
-
-    @Bean
-    public PostCommentedNotificationProcessor postCommentedNotificationProcessor() {
-        return new PostCommentedNotificationProcessor();
-    }
-
-    @Bean
-    public CommentRepliedNotificationProcessor commentRepliedNotificationProcessor() {
-        return new CommentRepliedNotificationProcessor();
-    }
-
-    @Bean
-    public FollowedByNotificationProcessor followedByNotificationProcessor() {
-        return new FollowedByNotificationProcessor();
-    }
-
-    @Bean
-    public PostLikedNotificationProcessor postLikedNotificationProcessor() {
-        return new PostLikedNotificationProcessor();
-    }
-
-    @Bean
-    public PostDislikedNotificationProcessor postDislikedNotificationProcessor() {
-        return new PostDislikedNotificationProcessor();
-    }
-
-    @Bean
-    public CommentLikedNotificationProcessor commentLikedNotificationProcessor() {
-        return new CommentLikedNotificationProcessor();
-    }
-
-    @Bean
-    public CommentDislikedNotificationProcessor commentDislikedNotificationProcessor() {
-        return new CommentDislikedNotificationProcessor();
     }
 }
