@@ -1,7 +1,7 @@
 package com.facedynamics.notifications.emails;
 
-import com.facedynamics.notifications.model.dto.FollowedBy;
 import com.facedynamics.notifications.model.dto.NotificationContent;
+import com.facedynamics.notifications.model.dto.WaitingApproval;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,20 +12,20 @@ import java.io.StringWriter;
 import static com.facedynamics.notifications.utils.TimeConverter.convert;
 
 @Component
-public class FollowedByEmailMessage extends EmailMessage {
+public class WaitingApprovalEmailMessage extends EmailMessage {
 
-    public static final String NEW_FOLLOW = "You have a NEW Follow!";
+    public static final String NEW_FOLLOW_APPROVAL = "You have a NEW Follow to approve!";
 
     private final String emailTemplate;
 
-    public FollowedByEmailMessage(@Value("${source.mail.template.followed-by}") String emailTemplate) {
+    public WaitingApprovalEmailMessage(@Value("${source.mail.template.waiting-approval}") String emailTemplate) {
         this.emailTemplate = emailTemplate;
     }
 
     @Override
     public StringWriter getLetterBody() {
-        NotificationContent<FollowedBy> content = receivedDTO.content();
-        FollowedBy created = content.getChild();
+        NotificationContent<WaitingApproval> content = receivedDTO.content();
+        WaitingApproval created = content.getChild();
 
         VelocityContext context = new VelocityContext();
         context.put("ownerName", created.getRecipientName());
@@ -39,6 +39,6 @@ public class FollowedByEmailMessage extends EmailMessage {
 
     @Override
     public String getLetterSubject(){
-        return NEW_FOLLOW;
+        return NEW_FOLLOW_APPROVAL;
     }
 }

@@ -5,6 +5,7 @@ import com.facedynamics.notifications.services.commands.AbstractNotificationProc
 import com.facedynamics.notifications.services.commands.CommentDislikedNotificationProcessor;
 import com.facedynamics.notifications.services.commands.CommentLikedNotificationProcessor;
 import com.facedynamics.notifications.services.commands.CommentRepliedNotificationProcessor;
+import com.facedynamics.notifications.services.commands.WaitingApprovalNotificationProcessor;
 import com.facedynamics.notifications.services.commands.FollowedByNotificationProcessor;
 import com.facedynamics.notifications.services.commands.PostCommentedNotificationProcessor;
 import com.facedynamics.notifications.services.commands.PostDislikedNotificationProcessor;
@@ -25,6 +26,7 @@ public class ProcessorConfiguration {
     private final UserRegisteredNotificationProcessor userRegisteredNotificationProcessor;
     private final PostCommentedNotificationProcessor postCommentedNotificationProcessor;
     private final CommentRepliedNotificationProcessor commentRepliedNotificationProcessor;
+    private final WaitingApprovalNotificationProcessor waitingApprovalNotificationProcessor;
     private final FollowedByNotificationProcessor followedByNotificationProcessor;
     private final PostLikedNotificationProcessor postLikedNotificationProcessor;
     private final PostDislikedNotificationProcessor postDislikedNotificationProcessor;
@@ -37,6 +39,7 @@ public class ProcessorConfiguration {
                 USER_REGISTERED,    userRegisteredNotificationProcessor,
                 POST_COMMENTED,     postCommentedNotificationProcessor,
                 COMMENT_REPLIED,    commentRepliedNotificationProcessor,
+                WAITING_APPROVE,    waitingApprovalNotificationProcessor,
                 FOLLOWS,            followedByNotificationProcessor,
                 POST_LIKED,         postLikedNotificationProcessor,
                 POST_DISLIKED,      postDislikedNotificationProcessor,

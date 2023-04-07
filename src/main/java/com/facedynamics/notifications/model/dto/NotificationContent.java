@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
         @Type(value = CommentLiked.class, name = "COMMENT_LIKED"),
         @Type(value = CommentDisliked.class, name = "COMMENT_DISLIKED"),
         @Type(value = FollowedBy.class, name = "FOLLOWS"),
+        @Type(value = WaitingApproval.class, name = "WAITING_APPROVE"),
 })
 @Getter
 @RequiredArgsConstructor
@@ -58,10 +59,12 @@ public abstract class NotificationContent<T extends NotificationContent<T>> {
         COMMENT_REPLIED,
 
         /**
-         * A notification for trigger-user who
-         * just starts following another user.
+         * A notification for owner-user when another
+         * user wants to follow him but his account
+         * is private, so approval for the follow must
+         *  be granted.
          */
-        FOLLOWING,
+        WAITING_APPROVE,
 
         /**
          * A notification for owner-user when another
