@@ -2,6 +2,7 @@ package com.facedynamics.notifications.services.commands;
 
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
+import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.UserRegistered;
@@ -14,8 +15,9 @@ public class UserRegisteredNotificationProcessor extends AbstractNotificationPro
 
     @Override
     public NotificationDto process(NotificationDto receivedDTO) {
+        NotificationUserServiceDTO ownerDTO = userEventService.findById(receivedDTO.recipientId());
         notificationRepository.save(getNotification(receivedDTO));
-        emailService.sendEmail(receivedDTO, null, null);
+        emailService.sendEmail(receivedDTO, ownerDTO, null);
         return receivedDTO;
     }
 
