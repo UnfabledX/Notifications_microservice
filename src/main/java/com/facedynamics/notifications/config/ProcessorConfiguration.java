@@ -2,13 +2,9 @@ package com.facedynamics.notifications.config;
 
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.services.commands.AbstractNotificationProcessor;
-import com.facedynamics.notifications.services.commands.CommentDislikedNotificationProcessor;
-import com.facedynamics.notifications.services.commands.CommentLikedNotificationProcessor;
 import com.facedynamics.notifications.services.commands.CommentRepliedNotificationProcessor;
 import com.facedynamics.notifications.services.commands.FollowedByNotificationProcessor;
 import com.facedynamics.notifications.services.commands.PostCommentedNotificationProcessor;
-import com.facedynamics.notifications.services.commands.PostDislikedNotificationProcessor;
-import com.facedynamics.notifications.services.commands.PostLikedNotificationProcessor;
 import com.facedynamics.notifications.services.commands.UserRegisteredNotificationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,10 +22,6 @@ public class ProcessorConfiguration {
     private final PostCommentedNotificationProcessor postCommentedNotificationProcessor;
     private final CommentRepliedNotificationProcessor commentRepliedNotificationProcessor;
     private final FollowedByNotificationProcessor followedByNotificationProcessor;
-    private final PostLikedNotificationProcessor postLikedNotificationProcessor;
-    private final PostDislikedNotificationProcessor postDislikedNotificationProcessor;
-    private final CommentLikedNotificationProcessor commentLikedNotificationProcessor;
-    private final CommentDislikedNotificationProcessor commentDislikedNotificationProcessor;
 
     @Bean(name = "processor")
     public Map<NotificationContent.Type, AbstractNotificationProcessor> getProcessor() {
@@ -37,11 +29,7 @@ public class ProcessorConfiguration {
                 USER_REGISTERED,    userRegisteredNotificationProcessor,
                 POST_COMMENTED,     postCommentedNotificationProcessor,
                 COMMENT_REPLIED,    commentRepliedNotificationProcessor,
-                FOLLOWED_BY,        followedByNotificationProcessor,
-                POST_LIKED,         postLikedNotificationProcessor,
-                POST_DISLIKED,      postDislikedNotificationProcessor,
-                COMMENT_LIKED,      commentLikedNotificationProcessor,
-                COMMENT_DISLIKED,   commentDislikedNotificationProcessor
+                FOLLOWED_BY,        followedByNotificationProcessor
         );
     }
 }

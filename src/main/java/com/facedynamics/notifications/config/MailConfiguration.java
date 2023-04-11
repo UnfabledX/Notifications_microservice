@@ -1,13 +1,9 @@
 package com.facedynamics.notifications.config;
 
-import com.facedynamics.notifications.emails.CommentDislikedEmailMessage;
-import com.facedynamics.notifications.emails.CommentLikedEmailMessage;
 import com.facedynamics.notifications.emails.CommentRepliedEmailMessage;
 import com.facedynamics.notifications.emails.EmailMessage;
 import com.facedynamics.notifications.emails.FollowedByEmailMessage;
 import com.facedynamics.notifications.emails.PostCommentedEmailMessage;
-import com.facedynamics.notifications.emails.PostDislikedEmailMessage;
-import com.facedynamics.notifications.emails.PostLikedEmailMessage;
 import com.facedynamics.notifications.emails.UserRegisteredEmailMessage;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +25,6 @@ public class MailConfiguration {
     private final PostCommentedEmailMessage postCommentedEmailMessage;
     private final CommentRepliedEmailMessage commentRepliedEmailMessage;
     private final FollowedByEmailMessage followedByEmailMessage;
-    private final PostLikedEmailMessage postLikedEmailMessage;
-    private final PostDislikedEmailMessage postDislikedEmailMessage;
-    private final CommentLikedEmailMessage commentLikedEmailMessage;
-    private final CommentDislikedEmailMessage commentDislikedEmailMessage;
 
     @Bean(name = "engine")
     public VelocityEngine getVelocityEngine(){
@@ -49,11 +41,7 @@ public class MailConfiguration {
                 USER_REGISTERED,    userRegisteredEmailMessage,
                 POST_COMMENTED,     postCommentedEmailMessage,
                 COMMENT_REPLIED,    commentRepliedEmailMessage,
-                FOLLOWED_BY,        followedByEmailMessage,
-                POST_LIKED,         postLikedEmailMessage,
-                POST_DISLIKED,      postDislikedEmailMessage,
-                COMMENT_LIKED,      commentLikedEmailMessage,
-                COMMENT_DISLIKED,   commentDislikedEmailMessage
+                FOLLOWED_BY,        followedByEmailMessage
         );
     }
 }
