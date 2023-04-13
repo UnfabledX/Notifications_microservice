@@ -18,13 +18,13 @@ import static com.facedynamics.notifications.model.dto.NotificationContent.Type.
 @RequiredArgsConstructor
 public class ProcessorConfiguration {
 
-    private final UserRegisteredNotificationProcessor userRegisteredNotificationProcessor;
-    private final PostCommentedNotificationProcessor postCommentedNotificationProcessor;
-    private final CommentRepliedNotificationProcessor commentRepliedNotificationProcessor;
-    private final FollowedByNotificationProcessor followedByNotificationProcessor;
-
     @Bean(name = "processor")
-    public Map<NotificationContent.Type, AbstractNotificationProcessor> getProcessor() {
+    public Map<NotificationContent.Type, AbstractNotificationProcessor> getProcessor(
+            UserRegisteredNotificationProcessor userRegisteredNotificationProcessor,
+            PostCommentedNotificationProcessor postCommentedNotificationProcessor,
+            CommentRepliedNotificationProcessor commentRepliedNotificationProcessor,
+            FollowedByNotificationProcessor followedByNotificationProcessor
+    ) {
         return Map.of(
                 USER_REGISTERED,    userRegisteredNotificationProcessor,
                 POST_COMMENTED,     postCommentedNotificationProcessor,

@@ -21,11 +21,6 @@ import static com.facedynamics.notifications.model.dto.NotificationContent.Type.
 @RequiredArgsConstructor
 public class MailConfiguration {
 
-    private final UserRegisteredEmailMessage userRegisteredEmailMessage;
-    private final PostCommentedEmailMessage postCommentedEmailMessage;
-    private final CommentRepliedEmailMessage commentRepliedEmailMessage;
-    private final FollowedByEmailMessage followedByEmailMessage;
-
     @Bean(name = "engine")
     public VelocityEngine getVelocityEngine(){
         VelocityEngine engine = new VelocityEngine();
@@ -36,7 +31,11 @@ public class MailConfiguration {
     }
 
     @Bean(name = "mails")
-    public Map<NotificationContent.Type, EmailMessage> getMails() {
+    public Map<NotificationContent.Type, EmailMessage> getMails(
+            UserRegisteredEmailMessage userRegisteredEmailMessage,
+            PostCommentedEmailMessage postCommentedEmailMessage,
+            CommentRepliedEmailMessage commentRepliedEmailMessage,
+            FollowedByEmailMessage followedByEmailMessage) {
         return Map.of(
                 USER_REGISTERED,    userRegisteredEmailMessage,
                 POST_COMMENTED,     postCommentedEmailMessage,
