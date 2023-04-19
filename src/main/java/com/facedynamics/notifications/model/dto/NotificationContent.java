@@ -29,9 +29,7 @@ public abstract class NotificationContent<T extends NotificationContent<T>> {
     protected final LocalDateTime entityCreatedAt;
 
     @JsonIgnore
-    public T getChild(){
-        return (T) this;
-    }
+    public abstract T getChild();
 
     public enum Type {
         /**

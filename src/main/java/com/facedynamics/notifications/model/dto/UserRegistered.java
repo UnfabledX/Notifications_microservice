@@ -1,5 +1,6 @@
 package com.facedynamics.notifications.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -36,5 +37,11 @@ public class UserRegistered extends NotificationContent<UserRegistered>{
         this.email = email;
         this.confirmationLink = confirmationLink;
         this.timeToLive = timeToLive;
+    }
+
+    @JsonIgnore
+    @Override
+    public UserRegistered getChild() {
+        return this;
     }
 }

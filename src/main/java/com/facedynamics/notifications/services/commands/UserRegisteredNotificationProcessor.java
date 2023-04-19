@@ -15,7 +15,7 @@ public class UserRegisteredNotificationProcessor extends AbstractNotificationPro
 
     @Override
     public NotificationDto process(NotificationDto receivedDTO) {
-        NotificationUserServiceDTO ownerDTO = userEventService.findById(receivedDTO.recipientId());
+        NotificationUserServiceDTO ownerDTO = userApiClient.getById(receivedDTO.recipientId());
         notificationRepository.save(getNotification(receivedDTO));
         emailService.sendEmail(receivedDTO, ownerDTO, null);
         return receivedDTO;

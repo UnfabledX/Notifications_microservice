@@ -30,7 +30,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(FeignException.class)
     public ProblemDetail handleFeignException(FeignException e) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,
-                "External data is not found or not accessible/unauthorized");
+                "Internal Server Error");
         Error error = Error.builder().message(e.getMessage()).build();
         pd.setProperty(PROBLEMS, List.of(error));
         return pd;
