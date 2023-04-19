@@ -1,5 +1,6 @@
 package com.facedynamics.notifications.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,5 +17,11 @@ public class FollowedBy extends NotificationContent<FollowedBy> {
     public FollowedBy(String username, LocalDateTime entityCreatedAt) {
         super(Type.FOLLOWING, entityCreatedAt);
         this.username = username;
+    }
+
+    @JsonIgnore
+    @Override
+    public FollowedBy getChild() {
+        return this;
     }
 }

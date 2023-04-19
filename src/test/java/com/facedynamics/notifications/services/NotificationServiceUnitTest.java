@@ -1,7 +1,7 @@
 package com.facedynamics.notifications.services;
 
 import com.facedynamics.BaseTest;
-import com.facedynamics.notifications.feign.UserEventService;
+import com.facedynamics.notifications.feign.UserApiClient;
 import com.facedynamics.notifications.handler.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
@@ -42,7 +42,7 @@ class NotificationServiceUnitTest extends BaseTest {
     private EmailServiceImpl emailService;
 
     @Mock
-    private UserEventService userEventService;
+    private UserApiClient userApiClient;
 
     private List<Notification> notificationList;
 
@@ -156,8 +156,8 @@ class NotificationServiceUnitTest extends BaseTest {
                 .username("Dragon")
                 .email("pasha@gmail.com")
                 .build();
-        when(userEventService.findById(ownerId)).thenReturn(userServiceDTO321);
-        when(userEventService.findById(createdById)).thenReturn(userServiceDTO123);
+        when(userApiClient.getById(ownerId)).thenReturn(userServiceDTO321);
+        when(userApiClient.getById(createdById)).thenReturn(userServiceDTO123);
         doNothing().when(emailService)
                 .sendEmail(getDTO, userServiceDTO321, userServiceDTO123.getUsername());
         NotificationDto actualReturnDTO = service.createNotification(getDTO);

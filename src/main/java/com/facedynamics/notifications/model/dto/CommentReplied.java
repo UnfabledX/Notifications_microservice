@@ -1,5 +1,6 @@
 package com.facedynamics.notifications.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -36,5 +37,11 @@ public class CommentReplied extends NotificationContent<CommentReplied> {
         this.replyId = replyId;
         this.commentText = commentText;
         this.replyText = replyText;
+    }
+
+    @JsonIgnore
+    @Override
+    public CommentReplied getChild() {
+        return this;
     }
 }

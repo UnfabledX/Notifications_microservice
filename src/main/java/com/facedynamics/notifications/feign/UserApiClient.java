@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(value = "users-service")
 @Component
-public interface UserEventService {
+public interface UserApiClient {
     /**
      * Receives user information such as:
      * name, username and email.
@@ -16,5 +16,5 @@ public interface UserEventService {
      * @return user object with necessary information.
      */
     @GetMapping("/users/{id}")
-    NotificationUserServiceDTO findById(@PathVariable Long id);
+    NotificationUserServiceDTO getById(@PathVariable Long id);
 }
