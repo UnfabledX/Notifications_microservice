@@ -1,6 +1,6 @@
 package com.facedynamics.notifications.services.commands;
 
-import com.facedynamics.notifications.config.clients.UserApiClient;
+import com.facedynamics.notifications.clients.UserApiClient;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
 import com.facedynamics.notifications.model.NotificationUserServiceDTO;

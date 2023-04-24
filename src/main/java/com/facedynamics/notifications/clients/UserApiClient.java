@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.config.clients;
+package com.facedynamics.notifications.clients;
 
 import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import org.springframework.cloud.openfeign.FeignClient;
