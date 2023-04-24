@@ -1,8 +1,8 @@
 package com.facedynamics.notifications.services;
 
 import com.facedynamics.notifications.emails.EmailComposer;
-import com.facedynamics.notifications.model.NotificationUserServiceDTO;
-import com.facedynamics.notifications.model.dto.NotificationDto;
+import com.facedynamics.notifications.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.dto.NotificationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;

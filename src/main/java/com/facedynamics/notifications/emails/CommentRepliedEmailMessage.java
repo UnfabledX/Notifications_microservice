@@ -1,9 +1,11 @@
 package com.facedynamics.notifications.emails;
 
-import com.facedynamics.notifications.model.dto.CommentReplied;
-import com.facedynamics.notifications.model.dto.NotificationContent;
+import com.facedynamics.notifications.dto.CommentReplied;
+import com.facedynamics.notifications.dto.NotificationDto;
+import com.facedynamics.notifications.dto.NotificationUserServiceDTO;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +18,16 @@ public class CommentRepliedEmailMessage extends EmailMessage {
 
     private final String emailTemplate;
 
-    public CommentRepliedEmailMessage(@Value("${source.mail.template.comment-replied}") String emailTemplate) {
+    public CommentRepliedEmailMessage(@Value("${source.mail.template.comment-replied}") String emailTemplate,
+                                      VelocityEngine engine) {
+        super(engine);
         this.emailTemplate = emailTemplate;
     }
 
     @Override
-    public StringWriter getLetterBody() {
-        NotificationContent<CommentReplied> content = receivedDTO.content();
-        CommentReplied created = content.getChild();
+    public StringWriter getLetterBody(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,
+                                      Object payload) {
+        CommentReplied created = (CommentReplied) receivedDTO.content();
         String replyBody = created.getReplyText();
         String commentBody = created.getCommentText();
 

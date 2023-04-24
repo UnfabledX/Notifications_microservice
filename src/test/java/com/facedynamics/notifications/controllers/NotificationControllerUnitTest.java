@@ -4,9 +4,9 @@ import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.exception.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
-import com.facedynamics.notifications.model.dto.NotificationContent;
-import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.dto.PostCommented;
+import com.facedynamics.notifications.dto.NotificationContent;
+import com.facedynamics.notifications.dto.NotificationDto;
+import com.facedynamics.notifications.dto.PostCommented;
 import com.facedynamics.notifications.services.NotificationServiceImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
+import static com.facedynamics.notifications.dto.NotificationContent.Type.POST_COMMENTED;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -191,7 +191,7 @@ public class NotificationControllerUnitTest extends BaseTest {
     @Test
     public void createNotificationCommentTest() throws Exception {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
-        NotificationContent<PostCommented> content = new PostCommented(4L, 3L, "some post...", "some comment", dateTime);
+        NotificationContent content = new PostCommented(4L, 3L, "some post...", "some comment", dateTime);
         NotificationDto getDTO = new NotificationDto(321L, 123L, content);
 
         Mockito.when(service.createNotification(eq(getDTO)))

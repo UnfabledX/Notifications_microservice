@@ -1,9 +1,11 @@
 package com.facedynamics.notifications.emails;
 
-import com.facedynamics.notifications.model.dto.NotificationContent;
-import com.facedynamics.notifications.model.dto.UserRegistered;
+import com.facedynamics.notifications.dto.NotificationDto;
+import com.facedynamics.notifications.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.dto.UserRegistered;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +18,16 @@ public class UserRegisteredEmailMessage extends EmailMessage {
 
     private final String emailTemplate;
 
-    public UserRegisteredEmailMessage(@Value("${source.mail.template.user-registered}") String emailTemplate) {
+    public UserRegisteredEmailMessage(@Value("${source.mail.template.user-registered}") String emailTemplate,
+                                      VelocityEngine engine) {
+        super(engine);
         this.emailTemplate = emailTemplate;
     }
 
     @Override
-    public StringWriter getLetterBody() {
-        NotificationContent<UserRegistered> userRegistered = receivedDTO.content();
-        UserRegistered registered = userRegistered.getChild();
+    public StringWriter getLetterBody(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,
+                                      Object payload) {
+        UserRegistered registered = (UserRegistered) receivedDTO.content();
 
         VelocityContext context = new VelocityContext();
         context.put("ownerName", registered.getOwnerName());

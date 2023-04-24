@@ -2,8 +2,8 @@ package com.facedynamics.notifications.services;
 
 import com.facedynamics.notifications.exception.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.model.dto.NotificationContent;
-import com.facedynamics.notifications.model.dto.NotificationDto;
+import com.facedynamics.notifications.dto.NotificationContent;
+import com.facedynamics.notifications.dto.NotificationDto;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import com.facedynamics.notifications.services.commands.NotificationProcessor;
 import lombok.RequiredArgsConstructor;
