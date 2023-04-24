@@ -1,6 +1,5 @@
-package com.facedynamics.notifications.model.dto;
+package com.facedynamics.notifications.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class CommentReplied extends NotificationContent<CommentReplied> {
+public class CommentReplied extends NotificationContent {
 
     public static final String GREATER_THAN_OR_EQUAL_TO_1 = "The value must be greater than or equal to 1";
     public static final String THE_COMMENT_TEXT_MUST_BE_PRESENT = "The comment text must be present.";
@@ -39,9 +38,4 @@ public class CommentReplied extends NotificationContent<CommentReplied> {
         this.replyText = replyText;
     }
 
-    @JsonIgnore
-    @Override
-    public CommentReplied getChild() {
-        return this;
-    }
 }

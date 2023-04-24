@@ -3,10 +3,9 @@ package com.facedynamics.notifications.services.commands;
 import com.facedynamics.notifications.clients.UserApiClient;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
-import com.facedynamics.notifications.model.NotificationUserServiceDTO;
-import com.facedynamics.notifications.model.dto.NotificationContent;
-import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.dto.UserRegistered;
+import com.facedynamics.notifications.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.dto.NotificationDto;
+import com.facedynamics.notifications.dto.UserRegistered;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import com.facedynamics.notifications.services.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -31,18 +30,20 @@ public class UserRegisteredNotificationProcessor implements NotificationProcesso
     }
 
     private static Notification getNotification(NotificationDto receivedDTO) {
-        NotificationContent<UserRegistered> content = receivedDTO.content();
-        UserRegistered registered = content.getChild();
-        return Notification.builder()
-                .ownerId(receivedDTO.recipientId())
-                .createdById(receivedDTO.createdById())
-                .notificationCreatedAt(LocalDateTime.now())
-                .details(NotificationDetails.builder()
-                        .type(registered.getType().name())
-                        .name(registered.getOwnerName())
-                        .email(registered.getEmail())
-                        .entityCreatedAt(registered.getEntityCreatedAt())
-                        .build())
-                .build();
+        if (receivedDTO.content() instanceof UserRegistered registered) {
+            return Notification.builder()
+                    .ownerId(receivedDTO.recipientId())
+                    .createdById(receivedDTO.createdById())
+                    .notificationCreatedAt(LocalDateTime.now())
+                    .details(NotificationDetails.builder()
+                            .type(registered.getType().name())
+                            .name(registered.getOwnerName())
+                            .email(registered.getEmail())
+                            .entityCreatedAt(registered.getEntityCreatedAt())
+                            .build())
+                    .build();
+        } else {
+            throw new IllegalArgumentException("Wrong type of the notification!");
+        }
     }
 }

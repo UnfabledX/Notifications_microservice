@@ -1,7 +1,7 @@
 package com.facedynamics.notifications.services;
 
-import com.facedynamics.notifications.model.NotificationUserServiceDTO;
-import com.facedynamics.notifications.model.dto.NotificationDto;
+import com.facedynamics.notifications.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.dto.NotificationDto;
 
 public interface EmailService {
 

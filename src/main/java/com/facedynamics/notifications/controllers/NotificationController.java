@@ -1,7 +1,7 @@
 package com.facedynamics.notifications.controllers;
 
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.model.dto.NotificationDto;
+import com.facedynamics.notifications.dto.NotificationDto;
 import com.facedynamics.notifications.services.NotificationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;

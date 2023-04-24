@@ -36,7 +36,7 @@ public class Notification {
     @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime notificationCreatedAt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "details_id", referencedColumnName = "id")
     @JsonProperty("content")
     private NotificationDetails details;

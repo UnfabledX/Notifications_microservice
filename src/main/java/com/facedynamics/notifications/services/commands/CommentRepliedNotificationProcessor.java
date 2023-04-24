@@ -3,10 +3,9 @@ package com.facedynamics.notifications.services.commands;
 import com.facedynamics.notifications.clients.UserApiClient;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
-import com.facedynamics.notifications.model.NotificationUserServiceDTO;
-import com.facedynamics.notifications.model.dto.CommentReplied;
-import com.facedynamics.notifications.model.dto.NotificationContent;
-import com.facedynamics.notifications.model.dto.NotificationDto;
+import com.facedynamics.notifications.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.dto.CommentReplied;
+import com.facedynamics.notifications.dto.NotificationDto;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import com.facedynamics.notifications.services.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -31,19 +30,21 @@ public class CommentRepliedNotificationProcessor implements NotificationProcesso
         return receivedDTO;
     }
 
-    private static Notification getNotification(NotificationDto receivedDTO) {
-        NotificationContent<CommentReplied> content = receivedDTO.content();
-        CommentReplied replied = content.getChild();
-        return Notification.builder()
-                .ownerId(receivedDTO.recipientId())
-                .createdById(receivedDTO.createdById())
-                .notificationCreatedAt(LocalDateTime.now())
-                .details(NotificationDetails.builder()
-                        .type(replied.getType().name())
-                        .commentId(replied.getCommentId())
-                        .replyId(replied.getReplyId())
-                        .entityCreatedAt(replied.getEntityCreatedAt())
-                        .build())
-                .build();
+    private Notification getNotification(NotificationDto receivedDTO) {
+        if (receivedDTO.content() instanceof CommentReplied replied) {
+            return Notification.builder()
+                    .ownerId(receivedDTO.recipientId())
+                    .createdById(receivedDTO.createdById())
+                    .notificationCreatedAt(LocalDateTime.now())
+                    .details(NotificationDetails.builder()
+                            .type(replied.getType().name())
+                            .commentId(replied.getCommentId())
+                            .replyId(replied.getReplyId())
+                            .entityCreatedAt(replied.getEntityCreatedAt())
+                            .build())
+                    .build();
+        } else {
+            throw new IllegalArgumentException("Wrong type of the notification!");
+        }
     }
 }

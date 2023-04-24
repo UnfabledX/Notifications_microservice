@@ -1,6 +1,5 @@
-package com.facedynamics.notifications.model.dto;
+package com.facedynamics.notifications.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class UserRegistered extends NotificationContent<UserRegistered>{
+public class UserRegistered extends NotificationContent{
 
     public static final String NO_BIGGER_THEN_24_AND_NO_LESS_THEN_3_LETTERS =
             "Username mustn't be bigger then 24 letters and less then 3 letters";
@@ -40,9 +39,4 @@ public class UserRegistered extends NotificationContent<UserRegistered>{
         this.timeToLive = timeToLive;
     }
 
-    @JsonIgnore
-    @Override
-    public UserRegistered getChild() {
-        return this;
-    }
 }

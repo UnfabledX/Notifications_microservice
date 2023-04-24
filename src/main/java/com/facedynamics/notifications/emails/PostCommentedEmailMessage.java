@@ -1,9 +1,11 @@
 package com.facedynamics.notifications.emails;
 
-import com.facedynamics.notifications.model.dto.NotificationContent;
-import com.facedynamics.notifications.model.dto.PostCommented;
+import com.facedynamics.notifications.dto.NotificationDto;
+import com.facedynamics.notifications.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.dto.PostCommented;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,27 +18,32 @@ public class PostCommentedEmailMessage extends EmailMessage {
 
     private final String emailTemplate;
 
-    public PostCommentedEmailMessage(@Value("${source.mail.template.post-commented}") String emailTemplate) {
+    public PostCommentedEmailMessage(@Value("${source.mail.template.post-commented}") String emailTemplate,
+                                     VelocityEngine engine) {
+        super(engine);
         this.emailTemplate = emailTemplate;
     }
 
     @Override
-    public StringWriter getLetterBody() {
-        NotificationContent<PostCommented> content = receivedDTO.content();
-        PostCommented created = content.getChild();
-        String commentBody = created.getCommentText();
-        String postBody = created.getPostText();
+    public StringWriter getLetterBody(NotificationDto receivedDTO, NotificationUserServiceDTO ownerDTO,
+                                      Object payload) {
+        if (receivedDTO.content() instanceof PostCommented commented) {
+            String commentBody = commented.getCommentText();
+            String postBody = commented.getPostText();
 
-        VelocityContext context = new VelocityContext();
-        context.put("ownerName", ownerDTO.getOwnerName());
-        context.put("triggererUsername", payload);
-        context.put("commentBody", commentBody.length() > 40 ? commentBody.substring(0, 40) : commentBody);
-        context.put("postBody", postBody.length() > 50 ? postBody.substring(0, 50) : postBody);
-        context.put("commentCreatedAt", created.getEntityCreatedAt());
-        Template template = engine.getTemplate(emailTemplate);
-        StringWriter writer = new StringWriter();
-        template.merge(context, writer);
-        return writer;
+            VelocityContext context = new VelocityContext();
+            context.put("ownerName", ownerDTO.getOwnerName());
+            context.put("triggererUsername", payload);
+            context.put("commentBody", commentBody.length() > 40 ? commentBody.substring(0, 40) : commentBody);
+            context.put("postBody", postBody.length() > 50 ? postBody.substring(0, 50) : postBody);
+            context.put("commentCreatedAt", commented.getEntityCreatedAt());
+            Template template = engine.getTemplate(emailTemplate);
+            StringWriter writer = new StringWriter();
+            template.merge(context, writer);
+            return writer;
+        } else {
+            throw new IllegalArgumentException("Wrong type of the notification!");
+        }
     }
 
     @Override

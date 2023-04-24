@@ -5,9 +5,9 @@ import com.facedynamics.notifications.clients.UserApiClient;
 import com.facedynamics.notifications.exception.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
-import com.facedynamics.notifications.model.NotificationUserServiceDTO;
-import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.dto.PostCommented;
+import com.facedynamics.notifications.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.dto.NotificationDto;
+import com.facedynamics.notifications.dto.PostCommented;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
+import static com.facedynamics.notifications.dto.NotificationContent.Type.POST_COMMENTED;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

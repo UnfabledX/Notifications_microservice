@@ -1,6 +1,6 @@
 package com.facedynamics.notifications.clients;
 
-import com.facedynamics.notifications.model.NotificationUserServiceDTO;
+import com.facedynamics.notifications.dto.NotificationUserServiceDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;

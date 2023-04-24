@@ -5,7 +5,7 @@ import com.facedynamics.notifications.emails.EmailMessage;
 import com.facedynamics.notifications.emails.FollowedByEmailMessage;
 import com.facedynamics.notifications.emails.PostCommentedEmailMessage;
 import com.facedynamics.notifications.emails.UserRegisteredEmailMessage;
-import com.facedynamics.notifications.model.dto.NotificationContent;
+import com.facedynamics.notifications.dto.NotificationContent;
 import lombok.RequiredArgsConstructor;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
 
-import static com.facedynamics.notifications.model.dto.NotificationContent.Type.*;
+import static com.facedynamics.notifications.dto.NotificationContent.Type.*;
 
 @Configuration
 @RequiredArgsConstructor

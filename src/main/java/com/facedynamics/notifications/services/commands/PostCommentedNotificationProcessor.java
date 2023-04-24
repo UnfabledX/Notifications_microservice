@@ -3,10 +3,9 @@ package com.facedynamics.notifications.services.commands;
 import com.facedynamics.notifications.clients.UserApiClient;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
-import com.facedynamics.notifications.model.NotificationUserServiceDTO;
-import com.facedynamics.notifications.model.dto.NotificationContent;
-import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.dto.PostCommented;
+import com.facedynamics.notifications.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.dto.NotificationDto;
+import com.facedynamics.notifications.dto.PostCommented;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import com.facedynamics.notifications.services.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -32,18 +31,20 @@ public class PostCommentedNotificationProcessor implements NotificationProcessor
     }
 
     private static Notification getNotification(NotificationDto receivedDTO) {
-        NotificationContent<PostCommented> content = receivedDTO.content();
-        PostCommented commented = content.getChild();
-        return Notification.builder()
-                .ownerId(receivedDTO.recipientId())
-                .createdById(receivedDTO.createdById())
-                .notificationCreatedAt(LocalDateTime.now())
-                .details(NotificationDetails.builder()
-                        .type(commented.getType().name())
-                        .postId(commented.getPostId())
-                        .commentId(commented.getCommentId())
-                        .entityCreatedAt(commented.getEntityCreatedAt())
-                        .build())
-                .build();
+        if (receivedDTO.content() instanceof PostCommented commented) {
+            return Notification.builder()
+                    .ownerId(receivedDTO.recipientId())
+                    .createdById(receivedDTO.createdById())
+                    .notificationCreatedAt(LocalDateTime.now())
+                    .details(NotificationDetails.builder()
+                            .type(commented.getType().name())
+                            .postId(commented.getPostId())
+                            .commentId(commented.getCommentId())
+                            .entityCreatedAt(commented.getEntityCreatedAt())
+                            .build())
+                    .build();
+        } else {
+            throw new IllegalArgumentException("Wrong type of the notification!");
+        }
     }
 }

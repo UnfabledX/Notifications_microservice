@@ -1,7 +1,7 @@
 package com.facedynamics.notifications.services;
 
 import com.facedynamics.notifications.model.Notification;
-import com.facedynamics.notifications.model.dto.NotificationDto;
+import com.facedynamics.notifications.dto.NotificationDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

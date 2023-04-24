@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.model.dto;
+package com.facedynamics.notifications.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;

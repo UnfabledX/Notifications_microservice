@@ -2,11 +2,11 @@ package com.facedynamics.notifications;
 
 import com.facedynamics.BaseTest;
 import com.facedynamics.notifications.exception.Error;
-import com.facedynamics.notifications.model.dto.CommentReplied;
-import com.facedynamics.notifications.model.dto.NotificationContent;
-import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.dto.PostCommented;
-import com.facedynamics.notifications.model.dto.UserRegistered;
+import com.facedynamics.notifications.dto.CommentReplied;
+import com.facedynamics.notifications.dto.NotificationContent;
+import com.facedynamics.notifications.dto.NotificationDto;
+import com.facedynamics.notifications.dto.PostCommented;
+import com.facedynamics.notifications.dto.UserRegistered;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.facedynamics.notifications.model.dto.NotificationContent.Type.COMMENT_REPLIED;
-import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
-import static com.facedynamics.notifications.model.dto.NotificationContent.Type.USER_REGISTERED;
+import static com.facedynamics.notifications.dto.NotificationContent.Type.COMMENT_REPLIED;
+import static com.facedynamics.notifications.dto.NotificationContent.Type.POST_COMMENTED;
+import static com.facedynamics.notifications.dto.NotificationContent.Type.USER_REGISTERED;
 import static com.facedynamics.notifications.utils.SqlStatements.details1;
 import static com.facedynamics.notifications.utils.SqlStatements.details2;
 import static com.facedynamics.notifications.utils.SqlStatements.notific1;
@@ -177,7 +177,7 @@ public class IntegrationTests extends BaseTest {
     @Order(10)
     public void createPostCommentedTest_OK() {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
-        NotificationContent<PostCommented> content = new PostCommented(4L, 3L, "some post...", "some comment", dateTime);
+        NotificationContent content = new PostCommented(4L, 3L, "some post...", "some comment", dateTime);
         NotificationDto getDTO = new NotificationDto(321L, 123L, content);
 
         ResponseEntity<NotificationDto> response = template.postForEntity(createURLWithPort() + "/notifications",
@@ -192,7 +192,7 @@ public class IntegrationTests extends BaseTest {
     @Order(11)
     public void createPostCommentedTest_InvalidUserId() {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
-        NotificationContent<PostCommented> content = new PostCommented(4L, 3L, "some post...", "some comment", dateTime);
+        NotificationContent content = new PostCommented(4L, 3L, "some post...", "some comment", dateTime);
         NotificationDto getDTO = new NotificationDto(-321L, 123L, content);
 
         ResponseEntity<ProblemDetail> response = template.postForEntity(createURLWithPort() + "/notifications",
@@ -213,7 +213,7 @@ public class IntegrationTests extends BaseTest {
     @Order(12)
     public void createCommentRepliedTest_OK() {
         LocalDateTime dateTime = LocalDateTime.of(2019, 12, 5, 12, 12);
-        NotificationContent<CommentReplied> content = new CommentReplied(4L, 3L, "some post...", "some comment", dateTime);
+        NotificationContent content = new CommentReplied(4L, 3L, "some post...", "some comment", dateTime);
         NotificationDto getDTO = new NotificationDto(321L, 123L, content);
 
         ResponseEntity<NotificationDto> response = template.postForEntity(createURLWithPort() + "/notifications",

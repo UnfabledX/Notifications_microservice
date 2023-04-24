@@ -1,6 +1,5 @@
-package com.facedynamics.notifications.model.dto;
+package com.facedynamics.notifications.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -23,13 +22,10 @@ import java.time.LocalDateTime;
 @Getter
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public abstract class NotificationContent<T extends NotificationContent<T>> {
+public abstract class NotificationContent {
 
     protected final Type type;
     protected final LocalDateTime entityCreatedAt;
-
-    @JsonIgnore
-    public abstract T getChild();
 
     public enum Type {
         /**
