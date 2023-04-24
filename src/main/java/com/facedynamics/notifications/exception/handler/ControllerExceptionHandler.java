@@ -1,5 +1,7 @@
-package com.facedynamics.notifications.handler;
+package com.facedynamics.notifications.exception.handler;
 
+import com.facedynamics.notifications.exception.Error;
+import com.facedynamics.notifications.exception.NotFoundException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.InvalidTypeIdException;
 import feign.FeignException;

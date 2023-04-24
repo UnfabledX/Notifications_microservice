@@ -1,17 +1,26 @@
 package com.facedynamics.notifications.services.commands;
 
+import com.facedynamics.notifications.config.clients.UserApiClient;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
 import com.facedynamics.notifications.model.NotificationUserServiceDTO;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.model.dto.UserRegistered;
+import com.facedynamics.notifications.repository.NotificationRepository;
+import com.facedynamics.notifications.services.EmailService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Component
-public class UserRegisteredNotificationProcessor extends AbstractNotificationProcessor {
+@RequiredArgsConstructor
+public class UserRegisteredNotificationProcessor implements NotificationProcessor {
+
+    private final UserApiClient userApiClient;
+    private final EmailService emailService;
+    private final NotificationRepository notificationRepository;
 
     @Override
     public NotificationDto process(NotificationDto receivedDTO) {

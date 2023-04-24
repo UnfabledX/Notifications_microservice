@@ -1,7 +1,7 @@
 package com.facedynamics.notifications.controllers;
 
 import com.facedynamics.BaseTest;
-import com.facedynamics.notifications.handler.NotFoundException;
+import com.facedynamics.notifications.exception.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
 import com.facedynamics.notifications.model.dto.NotificationContent;

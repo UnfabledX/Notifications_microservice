@@ -10,11 +10,12 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-import static com.facedynamics.notifications.utils.Constants.NO_BIGGER_THEN_24_AND_NO_LESS_THEN_3_LETTERS;
-
 @Getter
 @EqualsAndHashCode(callSuper = true)
 public class UserRegistered extends NotificationContent<UserRegistered>{
+
+    public static final String NO_BIGGER_THEN_24_AND_NO_LESS_THEN_3_LETTERS =
+            "Username mustn't be bigger then 24 letters and less then 3 letters";
 
     @NotEmpty(message = "The name must be present")
     @Size(min = 3, max = 24, message = NO_BIGGER_THEN_24_AND_NO_LESS_THEN_3_LETTERS)

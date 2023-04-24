@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.facedynamics.notifications.utils.Constants.GREATER_THAN_OR_EQUAL_TO_1;
-
 @Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class NotificationController {
+
+    public static final String GREATER_THAN_OR_EQUAL_TO_1 = "The value must be greater than or equal to 1";
 
     private final NotificationService notificationService;
 

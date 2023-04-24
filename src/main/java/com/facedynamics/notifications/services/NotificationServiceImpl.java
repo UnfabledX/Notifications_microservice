@@ -1,11 +1,11 @@
 package com.facedynamics.notifications.services;
 
-import com.facedynamics.notifications.handler.NotFoundException;
+import com.facedynamics.notifications.exception.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
 import com.facedynamics.notifications.repository.NotificationRepository;
-import com.facedynamics.notifications.services.commands.AbstractNotificationProcessor;
+import com.facedynamics.notifications.services.commands.NotificationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,9 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
-
-import static com.facedynamics.notifications.utils.Constants.ID_OF_THE_NOTIFICATION_IS_NOT_FOUND;
-import static com.facedynamics.notifications.utils.Constants.USER_IS_NOT_FOUND;
 
 /**
  * Service class that is responsible for business logic of
@@ -29,9 +26,11 @@ import static com.facedynamics.notifications.utils.Constants.USER_IS_NOT_FOUND;
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
 
-    private final NotificationRepository notificationRepository;
+    public static final String USER_IS_NOT_FOUND = "ID of the user is not found.";
+    public static final String ID_OF_THE_NOTIFICATION_IS_NOT_FOUND = "ID of the notification is not found.";
 
-    private final Map<NotificationContent.Type, AbstractNotificationProcessor> processor;
+    private final NotificationRepository notificationRepository;
+    private final Map<NotificationContent.Type, NotificationProcessor> processor;
 
     /**
      * Finds all notifications of specified user ID.

@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.securityexpression;
+package com.facedynamics.notifications.security.expressions;
 
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.repository.NotificationRepository;

@@ -14,4 +14,5 @@ public abstract class EmailMessage implements MailTextBody{
     protected NotificationDto receivedDTO;
     protected NotificationUserServiceDTO ownerDTO;
     protected Object payload;
+
 }

@@ -1,7 +1,7 @@
 package com.facedynamics.notifications;
 
 import com.facedynamics.BaseTest;
-import com.facedynamics.notifications.handler.Error;
+import com.facedynamics.notifications.exception.Error;
 import com.facedynamics.notifications.model.dto.CommentReplied;
 import com.facedynamics.notifications.model.dto.NotificationContent;
 import com.facedynamics.notifications.model.dto.NotificationDto;
@@ -25,7 +25,6 @@ import java.util.Map;
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.COMMENT_REPLIED;
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
 import static com.facedynamics.notifications.model.dto.NotificationContent.Type.USER_REGISTERED;
-import static com.facedynamics.notifications.utils.Constants.GREATER_THAN_OR_EQUAL_TO_1;
 import static com.facedynamics.notifications.utils.SqlStatements.details1;
 import static com.facedynamics.notifications.utils.SqlStatements.details2;
 import static com.facedynamics.notifications.utils.SqlStatements.notific1;
@@ -42,6 +41,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class IntegrationTests extends BaseTest {
 
     public final static int PAGE_SIZE_DEFAULT = 5;
+    public static final String GREATER_THAN_OR_EQUAL_TO_1 = "The value must be greater than or equal to 1";
 
     @Autowired
     private TestRestTemplate template;

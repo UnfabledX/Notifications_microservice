@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Component
-@Table(name = "notifications", schema = "notifications_db")
+@Table(name = "notifications")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
