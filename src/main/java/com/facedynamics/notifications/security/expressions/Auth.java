@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.securityexpression;
+package com.facedynamics.notifications.security.expressions;
 
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.repository.NotificationRepository;
@@ -8,7 +8,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -21,11 +20,10 @@ public class Auth {
     }
 
     public boolean belongsToUser(Long notificationId) {
-        Optional <Notification> notification = notificationRepository.findNotificationById(notificationId);
-        Long notificationUserId = -1L;
-        if (notification.isPresent()) {
-            notificationUserId = notification.get().getOwnerId();
-        }
+        Long notificationUserId = notificationRepository
+                .findNotificationById(notificationId)
+                .map(Notification::getOwnerId)
+                .orElse(-1L);
         return Objects.equals(getCurrentUserId(), notificationUserId);
     }
 

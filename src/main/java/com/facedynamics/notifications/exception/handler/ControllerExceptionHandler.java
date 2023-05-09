@@ -1,5 +1,7 @@
-package com.facedynamics.notifications.handler;
+package com.facedynamics.notifications.exception.handler;
 
+import com.facedynamics.notifications.exception.Error;
+import com.facedynamics.notifications.exception.NotFoundException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.InvalidTypeIdException;
 import feign.FeignException;
@@ -29,8 +31,8 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(FeignException.class)
     public ProblemDetail handleFeignException(FeignException e) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.valueOf(e.status()),
-                "External data is not found or not accessible/unauthorized");
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal Server Error");
         Error error = Error.builder().message(e.getMessage()).build();
         pd.setProperty(PROBLEMS, List.of(error));
         return pd;

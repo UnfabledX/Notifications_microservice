@@ -1,13 +1,13 @@
 package com.facedynamics.notifications.services;
 
 import com.facedynamics.BaseTest;
-import com.facedynamics.notifications.feign.UserEventService;
-import com.facedynamics.notifications.handler.NotFoundException;
+import com.facedynamics.notifications.clients.UserApiClient;
+import com.facedynamics.notifications.exception.NotFoundException;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
-import com.facedynamics.notifications.model.NotificationUserServiceDTO;
-import com.facedynamics.notifications.model.dto.NotificationDto;
-import com.facedynamics.notifications.model.dto.PostCommented;
+import com.facedynamics.notifications.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.dto.NotificationDto;
+import com.facedynamics.notifications.dto.PostCommented;
 import com.facedynamics.notifications.repository.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.facedynamics.notifications.model.dto.NotificationContent.Type.POST_COMMENTED;
+import static com.facedynamics.notifications.dto.NotificationContent.Type.POST_COMMENTED;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -42,7 +42,7 @@ class NotificationServiceUnitTest extends BaseTest {
     private EmailServiceImpl emailService;
 
     @Mock
-    private UserEventService userEventService;
+    private UserApiClient userApiClient;
 
     private List<Notification> notificationList;
 
@@ -156,8 +156,8 @@ class NotificationServiceUnitTest extends BaseTest {
                 .username("Dragon")
                 .email("pasha@gmail.com")
                 .build();
-        when(userEventService.findById(ownerId)).thenReturn(userServiceDTO321);
-        when(userEventService.findById(createdById)).thenReturn(userServiceDTO123);
+        when(userApiClient.getById(ownerId)).thenReturn(userServiceDTO321);
+        when(userApiClient.getById(createdById)).thenReturn(userServiceDTO123);
         doNothing().when(emailService)
                 .sendEmail(getDTO, userServiceDTO321, userServiceDTO123.getUsername());
         NotificationDto actualReturnDTO = service.createNotification(getDTO);

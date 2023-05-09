@@ -1,5 +1,6 @@
 package com.facedynamics.notifications.services.commands;
 
+import com.facedynamics.notifications.dto.NotificationDto;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
 import com.facedynamics.notifications.model.dto.FollowedBy;
@@ -10,8 +11,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-public class FollowedByNotificationProcessor extends AbstractNotificationProcessor {
-
+public class FollowedByNotificationProcessor implements NotificationProcessor {
     @Override
     public NotificationDto process(NotificationDto receivedDTO) {
         notificationRepository.save(getNotification(receivedDTO));

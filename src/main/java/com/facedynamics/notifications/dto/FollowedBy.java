@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.model.dto;
+package com.facedynamics.notifications.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)
-public class FollowedBy extends NotificationContent<FollowedBy> implements ContentWithEmail{
+public class FollowedBy extends NotificationContent {
 
     @Size(min = 3, max = 24, message = "Username mustn't be bigger then 24 letters and less then 3 letters")
     private final String recipientName;

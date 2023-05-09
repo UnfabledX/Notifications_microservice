@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.handler;
+package com.facedynamics.notifications.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

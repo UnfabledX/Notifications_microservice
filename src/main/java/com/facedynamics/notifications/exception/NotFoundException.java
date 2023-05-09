@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.handler;
+package com.facedynamics.notifications.exception;
 
 import lombok.Getter;
 import lombok.Setter;
