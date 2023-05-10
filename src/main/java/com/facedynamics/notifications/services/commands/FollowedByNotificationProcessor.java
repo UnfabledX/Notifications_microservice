@@ -1,17 +1,23 @@
 package com.facedynamics.notifications.services.commands;
 
+import com.facedynamics.notifications.dto.FollowedBy;
 import com.facedynamics.notifications.dto.NotificationDto;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
-import com.facedynamics.notifications.model.dto.FollowedBy;
-import com.facedynamics.notifications.model.dto.NotificationContent;
-import com.facedynamics.notifications.model.dto.NotificationDto;
+import com.facedynamics.notifications.repository.NotificationRepository;
+import com.facedynamics.notifications.services.EmailService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Component
+@RequiredArgsConstructor
 public class FollowedByNotificationProcessor implements NotificationProcessor {
+
+    private final EmailService emailService;
+    private final NotificationRepository notificationRepository;
+
     @Override
     public NotificationDto process(NotificationDto receivedDTO) {
         notificationRepository.save(getNotification(receivedDTO));
@@ -20,16 +26,18 @@ public class FollowedByNotificationProcessor implements NotificationProcessor {
     }
 
     private static Notification getNotification(NotificationDto receivedDTO) {
-        NotificationContent<FollowedBy> content = receivedDTO.content();
-        FollowedBy registered = content.getChild();
-        return Notification.builder()
-                .ownerId(receivedDTO.recipientId())
-                .createdById(receivedDTO.createdById())
-                .notificationCreatedAt(LocalDateTime.now())
-                .details(NotificationDetails.builder()
-                        .type(registered.getType().name())
-                        .entityCreatedAt(registered.getEntityCreatedAt())
-                        .build())
-                .build();
+        if (receivedDTO.content() instanceof FollowedBy followedBy) {
+            return Notification.builder()
+                    .ownerId(receivedDTO.recipientId())
+                    .createdById(receivedDTO.createdById())
+                    .notificationCreatedAt(LocalDateTime.now())
+                    .details(NotificationDetails.builder()
+                            .type(followedBy.getType().name())
+                            .entityCreatedAt(followedBy.getEntityCreatedAt())
+                            .build())
+                    .build();
+        } else {
+            throw new IllegalArgumentException("Wrong type of the notification!");
+        }
     }
 }

@@ -1,8 +1,8 @@
 version: '3.3'
 services:
-  notification_database:
+  database:
     image: postgres
-    container_name: notification_database
+    container_name: general_database
     environment:
       TZ: Europe/Kyiv
       POSTGRES_DB: postgres

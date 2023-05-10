@@ -1,10 +1,6 @@
 package com.facedynamics.notifications.config;
 
-import com.facedynamics.notifications.emails.CommentRepliedEmailMessage;
-import com.facedynamics.notifications.emails.EmailMessage;
-import com.facedynamics.notifications.emails.FollowedByEmailMessage;
-import com.facedynamics.notifications.emails.PostCommentedEmailMessage;
-import com.facedynamics.notifications.emails.UserRegisteredEmailMessage;
+import com.facedynamics.notifications.emails.*;
 import com.facedynamics.notifications.dto.NotificationContent;
 import lombok.RequiredArgsConstructor;
 import org.apache.velocity.app.VelocityEngine;
@@ -35,17 +31,19 @@ public class MailConfiguration {
             UserRegisteredEmailMessage userRegisteredEmailMessage,
             PostCommentedEmailMessage postCommentedEmailMessage,
             CommentRepliedEmailMessage commentRepliedEmailMessage,
-            FollowedByEmailMessage followedByEmailMessage) {
+            FollowedByEmailMessage followedByEmailMessage,
+            WaitingApprovalEmailMessage waitingApprovalEmailMessage,
+            PostLikedEmailMessage postLikedEmailMessage,
+            PostDislikedEmailMessage postDislikedEmailMessage,
+            CommentLikedEmailMessage commentLikedEmailMessage,
+            CommentDislikedEmailMessage commentDislikedEmailMessage
+            ) {
         return Map.of(
                 USER_REGISTERED,    userRegisteredEmailMessage,
                 POST_COMMENTED,     postCommentedEmailMessage,
                 COMMENT_REPLIED,    commentRepliedEmailMessage,
-                FOLLOWED_BY,        followedByEmailMessage
-                USER_REGISTERED,    userRegisteredEmailMessage,
-                POST_COMMENTED,     postCommentedEmailMessage,
-                COMMENT_REPLIED,    commentRepliedEmailMessage,
-                WAITING_APPROVE,    waitingApprovalEmailMessage,
                 FOLLOWS,            followedByEmailMessage,
+                WAITING_APPROVE,    waitingApprovalEmailMessage,
                 POST_LIKED,         postLikedEmailMessage,
                 POST_DISLIKED,      postDislikedEmailMessage,
                 COMMENT_LIKED,      commentLikedEmailMessage,

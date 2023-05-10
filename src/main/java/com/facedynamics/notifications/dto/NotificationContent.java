@@ -33,11 +33,6 @@ public abstract class NotificationContent {
     protected final Type type;
     protected final LocalDateTime entityCreatedAt;
 
-    @JsonIgnore
-    public T getChild(){
-        return (T) this;
-    }
-
     public enum Type {
         /**
          * A notification for a user who just registered

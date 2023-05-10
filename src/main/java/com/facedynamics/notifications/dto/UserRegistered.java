@@ -18,7 +18,7 @@ public class UserRegistered extends NotificationContent{
 
     @NotEmpty(message = "The name must be present")
     @Size(min = 3, max = 24, message = NO_BIGGER_THEN_24_AND_NO_LESS_THEN_3_LETTERS)
-    private final String recipientName;
+    private final String ownerName;
 
     @NotEmpty(message = "Email address must not be empty")
     @Email(message = "Email is written in a wrong format")
@@ -30,10 +30,10 @@ public class UserRegistered extends NotificationContent{
     @NotNull(message = "Time of link to be active must be present")
     private final Integer timeToLive;
 
-    public UserRegistered(String recipientName, String email, String confirmationLink,
+    public UserRegistered(String ownerName, String email, String confirmationLink,
                           int timeToLive, LocalDateTime entityCreatedAt) {
         super(Type.USER_REGISTERED, entityCreatedAt);
-        this.recipientName = recipientName;
+        this.ownerName = ownerName;
         this.email = email;
         this.confirmationLink = confirmationLink;
         this.timeToLive = timeToLive;

@@ -1,42 +1,48 @@
 package com.facedynamics.notifications.services.commands;
 
+import com.facedynamics.notifications.clients.UserApiClient;
+import com.facedynamics.notifications.dto.CommentLiked;
 import com.facedynamics.notifications.dto.NotificationDto;
-import com.facedynamics.notifications.dto.WaitingApproval;
+import com.facedynamics.notifications.dto.NotificationUserServiceDTO;
+import com.facedynamics.notifications.events.CommentLikeEvent;
 import com.facedynamics.notifications.model.Notification;
 import com.facedynamics.notifications.model.NotificationDetails;
 import com.facedynamics.notifications.repository.NotificationRepository;
-import com.facedynamics.notifications.services.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
-public class WaitingApprovalNotificationProcessor implements NotificationProcessor{
+public class CommentLikedNotificationProcessor implements NotificationProcessor {
 
-    private final EmailService emailService;
-    private final NotificationRepository notificationRepository;
+    private ApplicationEventPublisher applicationEventPublisher;
+    private UserApiClient userEventService;
+    private NotificationRepository notificationRepository;
 
     @Override
     public NotificationDto process(NotificationDto receivedDTO) {
+        NotificationUserServiceDTO ownerDTO = userEventService.getById(receivedDTO.recipientId());
         notificationRepository.save(getNotification(receivedDTO));
-        emailService.sendEmail(receivedDTO, null, null);
+        applicationEventPublisher.publishEvent(new CommentLikeEvent(this, receivedDTO, ownerDTO));
         return receivedDTO;
     }
 
     private static Notification getNotification(NotificationDto receivedDTO) {
-        if (receivedDTO.content() instanceof WaitingApproval approval) {
+        if (receivedDTO.content() instanceof  CommentLiked commentLiked) {
             return Notification.builder()
                     .ownerId(receivedDTO.recipientId())
                     .createdById(receivedDTO.createdById())
                     .notificationCreatedAt(LocalDateTime.now())
                     .details(NotificationDetails.builder()
-                            .type(approval.getType().name())
-                            .entityCreatedAt(approval.getEntityCreatedAt())
+                            .type(commentLiked.getType().name())
+                            .commentId(commentLiked.getCommentId())
+                            .entityCreatedAt(commentLiked.getEntityCreatedAt())
                             .build())
                     .build();
-        }  else {
+        } else {
             throw new IllegalArgumentException("Wrong type of the notification!");
         }
     }

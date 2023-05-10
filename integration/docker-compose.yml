@@ -1,0 +1,77 @@
+version: '3.3'
+services:
+  eureka:
+    image: pvyshnevetskyi/facedynamics:eureka0.0.3
+    restart: on-failure
+  comments-reactions-service:
+    image: pvyshnevetskyi/facedynamics:comments0.0.5
+    restart: on-failure
+    environment:
+      - DATABASE_URL=jdbc:postgresql://baseforface.postgres.database.azure.com:5432/postgres?ssl=true&sslmode=require
+      - DATABASE_USER=root_user
+      - DATABASE_PASSWORD=Password1
+    depends_on:
+      eureka:
+        condition: service_started
+      database:
+        condition: service_started
+  posts-service:
+    image: pvyshnevetskyi/facedynamics:posts0.0.5
+    restart: on-failure
+    environment:
+      - DATABASE_URL=jdbc:postgresql://baseforface.postgres.database.azure.com:5432/postgres?ssl=true&sslmode=require
+      - DATABASE_USER=root_user
+      - DATABASE_PASSWORD=Password1
+    depends_on:
+      eureka:
+        condition: service_started
+      database:
+        condition: service_started
+  media-service:
+    image: pvyshnevetskyi/facedynamics:media0.0.5
+    restart: on-failure
+    environment:
+      - DATABASE_URL=jdbc:postgresql://baseforface.postgres.database.azure.com:5432/postgres?ssl=true&sslmode=require
+      - DATABASE_USER=root_user
+      - DATABASE_PASSWORD=Password1
+      - AZURE_BLOB_NAME=facedynamicsblob
+      - AZURE_BLOB_KEY=RrkDhnAMgjXqBkmw5BSN5b8rxni36rm/qjL7AicTMOw/nLw+BYVOAgsV0YTB+3/y0ASfBbE4lCpL+ASt2SIRqg==
+      - AZURE_BLOB_ENDPOINT=https://facedynamicsblob.blob.core.windows.net/
+      - AZURE_BLOB_CONTAINER_NAME=genericontainer
+    depends_on:
+      eureka:
+        condition: service_started
+      database:
+        condition: service_started
+  gateway:
+    image: pvyshnevetskyi/facedynamics:gateway0.0.4
+    restart: on-failure
+    depends_on:
+      eureka:
+        condition: service_started
+    ports:
+      - '8080:8080'
+  notifications-service:
+    image: unfabled/facedynamics:notifications0.0.5
+    restart: on-failure
+    environment:
+      - DATABASE_URL=jdbc:postgresql://baseforface.postgres.database.azure.com:5432/postgres?ssl=true&sslmode=require
+      - DATABASE_USER=root_user
+      - DATABASE_PASSWORD=Password1
+    depends_on:
+      eureka:
+        condition: service_started
+      database:
+        condition: service_started
+  users-service:
+    image: unfabled/facedynamics:users0.0.5
+    restart: on-failure
+    environment:
+      - DATABASE_URL=jdbc:postgresql://baseforface.postgres.database.azure.com:5432/postgres?ssl=true&sslmode=require
+      - DATABASE_USER=root_user
+      - DATABASE_PASSWORD=Password1
+    depends_on:
+      eureka:
+        condition: service_started
+      database:
+        condition: service_started

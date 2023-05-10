@@ -1,23 +1,14 @@
 package com.facedynamics.notifications.config;
 
-import com.facedynamics.notifications.model.dto.NotificationContent;
-import com.facedynamics.notifications.services.commands.AbstractNotificationProcessor;
-import com.facedynamics.notifications.services.commands.CommentDislikedNotificationProcessor;
-import com.facedynamics.notifications.services.commands.CommentLikedNotificationProcessor;
-import com.facedynamics.notifications.services.commands.CommentRepliedNotificationProcessor;
-import com.facedynamics.notifications.services.commands.WaitingApprovalNotificationProcessor;
-import com.facedynamics.notifications.services.commands.FollowedByNotificationProcessor;
-import com.facedynamics.notifications.services.commands.PostCommentedNotificationProcessor;
-import com.facedynamics.notifications.services.commands.PostDislikedNotificationProcessor;
-import com.facedynamics.notifications.services.commands.PostLikedNotificationProcessor;
-import com.facedynamics.notifications.services.commands.UserRegisteredNotificationProcessor;
+import com.facedynamics.notifications.dto.NotificationContent;
+import com.facedynamics.notifications.services.commands.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
 
-import static com.facedynamics.notifications.model.dto.NotificationContent.Type.*;
+import static com.facedynamics.notifications.dto.NotificationContent.Type.*;
 
 @Configuration
 @RequiredArgsConstructor
@@ -34,7 +25,7 @@ public class ProcessorConfiguration {
     private final CommentDislikedNotificationProcessor commentDislikedNotificationProcessor;
 
     @Bean(name = "processor")
-    public Map<NotificationContent.Type, AbstractNotificationProcessor> getProcessor() {
+    public Map<NotificationContent.Type, NotificationProcessor> getProcessor() {
         return Map.of(
                 USER_REGISTERED,    userRegisteredNotificationProcessor,
                 POST_COMMENTED,     postCommentedNotificationProcessor,

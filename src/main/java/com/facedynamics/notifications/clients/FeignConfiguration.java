@@ -1,4 +1,4 @@
-package com.facedynamics.notifications.config;
+package com.facedynamics.notifications.clients;
 
 import feign.RequestInterceptor;
 import org.springframework.cloud.openfeign.EnableFeignClients;
